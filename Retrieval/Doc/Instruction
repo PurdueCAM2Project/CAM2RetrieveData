@@ -1,6 +1,6 @@
 Updated on May 24th
 
-This program is working perfectly and it can generate the image data with the given camera ID and processing time.
+This program is working correctly and it can generate the image data with the given camera ID and processing time.
 
 The command to run this program is:
 python archiver.py <camera_id> <is_video> <duration> <interval>
