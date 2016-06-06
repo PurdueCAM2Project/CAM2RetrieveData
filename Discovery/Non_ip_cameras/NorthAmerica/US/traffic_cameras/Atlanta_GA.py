@@ -1,17 +1,30 @@
-#author: Honey Singh
-#date: 10/23/2014
-
-''' The script was written to parse the data for traffic 
-cameras in Atlanta, Georgia. The original website url 
-http://www.511ga.org/#zoom=4&lat=33.71641&lon=-84.37597&traffic_speeds_layer&Construction_control&Message_Signs_control&Major_Incidents_control&Other_Incidents_control&General_Info_control&Special_Event_control.
-
+""" 
+--------------------------------------------------------------------------------
+Descriptive Name     : Atlanta_GA.py
+Author               : Honey Singh								      
+Contact Info         : N/A
+Date                 : Oct 23, 2014
+Description          : Parse cameras on the Atlanta, Georgia traffic camera website
+Command to run script: python Atlanta_GA.py
+Output               : output urls, country, city and latitude, longitude to a 
+                       textfile <Atlanta_GA>
+Other files required by : N/A
+this script and where 
+located
+----For Parsing Scripts---------------------------------------------------------
+Website    	  : http://www.511ga.org/#zoom=4&lat=33.71641&lon=-84.37597&traffic_speeds_layer&Construction_control&Message_Signs_control&Major_Incidents_control&Other_Incidents_control&General_Info_control&Special_Event_control.
+URL parsed	  : http://files0.iteriscdn.com/WebApps/GA/SafeTravel4/data/geojson/icons.cctv.geojsonp
+In database (Y/N) : Y
+--------------------------------------------------------------------------------
+Note: 
 The file link used here is a resource file used by the website
- for camera data. The file is a geojson type. The data from 
+for camera data. The file is a geojson type. The data from 
 the file is separated into each camera geometry and properties.
 
 The required details are extracted using regular expressions.
 The geometry tag had the required latitudes and longitudes 
-and properties tag had the description and url.'''
+and properties tag had the description and url.
+"""
 
 import urllib2
 import re
