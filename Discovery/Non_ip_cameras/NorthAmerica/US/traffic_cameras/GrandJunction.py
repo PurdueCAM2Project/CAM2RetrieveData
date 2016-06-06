@@ -1,10 +1,21 @@
 #!/usr/bin/python
-'''
-This program will parse camera information from the City of Grand Junction website. This simple code will utilize
-Beautiful Soup 4 to extract the relevant information including image url and street address of each camera. The street
-address will then be processed by Google API to fetch the corresponding geographical information. It will then  output
-the results in a text file.
-'''
+""" 
+--------------------------------------------------------------------------------
+Descriptive Name     : GrandJunction.py
+Author               : unknown							      
+Contact Info         : ssui@purdue.edu (Shengli Sui)
+Description          : Parse cameras on the City of Grand Junction traffic camera website
+Command to run script: python GrandJunction.py
+Output               : output urls, country, city and latitude, longitude to a 
+                       textfile <GrandJunction_output.txt>
+Other files required by : N/A
+this script and where 
+located
+----For Parsing Scripts---------------------------------------------------------
+Website Parsed       : http://www.verkehr.rlp.de/index.php?lang=20&menu1=50&menu2=10&menu3=
+In database (Y/N)    : Y
+--------------------------------------------------------------------------------
+"""
 
 import urllib2
 import json
