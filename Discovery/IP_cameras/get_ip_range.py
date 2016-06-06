@@ -1,7 +1,20 @@
 #!/usr/bin/python
+""" 
+--------------------------------------------------------------------------------
+Descriptive Name     : get_ip_range.py
+Author               : unknown								      
+Contact Info         : ssui@purdue.edu (Shengli Sui)
+Description          : Take a host name (a URL) and find the range of IP addresses that 
+                       belongs to the same organization
+Command to run script: python get_ip_range.py <url textfile>
+Input file format    : url
+Output               : Information output to screen
+Other files required by : N/A
+this script and where 
+located
+--------------------------------------------------------------------------------
+"""
 
-# take a host name (an URL) and find the range of 
-# IP addresses belonging to the same organization
 import sys
 import socket
 import subprocess
