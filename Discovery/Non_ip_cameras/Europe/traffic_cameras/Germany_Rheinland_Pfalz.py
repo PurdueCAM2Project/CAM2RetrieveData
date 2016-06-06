@@ -1,3 +1,24 @@
+""" 
+--------------------------------------------------------------------------------
+Descriptive Name     : Germany_Rheinland_Pfalz.py
+Author               : Thomas Norling								      
+Contact Info         : tnorling@purdue.edu
+Date                 : June 6, 2016
+Description          : Parse cameras on the Rheinland-Pfalz, Germany traffic camera website
+Command to run script: python Germany_Rheinland_Pfalz.py
+Output               : output urls, country, city and latitude, longitude to a 
+                       textfile <list_Germany_Rheinland_Pfalz>
+
+Other files required by : N/A
+this script and where 
+located
+
+----For Parsing Scripts---------------------------------------------------------
+Website Parsed       : http://www.verkehr.rlp.de/index.php?lang=20&menu1=50&menu2=10&menu3=
+In database (Y/N)    : Y
+--------------------------------------------------------------------------------
+"""
+
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
