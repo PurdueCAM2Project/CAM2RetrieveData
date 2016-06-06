@@ -61,4 +61,6 @@ def finding():
 			output = loc_des+"#Atlanta#GA#USA#"+link+"#"+geoloc[1]+"#"+geoloc[0]+"\n"			
 			f.write(output.encode('utf-8'))
 	f.close()
-finding()
+
+if __name__ == '__main__':
+	finding()
