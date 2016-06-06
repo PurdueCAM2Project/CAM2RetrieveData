@@ -1,3 +1,21 @@
+""" 
+--------------------------------------------------------------------------------
+Descriptive Name     : Alberta.py
+Author               : Thomas Norling								      
+Contact Info         : tnorling@purdue.edu
+Date                 : June 2, 2016
+Description          : Parse cameras on the 511 Alberta traffic camera website
+Command to run script: python Alberta.py
+Output               : output urls, country, city and latitude, longitude to a 
+                       textfile <list_Alberta>
+Other files required by : N/A
+this script and where 
+located
+----For Parsing Scripts---------------------------------------------------------
+Website Parsed       : http://511.alberta.ca/cameras/
+In database (Y/N)    : Y
+--------------------------------------------------------------------------------
+"""
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
