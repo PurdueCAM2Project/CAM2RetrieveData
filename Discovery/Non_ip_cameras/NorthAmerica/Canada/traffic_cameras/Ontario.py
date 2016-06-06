@@ -1,6 +1,21 @@
-"""
-This module contains the parser used to retrieve traffic camera information
-from the Ontario Ministry of Transportation.
+""" 
+--------------------------------------------------------------------------------
+Descriptive Name     : Ontario.py
+Author               : Subhav Ramachandran								      
+Contact Info         : subhav@purdue.edu
+Date                 : May 28, 2014 11:36:16 AM
+Description          : Parse cameras on the Ontario Ministry of Transportation traffic camera website
+Command to run script: python Ontario.py <outputfile_name>
+Output               : output urls, country, city and latitude, longitude to a 
+                       textfile <outputfile_name>
+Other files required by : N/A
+this script and where 
+located
+----For Parsing Scripts---------------------------------------------------------
+Website 	     : http://www.mto.gov.on.ca/english/traveller/trip/traffic_cameras_list.shtml
+URL Parsed	     : http://www.mto.gov.on.ca/english/traveller/compass/camera/camData.xml
+In database (Y/N)    : Y
+--------------------------------------------------------------------------------
 
 The name of the traffic reporting system they use is COMPASS.
 
@@ -37,10 +52,6 @@ A simple list of available cameras can be found at:
     http://www.mto.gov.on.ca/english/traveller/trip/traffic_cameras_list.shtml
 
 """
-
-__author__="Subhav Ramachandran <subhav@purdue.edu>"
-__date__ ="$May 28, 2014 11:36:16 AM$"
-
 import sys
 from xml.dom import minidom
 import urllib2
