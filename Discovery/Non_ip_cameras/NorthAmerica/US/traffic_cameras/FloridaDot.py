@@ -1,3 +1,20 @@
+""" 
+--------------------------------------------------------------------------------
+Descriptive Name     : FloridaDot.py
+Author               : unknown								      
+Contact Info         : ssui@purdue.edu (Shengli Sui)
+Description          : Parse cameras on the 511 Florida traffic camera website
+Command to run script: python FloridaDot.py
+Output               : output urls, country, city and latitude, longitude to a 
+                       textfile <list_FloridaDot>
+Other files required by : N/A
+this script and where 
+located
+----For Parsing Scripts---------------------------------------------------------
+Website Parsed       : http://fl511.com/Cameras.aspx
+In database (Y/N)    : Y
+--------------------------------------------------------------------------------
+"""
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
@@ -16,16 +33,12 @@ list is to check the last camera. So check the website first if it adds any came
 the end. I'll tag that line in the code with a W.
 '''
 
-#Script uses selennium to acquire links to the images
-#output will be the image urls and description in file list_LosAngelesDot
-
-
 def main():
     driver = webdriver.Firefox()
     driver.get("http://fl511.com/Cameras.aspx")
     driver.implicitly_wait(15)
     time.sleep(2)
-    f = open ('list_FloridaDot11','w')
+    f = open ('list_FloridaDot','w')
     #Format of output
     att = []
     ls = []
@@ -177,9 +190,6 @@ def main():
     driver.implicitly_wait(30)
     time.sleep(4)
 
-    
-
-
     #Write format of output so it can be uploaded - Only needed to be written once
     f.write("country#state#city#snapshot_url#latitude#longitude\n")
 
@@ -321,5 +331,5 @@ def gAPI_city(locat, hwy, city, link, f): #Find location by county/city
     f.write(locat.encode('utf-8').replace(" ","").replace("\n",'')+'\n')
     return;
     
-    
-main()
+if __name__ == '__main__':
+    main()
