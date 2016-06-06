@@ -1,21 +1,17 @@
-###############################################################################
-# Descriptive Name for File:
-#
-# Written by:									      
-# Contact Info:
-#
-# URL of website being parsed:
-# Command to Run Script:
-# Other files required by this script and where located:
-#
-# Description:
-#
-#
-#
-#
-#
-#
-# DO NOT PUT USERNAMES/PASSWORDS IN CODE
-###############################################################################
+""" 
+--------------------------------------------------------------------------------
+Descriptive Name 	    : 
+Written by		        : 								      
+Contact Info  		    : 
+Description	    	    : 
+Command to run script	: 
+Input file format 	  : 
+ 
+Other files required by : N/A
+this script and where 
+located
+*add fields where appropriate, delete this line when done*
+--------------------------------------------------------------------------------
+"""
 
 if __name__ == __main__:
