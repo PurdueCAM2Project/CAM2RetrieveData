@@ -1,6 +1,29 @@
-
-
 """
+Descriptive Name 	 : addCamera.py
+Written by		 : Youngsol Koh									      
+Contact Info		 : 
+Description		 : This program will automatically add cameras in the database. 
+Command to run script	 : python addCamera.py <text file to put in database> <ip / non_ip>
+Input file format 	 : Country,City,latitude,longitude,snapshot_url must exist in the file
+				you do not have to follow the sequence of fields.
+				You must list the field in the first line.
+				Country(2 letter) and City must exist in the file.
+				Please use field name in the info_source table
+
+				input file examples :
+			
+				snapshot_url#lat#long#country#state#city#description
+				http://....jpg#43.852169#-79.022083#CA#ON#Greater Toronto Area#Highway 401 near Harwood Avenue
+
+				example 2)
+				description#snapshot_url#direction#country#state#city
+				Tupper Hwy 2, 2 km west of BC/Alberta border#http://....jpg#east#CA#BC#Dawson Creek
+				this python program and a file should be in the same folder.
+ 
+ Other files required by : N/A
+ this script and where 
+ located
+
 --------------------------------------------------------------------------------
 Package requirements : pip, chardet, MySQLdb
 --------------------------------------------------------------------------------
@@ -9,30 +32,7 @@ MySQLdb : sudo apt-get install python-dev libmysqlclient-dev
           sudo pip install MySQL-python
 chardet : pip install chardet
 --------------------------------------------------------------------------------
-
-
-This program will automatically add cameras in the database.
-
-
-input file format : Country,City,latitude,longitude,snapshot_url must exist in the file
-					you do not have to follow the sequence of fields.
-					You must list the field in the first line.
-					Country(2 letter) and City must exist in the file.
-					Please use field name in the info_source table
-
-					input file examples :
-					
-					snapshot_url#lat#long#country#state#city#description
-					http://....jpg#43.852169#-79.022083#CA#ON#Greater Toronto Area#Highway 401 near Harwood Avenue
-
-					example 2)
-					description#snapshot_url#direction#country#state#city
-					Tupper Hwy 2, 2 km west of BC/Alberta border#http://....jpg#east#CA#BC#Dawson Creek
-
-this python program and a file should be in the same folder.
 """
-
-__author__      = "Youngsol Koh"
 
 import sys
 import os
