@@ -27,9 +27,6 @@ import re
 import json
 import time
 
-#Written by Thomas Norling
-#Will parse the cameras on the 511 Alberta traffic camera website and output urls, country, city and latitude, longitude to a text file
-
 class Alberta:
     def __init__(self):
         self.driver = webdriver.Firefox()
