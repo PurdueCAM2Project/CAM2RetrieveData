@@ -129,7 +129,7 @@ def check_basic_rules(fileName,camType):
 			print "Line %s : incorrect country format %s" %(str(numLine),line.split('#')[index_country])
 			isSuccess = False
 		#check state length only for USA
-		if(index_state == -1 and !(exact_match('usa',line.split('#')[index_country].lower())) or (index_state != -1 and exact_match('usa',line.split('#')[index_country].lower()) and len(line.split('#')[index_state])==2)):
+		if((index_state == -1 and (exact_match('usa',line.split('#')[index_country].lower()) is False)) or (index_state != -1 and exact_match('usa',line.split('#')[index_country].lower()) and len(line.split('#')[index_state])==2)):
 			pass
 		else:
 			print "Line %s : incorrect state format %s" %(str(numLine),line.split('#')[index_state])
