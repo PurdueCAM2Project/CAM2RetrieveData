@@ -1,7 +1,21 @@
-# script for parsing cams on http://hvo.wr.usgs.gov/cams/
-
+""" 
+--------------------------------------------------------------------------------
+Descriptive Name     : Hawaiian_Volvano_Observatory.py
+Author               : unknown								      
+Contact Info         : ssui@purdue.edu (Shengli Sui)
+Description          : Parse cameras on the Hawaiian_Volvano_Observatory camera website
+Command to run script: python Hawaiian_Volvano_Observatory.py
+Output               : output urls, country, city and latitude, longitude to a 
+                       textfile <list_HVO>
+Other files required by : N/A
+this script and where 
+located
+----For Parsing Scripts---------------------------------------------------------
+Website Parsed       : http://hvo.wr.usgs.gov/cams
+In database (Y/N)    : Y
+--------------------------------------------------------------------------------
+"""
 import urllib2
-
 import re
 
 def getFromPage(page_url):
