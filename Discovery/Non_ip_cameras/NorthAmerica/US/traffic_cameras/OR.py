@@ -1,5 +1,21 @@
 #!/usr/bin/python
-
+""" 
+--------------------------------------------------------------------------------
+Descriptive Name     : OR.py
+Author               : unknown								      
+Contact Info         : ssui@purdue.edu (Shengli Sui)
+Description          : Parse cameras on the Oregon Dept of Transportation traffic camera website
+Command to run script: python OR.py
+Output               : output urls, country, city and latitude, longitude to a 
+                       textfile <OR.list>
+Other files required by : N/A
+this script and where 
+located
+----For Parsing Scripts---------------------------------------------------------
+URL Parse	     : http://www.tripcheck.com/ttipv2/Documents/SampleData/cctvInventory.xml
+In database (Y/N)    : Y
+--------------------------------------------------------------------------------
+"""
 import urllib2
 import httplib
 from xml.dom import minidom
@@ -31,5 +47,6 @@ def getOR():
 
 
 	listFile.close()
-
-getOR()
+	
+if __name__ == '__main__':
+	getOR()
