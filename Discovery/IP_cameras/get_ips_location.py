@@ -7,17 +7,17 @@ Description          : Prints the approximate GPS locations of a list of IP addr
 Command to run script: python get_ips_location.py <IP_address textfile>
 Usage                : For each IP, the function sends a query to the web site 
 		       whatismyipaddress.com to find the geographical location of the 
-		       IP address (it is an approximation) and prints the location on the screen.
-
+		       IP address (it is an approximation).
 		       whatismyipaddress.com allows only 56 queries each hour. after
 		       responding to 56 queries, the funtion will wait for an hour
+		       
 Input file format    : IP address (on each line)
+Output		     : prints the location on the screen
 Note		     : This function needs lynx (text mode web browser). Please make sure it is installed.
  
 Other files required by : N/A
 this script and where 
 located
-
 --------------------------------------------------------------------------------
 """
 
