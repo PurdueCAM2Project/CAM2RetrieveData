@@ -1,3 +1,21 @@
+""" 
+--------------------------------------------------------------------------------
+Descriptive Name     : Prague.py
+Author               : Thomas Norling								      
+Contact Info         : tnorling@purdue.edu
+Date                 : June 6, 2016
+Description          : Parse cameras on the Prague traffic camera website
+Command to run script: python Prague.py
+Output               : output urls, country, city and latitude, longitude to a 
+                       textfile <list_Prague>
+Other files required by : N/A
+this script and where 
+located
+----For Parsing Scripts---------------------------------------------------------
+Website Parsed       : http://www.dpp.cz/en/webcams/
+In database (Y/N)    : Y
+--------------------------------------------------------------------------------
+"""
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
@@ -8,9 +26,6 @@ import sys
 import re
 import json
 import time
-
-#Written by Thomas Norling
-#Will parse the cameras on the Prague traffic camera website and output urls, country, city and latitude, longitude to a text file
 
 class Prague:
     def __init__(self):
