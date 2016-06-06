@@ -1,21 +1,26 @@
 #!/usr/bin/env python
+""" 
+--------------------------------------------------------------------------------
+Descriptive Name     : check_camera_exist.py
+Author               : Tao Tian								      
+Contact Info         : N/A
+Date                 : July 8, 2014
+Description          : This script checks if the cameras parsed have been added to database. 
+Command to run script: python check_camera_exist.py <filename>
+Usage                : 1) The script has to be placed on develop machine along with the
+                          output file of your parsing script.
+                       2) <filename> is the file that contains a list of urls you want to check
+                       3) If the camera has not been added into database, the url of that camera 
+                          will be stored in <filename_need_added> file
+Input file format    : url#description (on each line)
+
+Other files required by : N/A
+this script and where 
+located
+*add fields where appropriate, delete this line when done*
+--------------------------------------------------------------------------------
 """
-    Author: Tao Tian
-    Date: July 8, 2014
-    This script checks if the cameras parsed have been added to database.
-    Things you need to make sure before using this script:
-    1. The script has to be placed on develop machine along with the output file of your parsing script.
-    2. To run his script:
-       python check_camera_exist.py <filename>
-       
-       <filename> is the file that contains a list of urls you want to check
-    3. If the camera has not been added into database, the url of that camera will be stored in filename_need_added file
-    
-    The input file should have the format:
-    url#description
-    on each line.
-    
-"""
+
 import MySQLdb
 import sys
 
