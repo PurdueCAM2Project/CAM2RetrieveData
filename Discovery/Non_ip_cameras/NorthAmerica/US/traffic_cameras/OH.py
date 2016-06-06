@@ -1,5 +1,21 @@
 #!/usr/bin/python
-
+""" 
+--------------------------------------------------------------------------------
+Descriptive Name     : OH.py
+Author               : unknown								      
+Contact Info         : ssui@purdue.edu (Shengli Sui)
+Description          : Parse cameras on the Ohio Dept of Transportation traffic camera website
+Command to run script: python OH.py
+Output               : output urls, country, city and latitude, longitude to a 
+                       textfile <list_Germany_Rheinland_Pfalz>
+Other files required by : N/A
+this script and where 
+located
+----For Parsing Scripts---------------------------------------------------------
+URL Parse	     : http://www.buckeyetraffic.org/services/Cameras.aspx
+In database (Y/N)    : Y
+--------------------------------------------------------------------------------
+"""
 import urllib2
 import httplib
 import xml.etree.ElementTree as ET
@@ -40,5 +56,6 @@ def getOH():
         out.write(str(snapshot_url) + "#" + str(latitude) + "#" + str(longitude)+ "#" + str(direction) + "#" + str(address) + "#" + str(camtype) + "#" + str(description) + "#" + str(small_snapshot_url) + "#" + str(update_interval) + "\n")
 
     out.close()
-
-getOH()
+    
+if __name__ == '__main__':
+	getOH()
