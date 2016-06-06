@@ -12,7 +12,7 @@ this script and where
 located
 ----For Parsing Scripts---------------------------------------------------------
 URL Parse	     : http://www.chart.state.md.us/rss/ProduceRss.aspx?Type=VIDEOXML&filter=all
-In database (Y/N)    : Y
+In database (Y/N)    : *URL gives a video, not on regular image database, NEEDS VERIFICATION* 
 --------------------------------------------------------------------------------
 """
 import urllib2
