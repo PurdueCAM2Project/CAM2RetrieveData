@@ -1,21 +1,32 @@
+""" 
+--------------------------------------------------------------------------------
+Descriptive Name     : get_ips_location.py
+Author               : unknown								      
+Contact Info         : ssui@purdue.edu (Shengli Sui)
+Description          : Prints the approximate GPS locations of a list of IP addresses
+Command to run script: python get_ips_location.py <IP_address textfile>
+Usage                : For each IP, the function sends a query to the web site 
+		       whatismyipaddress.com to find the geographical location of the 
+		       IP address (it is an approximation) and prints the location on the screen.
+
+		       whatismyipaddress.com allows only 56 queries each hour. after
+		       responding to 56 queries, the funtion will wait for an hour
+Input file format    : IP address (on each line)
+Note		     : This function needs lynx (text mode web browser). Please make sure it is installed.
+ 
+Other files required by : N/A
+this script and where 
+located
+
+--------------------------------------------------------------------------------
+"""
+
 import subprocess
 import re
 import time
 import sys
 
 def get_ips_locations(ips_file_name):
-	"""Prints the approximate locations of a list of IP addresses.
-
-	This function needs lynx (text mode web browser). Please make sure it is installed.
-
-	The function takes the name of the file with the IP addresses. For each IP, the function
-	sends a query to the web site whatismyipaddress.com to find the
-	geographical location of the IP address (it is an approximation) and
-	prints the location on the screen.
-
-	whatismyipaddress.com allows only 56 queries each hour. after
-	responding to 56 queries, the funtion will wait for an hour
-	"""
 	with open(ips_file_name, 'r') as ips_file:
 		ips = ips_file.read().splitlines()
 
