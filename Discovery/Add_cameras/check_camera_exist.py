@@ -17,7 +17,6 @@ Input file format    : url#description (on each line)
 Other files required by : N/A
 this script and where 
 located
-*add fields where appropriate, delete this line when done*
 --------------------------------------------------------------------------------
 """
 
