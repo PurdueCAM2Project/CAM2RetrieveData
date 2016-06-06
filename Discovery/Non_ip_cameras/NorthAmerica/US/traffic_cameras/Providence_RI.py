@@ -1,19 +1,26 @@
-__author__ = 'Mai Kanchanabul'
-'''
-This program will parse camera information from the City of Providence website. This simple code will utilize
-Beautiful Soup 4 to extract the relevant information including image url and street address of each camera. The street
-address will then be processed by Google API to fetch the corresponding geographical information. It will then  output
-the results in a text file.
-'''
+""" 
+--------------------------------------------------------------------------------
+Descriptive Name     : Providence_RI.py
+Author               : Mai Kanchanabul								      
+Contact Info         : ssui@purdue.edu (Shengli Sui)
+Description          : Parse cameras on the City of Providence traffic camera website
+Command to run script: python Providence_RI.py
+Output               : output urls, country, city and latitude, longitude to a 
+                       textfile <Providence_output.txt>
+Other files required by : N/A
+this script and where 
+located
+----For Parsing Scripts---------------------------------------------------------
+Website Parsed       : http://dot.ri.gov/travel/cameras_metro.php
+In database (Y/N)    : N
+--------------------------------------------------------------------------------
+"""
+
 import urllib2
 import json
 import time
 from bs4 import BeautifulSoup
 import re
-
-#This function will utilize the Beautiful Soup Library to find where each traffic camera information is stored within
-#the website's HTML source code. Regular expression will then be used to extract the street address and image url of
-#each camera where the street addresses will then be passed in Google API to output geo-locations.
 
 def getRegion():
     weburl="http://dot.ri.gov/travel/cameras_metro.php"
