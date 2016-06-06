@@ -7,7 +7,7 @@ Contact Info         : ssui@purdue.edu (Shengli Sui)
 Description          : Parse cameras on the Ohio Dept of Transportation traffic camera website
 Command to run script: python OH.py
 Output               : output urls, country, city and latitude, longitude to a 
-                       textfile <list_Germany_Rheinland_Pfalz>
+                       textfile <OH_cams>
 Other files required by : N/A
 this script and where 
 located
