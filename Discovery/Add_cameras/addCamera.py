@@ -140,7 +140,7 @@ def check_basic_rules(fileName,camType):
 				print line
 				print numLine
 				print index_description
-				print "Line %s : description contains \' or \" : %s" %{str(numLine),line.split('#')[index_description]}
+				print ("Line %s : description contains \' or \" : %s", str(numLine),line.split('#')[index_description])
 				print "Please open file and escape manually i.e) it's example -> it"+'"'+"'"+'"'+'s example, it"s example -> it'+"'"+'"'+"'"+"s example"
 				isSuccess = False
 		numLine+=1
