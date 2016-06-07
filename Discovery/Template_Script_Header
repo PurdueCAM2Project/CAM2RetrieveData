@@ -1,16 +1,22 @@
-""" 
+""" *add / remove fields where appropriate, delete this line when done*
 --------------------------------------------------------------------------------
 Descriptive Name     : 
 Author               : 								      
 Contact Info         : 
-Description          : 
+Date                 :
+Description          :
 Command to run script: 
+Usage                :
 Input file format    : 
- 
+Output               :
+Note                 :
 Other files required by : N/A
 this script and where 
 located
-*add fields where appropriate, delete this line when done*
+
+----For Parsing Scripts---------------------------------------------------------
+Website Parsed       : 
+In database (Y/N)    :
 --------------------------------------------------------------------------------
 """
 
