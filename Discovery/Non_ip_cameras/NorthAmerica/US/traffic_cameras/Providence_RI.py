@@ -1,8 +1,8 @@
 """ 
 --------------------------------------------------------------------------------
 Descriptive Name     : Providence_RI.py
-Author               : Mai Kanchanabul								      
-Contact Info         : ssui@purdue.edu (Shengli Sui)
+Author               : Mai Kanchanabul		
+Contact Info         : cwengyan@purdue.edu (Chan Weng Yan) 
 Description          : Parse cameras on the City of Providence traffic camera website
 Command to run script: python Providence_RI.py
 Output               : output urls, country, city and latitude, longitude to a 
@@ -12,7 +12,7 @@ this script and where
 located
 ----For Parsing Scripts---------------------------------------------------------
 Website Parsed       : http://dot.ri.gov/travel/cameras_metro.php
-In database (Y/N)    : N
+In database (Y/N)    : Y 
 --------------------------------------------------------------------------------
 """
 
@@ -26,7 +26,8 @@ def getRegion():
     weburl="http://dot.ri.gov/travel/cameras_metro.php"
     baseurl="http://dot.ri.gov" #Set main url for camera images
     soup = BeautifulSoup(urllib2.urlopen(weburl).read())
-    file = open('Providence_output.txt','w') #Open output file
+    file = open('list_ProvidenceRI','w') #Open output file
+    file.write("description#state#country#snapshot_url#latitude#longitude\n")
     for tag in soup.find_all("option"):
         region=tag.get('value')
         url = baseurl + region
@@ -34,7 +35,7 @@ def getRegion():
     file.close()
 
 def getProvidence(file,url):
-    baseurl="dot.ri.gov" #Set main url for camera images
+    baseurl="http://dot.ri.gov" #Set main url for camera images
     soup = BeautifulSoup(urllib2.urlopen(url).read()) #Initialize bs4
     imagelist=[]
     streetlist=[]
@@ -55,7 +56,8 @@ def getProvidence(file,url):
         street=street+' Providence'
         street=street.replace(" ","+")
         street=street.strip()
-        api='http://maps.googleapis.com/maps/api/geocode/json?address='+street
+	#if encounter 'loc out of range error', after street add: +'&key=<google API key>'
+        api='https://maps.googleapis.com/maps/api/geocode/json?address='+street
         response = urllib2.urlopen(api).read()
         #Load by json module
         parsed_json = json.loads(response)
@@ -75,9 +77,14 @@ def getProvidence(file,url):
     #Write output to file
     iter=0
     while iter < len(imagelist):
-        #Format the output
-        output = streetlist[iter]+'#'+'Providence'+'#'+'RI'+'#'+'USA''#'+imagelist[iter]+'#'+latlist[iter]+'#'+lnglist[iter]
-        iter +=1
+        #Format the Url and output
+	segment = imagelist[iter].split('/',imagelist[iter].count('/'))
+	if segment[1] == 'img':
+		output = streetlist[iter]+'#'+'Providence'+'#'+'RI'+'#'+'USA'+'#'+baseurl+imagelist[iter]+'#'+latlist[iter]+'#'+lnglist[iter]
+        else:
+		output = streetlist[iter]+'#'+'Providence'+'#'+'RI'+'#'+'USA'+'#'+imagelist[iter]+'#'+latlist[iter]+'#'+lnglist[iter]
+	
+	iter +=1
         #print output
         file.write(output.encode('utf-8')+'\n')
 
