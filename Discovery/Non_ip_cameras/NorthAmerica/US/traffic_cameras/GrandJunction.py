@@ -12,7 +12,7 @@ Other files required by : N/A
 this script and where 
 located
 ----For Parsing Scripts---------------------------------------------------------
-Website Parsed       : http://www.verkehr.rlp.de/index.php?lang=20&menu1=50&menu2=10&menu3=
+Website Parsed       : http://publicweb-fs.ci.grandjct.co.us/e-net/PublicWorks/TrafficCam/
 In database (Y/N)    : Y
 --------------------------------------------------------------------------------
 """
