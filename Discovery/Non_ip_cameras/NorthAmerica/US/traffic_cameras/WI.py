@@ -18,8 +18,8 @@ this script and where
 located
 
 ----For Parsing Scripts---------------------------------------------------------
-Website Parsed       : 
-In database (Y/N)    :
+Website Parsed       : http://www.511wi.gov/web/traffic/cameras.aspx
+In database (Y/N)    : Y
 --------------------------------------------------------------------------------
 """
 
