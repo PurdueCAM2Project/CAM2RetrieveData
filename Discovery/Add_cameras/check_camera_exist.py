@@ -22,7 +22,7 @@ located
 
 import MySQLdb
 import sys
-
+import getpass
 #Input validation
 if(len(sys.argv) != 2):
     print "Usage: check_camera.py <filename>"
@@ -37,9 +37,9 @@ for line in fin:
     data = line.split('#')
     links.append(data[0])
 fin.close()
-
+password = getpass.getpass()
 #Logon to database
-db = MySQLdb.connect("localhost", "root","a9L&uC$qu@R3F", "cam2")
+db = MySQLdb.connect("localhost", "root",password, "cam2")
 cursor = db.cursor()
 #Get camera links that have been added in database
 query = "Select camera_key from camera"
