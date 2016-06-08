@@ -12,14 +12,16 @@ Traffic camera Rule :
 
 Traffic camera filename Rule :
 	For US :
-		State wide camera    : state.py
-							   i.e)CO.py, KY.py
-		County or city wide  : County(or city)_state.py
-							   i.e)Lafayette_MS.py
-							     NewYorkCity_NY.py
-	For the rest :
-		City_country.py  i.e)Hongkong_CN.py
-                                 Barcelona_ES.py
+		State wide camera: <state>.py
+				i.e)CO.py, KY.py
+							   
+		County or city wide: <City>_<State>_<Source>.py
+				i.e)Lafayette_MS.py
+				    NewYorkCity_NY_dotsignals.py
+	Not US :
+		<City>_<Country>_<Source>.py  
+				i.e)Hongkong_CN.py
+                                    Barcelona_ES.py
 
 
 ============
