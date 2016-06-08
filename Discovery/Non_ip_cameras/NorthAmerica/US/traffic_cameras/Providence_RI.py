@@ -13,6 +13,7 @@ located
 ----For Parsing Scripts---------------------------------------------------------
 Website Parsed       : http://dot.ri.gov/travel/cameras_metro.php
 In database (Y/N)    : Y 
+Date added to Database : June 7, 2016
 --------------------------------------------------------------------------------
 """
 
