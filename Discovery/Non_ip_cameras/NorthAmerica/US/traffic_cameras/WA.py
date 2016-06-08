@@ -1,5 +1,26 @@
 #!/usr/bin/python
+""" 
+--------------------------------------------------------------------------------
+Descriptive Name     : WA.py
+Author               : unknown							      
+Contact Info         : dailey1@purdue.edu (Ryan Dailey)
+Date Written         : unknown
+Description          : Parse cameras on the Washington state DOT traffic camera website
+Command to run script: python WA.py
+Usage                : downloads WA.xml to be parsed instead of parsing on the web
+Output               : output urls, country, city and latitude, longitude to a 
+                       textfile <WA.list>
+Note                 : This program is to receive XML feed from WA
+Other files required by : N/A
+this script and where 
+located
 
+----For Parsing Scripts---------------------------------------------------------
+Website Parsed       : http://www.wsdot.wa.gov/traffic/api/HighwayCameras/kml.aspx
+In database (Y/N)    : Y
+Date added to Database : unknown
+--------------------------------------------------------------------------------
+"""
 import urllib2
 import httplib
 from xml.dom import minidom
@@ -31,6 +52,6 @@ def getWA():
 
 	listFile.close()
 
-
-getWA()
+if __name__ == __main__:
+	getWA()
 
