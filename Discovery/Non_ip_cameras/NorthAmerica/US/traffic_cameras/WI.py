@@ -1,3 +1,28 @@
+"""
+--------------------------------------------------------------------------------
+Descriptive Name     : Parsing Script for Wisconsin Traffic Cameras
+Author               : Thomas Norling (based off a script written by Otavio De Moraes Neto)							      
+Contact Info         : thomas.l.norling@gmail.com
+Date                 : June 8, 2016
+Description          : Script uses selennium to acquire links to the images
+Command to run script: python WI.py
+Usage                : 
+Input file format    : N/A
+Output               : list_WI
+Note                 : This script uses the geopy library to perform the geocoding on the 
+                       addresses given. Geopy is not installed on the development server 
+                       as of this writing. This will not run on the development machine 
+                       and thus will need to be run on a machine with geopy installed.
+Other files required by : N/A
+this script and where 
+located
+
+----For Parsing Scripts---------------------------------------------------------
+Website Parsed       : 
+In database (Y/N)    :
+--------------------------------------------------------------------------------
+"""
+
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
@@ -8,14 +33,6 @@ import sys
 import re
 import json
 import time
-
-#Adapted by Thomas Norling from a script Written by Otavio De Moraes Neto to parse Los Angeles traffic cams
-
-#Script uses selennium to acquire links to the images
-#output will be the image urls and description in file list_WI
-
-#Note: This script uses the geopy library to perform the geocoding on the addresses given. Geopy is not installed on the development server as of this writing.
-#This will not run on the development machine and thus will need to be run on a machine with geopy installed.
 
 def main():
     driver = webdriver.Firefox()
