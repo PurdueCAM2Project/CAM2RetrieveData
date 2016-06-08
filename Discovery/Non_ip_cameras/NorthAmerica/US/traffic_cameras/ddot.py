@@ -1,4 +1,24 @@
 #JSON in script tag style
+""" 
+--------------------------------------------------------------------------------
+Descriptive Name     : ddot.py
+Author               : unknown								      
+Contact Info         : cwengyan@purdue.edu (Chan Weng Yan)
+Date Written         : unknown
+Description          : Parse cameras on the Washington,DC traffic camera website
+Command to run script: python ddot.py
+Output               : country#state#city#description#snapshot_url#latitude#longitude to textfile  
+Note                 : 
+Other files required by : N/A
+this script and where 
+located
+
+----For Parsing Scripts---------------------------------------------------------
+Website Parsed       : http://app.ddot.dc.gov/
+In database (Y/N)    : Y
+Date added to Database : June 8, 2016
+--------------------------------------------------------------------------------
+"""
 from bs4 import BeautifulSoup
 import urllib2
 import re
