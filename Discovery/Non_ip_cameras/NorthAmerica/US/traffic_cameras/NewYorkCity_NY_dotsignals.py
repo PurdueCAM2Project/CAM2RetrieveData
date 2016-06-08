@@ -69,7 +69,7 @@ def nycdot():
 			f.write(content+"#"+str(snapshot_url)+"#"+latitude+"#"+longitude+"#"+"USA#NY#New York\n") 
 		pass
 
-
+	browser.quit()
 	f.close()
 	return
 
