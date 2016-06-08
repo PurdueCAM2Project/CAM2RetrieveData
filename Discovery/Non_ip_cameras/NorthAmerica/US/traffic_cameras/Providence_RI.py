@@ -6,7 +6,7 @@ Contact Info         : cwengyan@purdue.edu (Chan Weng Yan)
 Description          : Parse cameras on the City of Providence traffic camera website
 Command to run script: python Providence_RI.py
 Output               : output urls, country, city and latitude, longitude to a 
-                       textfile <Providence_output.txt>
+                       textfile <list_ProvidenceRI>
 Other files required by : N/A
 this script and where 
 located
