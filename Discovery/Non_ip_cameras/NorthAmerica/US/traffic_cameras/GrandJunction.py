@@ -12,8 +12,9 @@ Other files required by : N/A
 this script and where 
 located
 ----For Parsing Scripts---------------------------------------------------------
-Website Parsed       : http://publicweb-fs.ci.grandjct.co.us/e-net/PublicWorks/TrafficCam/
+Website Parsed       : http://www.gjcity.org/TrafficVolumeCameras.aspx
 In database (Y/N)    : Y
+Date added to database : unknown
 --------------------------------------------------------------------------------
 """
 
