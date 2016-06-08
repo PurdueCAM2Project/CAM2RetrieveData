@@ -4,6 +4,7 @@
 Descriptive Name     : MA.py
 Author               : unknown							      
 Contact Info         : ssui@purdue.edu (Shengli Sui)
+Date Written	     : unknown 
 Description          : Parse cameras on the 511 Massachusetts traffic camera website
 Command to run script: python MA.py
 Output               : output MA.xml 
@@ -13,6 +14,7 @@ located
 ----For Parsing Scripts---------------------------------------------------------
 URL Parse	     : http://www1.eot.state.ma.us/xmltrafficfeed/camsXML.aspx
 In database (Y/N)    : Y
+Date added to Database : unknown
 --------------------------------------------------------------------------------
 """
 import urllib2
@@ -27,4 +29,5 @@ def getMA():
 	out.write(xml.read())
 	out.close()
 
-getMA()
+if __name__ == __main__:
+	getMA()
