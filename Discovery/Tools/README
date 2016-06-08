@@ -1,3 +1,7 @@
+This folder contains code that can be useful when writing parsing scripts. 
+Just import these modules into any script you write and follow the directions
+for use outlined in each file's header.
+
 Geocoding:
       A module to perform most geocoding tasks required by this project. 
       Instructions on use are located in the header. Further information 
