@@ -1,6 +1,24 @@
-#Ilikephilly 
-#multiple links to follow
-#similar to gjcol
+""" 
+--------------------------------------------------------------------------------
+Descriptive Name     : ilikephilly.py
+Author               : unknown							      
+Contact Info         : cwengyan@purdue.edu (Chan Weng Yan)
+Date Written         : unknown
+Description          : Parse cameras on the Philadelphia Live Traffic Cameras website)
+Command to run script: python ilikephilly.py
+Output               : output urls, country, city and latitude, longitude to a 
+                       textfile <philly>
+Note                 : 
+Other files required by : N/A
+this script and where 
+located
+
+----For Parsing Scripts---------------------------------------------------------
+Website Parsed       : http://www.ilikephilly.com/traffic/
+In database (Y/N)    : Y
+Date added to Database : unknown
+--------------------------------------------------------------------------------
+"""
 from bs4 import BeautifulSoup
 import urllib2
 import re
