@@ -1,5 +1,24 @@
 #!/usr/bin/python
+"""
+-------------------------------------------------------------------------------
+Descriptive Name     : NewSouthWales_AU.py
+Author               : unknown						      
+Contact Info         : cwengyan@purdue.edu (Chan Weng Yan)
+Date Written         : unknown
+Description          : Parse cameras on the New South Wales, Australia traffic camera website)
+Command to run script: python NewSouthwales.py
+Output               : description#city#country#longitude#latitude#snapshot_url to <AU.list>
+Note                 : 
+Other files required by : N/A
+this script and where 
+located
 
+----For Parsing Scripts---------------------------------------------------------
+Website Parsed       : http://data.livetraffic.com/cameras/traffic-cam.json
+In database (Y/N)    : Y
+Date added to Database : June 9, 2016
+--------------------------------------------------------------------------------
+"""
 import urllib2
 import httplib
 import json
@@ -16,21 +35,20 @@ def getAU():
 	out =open("AU.list",'w')
 	#sort jason
 	results = js['features']
+	out.write('description#city#country#longitude#latitude#snapshot_url'+'\n')
 	for result in results:
+		#description
+                out.write(result['properties']['title'].encode(encoding='UTF-8')+'#')
+		#city and country
+		out.write('New South Wales#AU#')
 		#write longitude
 		out.write(str(result['geometry']['coordinates'][0])+'#')
 		#write latitude
 		out.write(str(result['geometry']['coordinates'][1])+'#')
-		#title
-		out.write(result['properties']['title'].encode(encoding='UTF-8')+'#')
-		#description
-		out.write(result['properties']['view'].encode(encoding='UTF-8')+'#')
-		#camera direction
-		out.write(result['properties']['direction'].encode(encoding='UTF-8')+'#')
+		
 		#Image link
 		out.write(result['properties']['href'].encode(encoding='UTF-8')+'\n')
-
 	out.close();
 
-
-getAU()
+if __name__ == '__main__':
+	getAU()
