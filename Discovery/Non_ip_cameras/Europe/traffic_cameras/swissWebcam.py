@@ -10,7 +10,7 @@ Usage                :  Parsing traffic cameras in SwissWebcam website
 Input file format    :  N/A
 Output               :  list_swissWebcam_traffic file
 Note                 :  it sometimes gives "TypeError: object of type 'NoneType' has no len()" error. If so, just re-run the script
-Other files required by : N/A
+Other files required by : This code requires to install Selenium
 this script and where 
 located
 
@@ -33,9 +33,6 @@ import selenium.webdriver.support.ui as ui
 
 class SwissWebcam:
     def __init__(self):
-        # open the Firefox
-        self.driver = webdriver.Firefox()
-
         # disable the js of firefox to speed up. it is not necessary to run
         firefox_profile = webdriver.FirefoxProfile()
         firefox_profile.set_preference("browser.download.folderList", 2)
@@ -83,7 +80,7 @@ class SwissWebcam:
             self.driver.refresh()
             self.click_all_button()
 
-    def get_tabs(self):
+    def get_tabs(self, tabs):
         """ get the list of link addresses of the alphabet tabs that
 
             extract the elements of the tabs of the alphabet which categorize the cameras by alphabet
@@ -105,11 +102,8 @@ class SwissWebcam:
             hrefs = tabs_container.find_elements_by_tag_name("a")
 
             # loop through all the tabs to get the href source of them
-            tabs = []
             for href in hrefs:
                 tabs.append(href.get_attribute("href"))
-
-            return tabs
 
         except UnexpectedAlertPresentException:
             self.handle_alert()
@@ -119,7 +113,7 @@ class SwissWebcam:
             self.driver.refresh()
             self.get_tabs()
 
-    def get_cctvs(self):
+    def get_cctvs(self, cctvs):
         """ get the list of link addresses of the cameras in the selected alphabet tab
 
             extract the elements of the cameras of the selected alphabet
@@ -136,7 +130,6 @@ class SwissWebcam:
             images = self.driver.find_elements_by_class_name("thumbnail")
 
             # loop throught all the cameras to get the href source of them
-            cctvs = []
             for img in images:
                 cctvs.append(img.get_attribute("href"))
 
@@ -144,7 +137,7 @@ class SwissWebcam:
         
         except UnexpectedAlertPresentException:
             self.handle_alert()
-            self.get_cctvs()
+            self.get_cctvs(cctvs)
 
         except:
             self.driver.refresh()
@@ -302,13 +295,15 @@ class SwissWebcam:
         """
         self.click_all_button()                             # click to move
 
-        tabs = self.get_tabs()                              # get the list of link addresses of the alphabet tabs
+        tabs = []
+        self.get_tabs(tabs)                                     # get the list of link addresses of the alphabet tabs
         current_url = self.driver.current_url               # get the current webpage's url
 
         for i in range(len(tabs)):
             self.driver.get(tabs[i])                        # move to the next alphabet tab
 
-            cctvs = self.get_cctvs()                        # get the list of link addresses of the cameras in the selected alphabet tab
+            cctvs = []
+            self.get_cctvs(cctvs)                           # get the list of link addresses of the cameras in the selected alphabet tab
 
             for j in range(len(cctvs)):
                 self.driver.get(cctvs[j])                   # move to the next camera
