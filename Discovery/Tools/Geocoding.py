@@ -94,7 +94,7 @@ class Geocoding:
         self.longitude = longitude  
         
         searchTerm = str(latitude + ',' + longitude)
-        location = self.geolocator.reverse(searchTerm)
+        location = self.geolocator.reverse(searchTerm)[0]
 
         extractInfo = location.raw['address_components'] #Get the raw JSON information so that the city name can be extracted
         for item in extractInfo:
