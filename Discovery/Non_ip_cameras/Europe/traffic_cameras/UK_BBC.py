@@ -59,47 +59,7 @@ import re
 import sys
 import time
 import json
-
-def rgAPI(cam_id, latitude, longitude, title, url, f):
-    time.sleep(0.2);
-    
-    # Use API to find the city information using no key
-    try:
-        api = "http://maps.googleapis.com/maps/api/geocode/json?latlng="+str(latitude)+","+str(longitude)+"&sensor=true"
-        response = urllib2.urlopen(api).read()
-        #load by json module 
-        parsed_json = json.loads(response) # Load the parsed jason
-        results = parsed_json['results'] # Check to see if there is a results field.
-        result = results[0] # Go to start of resaults field
-        info = [] # Define the info list. This will hold a list of address components
-        pass
-    # If we run out of attempts with no key switch to using a key
-    except:
-        try:
-            print "Using API key 2"
-            api = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+str(latitude)+","+str(longitude)+"&sensor=true&key=AIzaSyBXK0jqBwUrtZVdicbAZ_o8g8G9O6qGAbI"
-            response = urllib2.urlopen(api).read()
-            #load by json module 
-            parsed_json = json.loads(response) # Load the parsed jason
-            results = parsed_json['results'] # Check to see if there is a results field.
-            result = results[0] # Go to start of resaults field
-            info = [] # Define the info list. This will hold a list of address components
-            pass
-        except:
-            print "No more api keys ended on id: " + cam_id
-            return
-
-    for place in result['address_components']: # Go through the address components and put them in the info list.
-        info.append(place['short_name'])
-    if len(info) >= 2:
-        # The city and country fields are in thease positions in the list
-        country = info[len(info)-2]
-        city = info[len(info)-3]
-        f.write(title+"#"+url+"#"+str(latitude)+"#"+str(longitude)+"#"+country+"#"+city+"\n") # Write all the data to the text file
-    else:
-        print("City Info For Id: %s not available." % cam_id)
-
-    return
+from Geocoding import Geocoding
 
 def uk():
     # Map URL : https://www.bbc.co.uk/travel/northwestwales/incidents/road
@@ -114,6 +74,12 @@ def uk():
     # create and open a file named UK_ls to write as output
     f = open('UK_BBC_list','wb')
 
+    # Define Geocoder
+    GAPI = Geocoding("Google", "None")
+    API_num = 0 # Keeps track of which key we are using
+
+    f.write("description#snapshot_url#latitude#longitude#country#city\n")
+    print "Running UK_BBC..."
     # After making a list of files that hold the GPS information and camera data manually by going through the website and putting the URL's in a file 
     # we parse the jason and extract the information we need before sending it to the GAPI to get the city and country information as it is not in the Json file
     for onefile in files:
@@ -122,19 +88,41 @@ def uk():
         except:
             print("\"%s\" did not load" % onefile.replace("\n", ""))
             pass
-        f.write("description#snapshot_url#latitude#longitude#country#city\n")
         
         parsed_json= json.loads(response)
         for camera in parsed_json:
             cam_id = camera['id']
             provider = camera['provider']
             title = camera['title']
-            latitude = camera['latitude']
-            longitude = camera['longitude']
+            latitude = str(camera['latitude'])
+            longitude = str(camera['longitude'])
             url = camera_url.replace("provider/cam_id", provider+"/"+cam_id)
-            rgAPI(cam_id, latitude, longitude, title, url, f)
+            try:
+                GAPI.reverse(latitude, longitude)
+                city = str(GAPI.city)
+                country = str(GAPI.country)
+                if len(city) == 0 or len(country) == 0:
+                    raise Exception('City or Country Not Found!')
+                    pass
+                f.write(title+"#"+url+"#"+str(latitude)+"#"+str(longitude)+"#"+country+"#"+city+"\n") # Write all the data to the text file
+            except Exception as error:
+                if str(error) == "Your request was denied.":
+                    print("Over GAPI limit, switching to API"+str(API_num + 1))
+                    API_num = API_num + 1
+                    if API_num == 1:
+                        GAPI = Geocoding("Google", "AIzaSyC96cLzfPJJU6JJ9fzJ1kXykB6GMpb9fN4")
+                    elif API_num == 2:
+                        GAPI = Geocoding("Google", "AIzaSyCmrSFG2GCAnTKh7EtY0obD4_YnwSbjGxQ")
+                    elif API_num == 3:
+                        GAPI = Geocoding("Google", "AIzaSyDRb6HaVtHDbpHkJq8a3MEODFZlmkBt7f4")
+                    else:
+                        print "<<<ERROR:"+str(error)+">>>"
+                        print "API list exhausted, stopped on:"
+                        print title+"#"+url+"#"+str(latitude)+"#"+str(longitude)+"#"+"ERROR"+"#"+"ERROR"
+                        return
+                else:
+                    print "<<<Error:"+str(error)+">>>"+" For:\n"+title+"#"+url+"#"+str(latitude)+"#"+str(longitude)+"#"+"ERROR"+"#"+"ERROR"
             pass
-
 
     f.close()             
               
