@@ -1,3 +1,23 @@
+""" 
+--------------------------------------------------------------------------------
+Descriptive Name     : Houston.py
+Author               : Shengli Sui								      
+Contact Info         : ssui@purdue.edu
+Date Written         : June 13, 2016
+Description          : Parse cameras on the Houston,TX traffic camera website
+Command to run script: python Houston.py 
+Output               : country#state#city#snapshot_url#latitude#longitude to <list_Houston>
+Note                 : 
+Other files required by : N/A
+this script and where 
+located
+
+----For Parsing Scripts---------------------------------------------------------
+Website Parsed       : http://traffic.houstontranstar.org/cctv/txdot/txdot_regional_cameras.html?rd=FM-105
+In database (Y/N)    : N ## returns same Lat and Long for all camera; needs fixing ##
+Date added to Database :
+--------------------------------------------------------------------------------
+"""
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import urllib2
