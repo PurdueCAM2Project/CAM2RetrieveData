@@ -10,6 +10,7 @@ Geocoding:
 WriteToFile:
       A module to create the output text file for use in parsing scripts.
       Instructions for use are located in the header.
+
 Clean:
       A module to clean up location information. In other words this will
       remove unneccessary information before the location is used to search
