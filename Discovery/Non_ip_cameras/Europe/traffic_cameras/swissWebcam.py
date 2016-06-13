@@ -15,7 +15,7 @@ this script and where
 located
 
 ----For Parsing Scripts---------------------------------------------------------
-Website Parsed       :  yes
+Website Parsed       :  http://en.swisswebcams.ch/verzeichnis/traffic/schweiz/beliebt
 In database (Y/N)    :  yes
 --------------------------------------------------------------------------------
 """
