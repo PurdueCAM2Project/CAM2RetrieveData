@@ -1,4 +1,4 @@
-""" ****add / remove fields where appropriate, delete this line when done****
+"""
 --------------------------------------------------------------------------------
 Descriptive Name     : Parser for Puerto Rico Traffic Camera website http://its.dtop.gov.pr/es/TrafficCameras.aspx
 Author               : Sanghyun Joo
