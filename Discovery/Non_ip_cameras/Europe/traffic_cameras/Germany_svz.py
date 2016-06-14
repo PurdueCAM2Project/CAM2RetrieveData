@@ -9,7 +9,7 @@ Command to run script: python Germany_svz.py
 Usage                : N/A
 Input file format    : N/A
 Output               : list_germany_traffic
-Note                 : No single camera is parsed because every camera fails on Geocoding
+Note                 : Can't parse the image url because it keeps changing
 Other files required by : It requires Selenium to be installed
 this script and where
 located
@@ -125,6 +125,8 @@ class Germany:
             # get the descrip and city name of a camera
             location = cams[i].find_elements_by_tag_name("td")[1].text
             descrip, city = self.get_desc(location)
+            
+            img_src = 
 
             print(i, descrip, city)
 
