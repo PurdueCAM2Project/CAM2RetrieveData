@@ -34,7 +34,7 @@ from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import UnexpectedAlertPresentException
 from selenium.common.exceptions import TimeoutException
 
-class SwissWebcam:
+class Puerto:
     def __init__(self):
         # store the url of homepage, traffic page, the country code, and the state code
         self.home_url = "http://its.dtop.gov.pr/es/"
@@ -153,5 +153,5 @@ class SwissWebcam:
                 print("can't find")
 
 if __name__ == '__main__':
-    SwissWebcam = SwissWebcam()
-    SwissWebcam.main()
+    Puerto = Puerto()
+    Puerto.main()
