@@ -1,23 +1,23 @@
 """
 --------------------------------------------------------------------------------
-Descriptive Name     : 
+Descriptive Name     : Parser for traffic cameras in Idaho's gov website
 Author               : Sanghyun Joo
 Contact Info         : joos@purdue.edu OR toughshj@gmail.com
-Date Written         : 
-Description          : 
-Command to run script: 
+Date Written         : 15 June 2016
+Description          : parses the city name, snapshot_url, latitude, and longitude for each camera
+Command to run script: python Idaho_gov.py
 Usage                : N/A
 Input file format    : N/A
-Output               : 
+Output               : list_Idaho_traffic
 Note                 : 
-Other files required by : It requires Selenium to be installed
+Other files required by : It requires Selenium and BeautifulSoup4 to be installed
 this script and where
 located
 
 ----For Parsing Scripts---------------------------------------------------------
 Website Parsed       : http://lb.511.idaho.gov/idlb/cameras/routeselect.jsf?view=state&textOnly=false
-In database (Y/N)    : N
-Date added to Database : 
+In database (Y/N)    : Y
+Date added to Database : 15 June 2016
 --------------------------------------------------------------------------------
 """
 
@@ -94,55 +94,38 @@ class Germany:
             token = ""
 
         return token
-
-    def get_desc(self, location):
-        """ Get the description AND city name of the given location
-            
-            The location contains street name, location name, and sight name of one camera
-            This function extracts them from the location string
-
-            Args:
-                location: string that contains street name, location name, and sight name of one camera
-
-            Return:
-                desc: description of location about one camera
-                sight: city name of location about one camera
-        """
-        location = location.encode("UTF-8")
-
-        street = self.get_token(location, "e:", "Standort").strip()
-        locat = self.get_token(location, "Standort:", "Blickrichtung").strip()
-        sight = self.get_token(location, "Blickrichtung:", "").strip()
-
-        desc = street + " " + locat + " " + sight
-
-        return desc, sight
     
     def main(self):
         # get parser for the traffic page
         variable = Geocoding('Nominatim', None)
         soup = self.get_soup(self.traffic_url)
 
-        links = []
 
+        # store the href of each camera
+        links = []
         for div_tag in soup.findAll("div", {"id" : "j_idt120"}):
             links.append(div_tag.find("a").get('href'))
 
+        # loop through each camera to parse
         soup_cam = None
-
         for link in links:
+            # if href of each link doesn't start with character "/", ignore it
             if link[0] != "/":
                 continue
 
+            # create html parser for the camera
             soup_cam = self.get_soup(self.home_url + link)
 
+            # get the description and city name of the camera
             descrip = soup_cam.find("div", {"class" : "panelTitle"}).text
             descrip = self.get_token(descrip, ":", "").strip()
             city = descrip
 
+            # get the img_src
             for arg in [{"id" : "cam-1-img"}, {"id" : "cam-0-img"}]:
                 try:
                     img_src = soup_cam.find("img", arg).get('src')
+                    break
                 except:
                     continue
 
