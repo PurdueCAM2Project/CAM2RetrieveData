@@ -47,17 +47,23 @@ class Clean:
         self.textString = self.textString.replace("S of", "")
         self.textString = self.textString.replace("E of", "")
         self.textString = self.textString.replace("W of", "")
+        self.textString = self.textString.replace("NB", "")
+        self.textString = self.textString.replace("SB", "")
+        self.textString = self.textString.replace("WB", "")
+        self.textString = self.textString.replace("EB", "")
         self.textString = self.textString.replace("Inbound", "")
         self.textString = self.textString.replace("IB", "")
         self.textString = self.textString.replace("Outbound", "")
         self.textString = self.textString.replace("OB", "")
         self.textString = self.textString.replace("Onramp", "")
         self.textString = self.textString.replace("onramp", "")
+        self.textString = self.textString.replace("on Ramp", "")
         self.textString = self.textString.replace("on-ramp", "")
         self.textString = self.textString.replace("On-ramp", "")
         self.textString = self.textString.replace("On-Ramp", "")
         self.textString = self.textString.replace("Offramp", "")
         self.textString = self.textString.replace("offramp", "")
+        self.textString = self.textString.replace("off Ramp", "")
         self.textString = self.textString.replace("off-ramp", "")
         self.textString = self.textString.replace("Off-ramp", "")
         self.textString = self.textString.replace("Off-Ramp", "")
@@ -73,6 +79,8 @@ class Clean:
         self.textString = self.textString.replace("near", "")
         self.textString = self.textString.replace("Opposite", "")
         self.textString = self.textString.replace("opposite", "")
+        self.textString = self.textString.replace("Interchange", "")
+        self.textString = self.textString.replace("interchange", "")
 
     def remove_repeating(self):
         while (',,' in self.textString) or ('..' in self.textString) or ('##' in self.textString):
@@ -93,7 +101,7 @@ class Clean:
 
     def replace_at_with_and(self):
         self.textString = self.textString.replace('@', 'and')
-        self.textString = self.textString.replace('at', 'and')
+        #self.textString = self.textString.replace('at', 'and')
 
     def suite(self):
         self.remove_direction()
