@@ -34,8 +34,7 @@ class Clean:
 
     def remove_Whitespace(self):
         self.textString = self.textString.replace('\n', '')
-        while '  ' in self.textString:
-            self.textString = self.textString.replace('  ', ' ')
+        self.textString = re.sub(r"\s+", " ", self.textString)
         self.textString = self.textString.strip()
     
     def remove_direction(self):
@@ -81,12 +80,15 @@ class Clean:
         self.textString = self.textString.replace("opposite", "")
         self.textString = self.textString.replace("Interchange", "")
         self.textString = self.textString.replace("interchange", "")
+        self.textString = self.textString.replace("Ramps", "")
+        self.textString = self.textString.replace("ramps", "")
+        self.textString = self.textString.replace("Jct", "")
+        self.textString = self.textString.replace("JCT", "")
 
     def remove_repeating(self):
-        while (',,' in self.textString) or ('..' in self.textString) or ('##' in self.textString):
-            self.textString = self.textString.replace(',,', ',')
-            self.textString = self.textString.replace('..', '.')
-            self.textString = self.textString.replace('##', '#')
+        self.textString = re.sub(r"\.{2,}", ".", self.textString)
+        self.textString = re.sub(r"\,{2,}", ",", self.textString)
+        self.textString = re.sub(r"\#{2,}", "#", self.textString)
 
     def remove_bad_char(self):
         self.textString = self.textString.replace('(', '')
@@ -101,12 +103,35 @@ class Clean:
 
     def replace_at_with_and(self):
         self.textString = self.textString.replace('@', 'and')
-        #self.textString = self.textString.replace('at', 'and')
+        self.textString = re.sub(r"\sat\s", " and ", self.textString)
+
+    def remove_mileposts(self):
+        self.textString = re.sub(r"MP\s[0-9]+\.[0-9]+", "", self.textString)
+        self.textString = re.sub(r"Milepost\s[0-9]+\.[0-9]+", "", self.textString)
+        self.textString = re.sub(r"MP\s[0-9]+", "", self.textString)
+        self.textString = re.sub(r"Milepost\s[0-9]+", "", self.textString)
+        self.textString = re.sub(r"MP[0-9]+\.[0-9]+", "", self.textString)
+        self.textString = re.sub(r"MP[0-9]+", "", self.textString)
+
+    def remove_exits(self):
+        self.textString = re.sub(r"Exit\s[0-9]+", "", self.textString)
+        self.textString = re.sub(r"Exit[0-9]+", "", self.textString)
+        self.textString = re.sub(r"exit\s[0-9]+", "", self.textString)
+        self.textString = re.sub(r"exit[0-9]+", "", self.textString)
+
+    def remove_begin_end_words(self):
+        self.textString = re.sub(r"\sand$", "", self.textString)
+        self.textString = re.sub(r"^and\s", "", self.textString)
+        self.textString = re.sub(r"\sat$", "", self.textString)
+        self.textString = re.sub(r"^at\s", "", self.textString)
 
     def suite(self):
         self.remove_direction()
+        self.remove_mileposts()
+        self.remove_exits()
         self.remove_bad_char()
         self.replace_at_with_and()
         self.remove_repeating()
         self.remove_Whitespace()
+        self.remove_begin_end_words()
 
