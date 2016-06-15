@@ -37,7 +37,7 @@ from selenium.common.exceptions import UnexpectedAlertPresentException
 from selenium.common.exceptions import TimeoutException
 from bs4 import BeautifulSoup
 
-class Germany:
+class Idaho:
     def __init__(self):
         # store the url of homepage, traffic page, the country code, and the state code
         self.home_url = "http://lb.511.idaho.gov"
@@ -140,5 +140,5 @@ class Germany:
                 print("can't find")
 
 if __name__ == '__main__':
-    Germany = Germany()
-    Germany.main()
+    Idaho = Idaho()
+    Idaho.main()
