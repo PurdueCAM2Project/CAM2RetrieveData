@@ -97,13 +97,24 @@ class Geocoding:
         location = self.geolocator.reverse(searchTerm)[0]
 
         extractInfo = location.raw['address_components'] #Get the raw JSON information so that the city name can be extracted
+        most_exact = 4
         for item in extractInfo:
             types = item['types']
-            if types[0] == "locality":
+            if types[0] == "locality" and most_exact > 1:
                 self.city = item['long_name']
+                most_exact = 1
+            elif types[0] == "postal_town" and most_exact > 2:
+                self.city = item['long_name']
+                most_exact = 2
+            elif types[0] == "administrative_area_level_2" and most_exact > 3:
+                self.city = item['long_name']
+                most_exact = 3
             if types[0] == "country":
                 self.country = item['short_name']
         self.country = self.country.replace("US", "USA")
+
+        if self.city == "":
+            raise Exception('City could not be found')
 
         if self.country == "USA":
             for item in extractInfo:
