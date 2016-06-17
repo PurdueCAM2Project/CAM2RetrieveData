@@ -68,10 +68,13 @@ class Geocoding:
             searchTerm = searchTerm.replace(',,', ',')
             location = self.geolocator.geocode(searchTerm)
         except:
-            searchTerm = str(self.city + ',' + self.state + ',' + self.country) #Search for only city, state (if there is one) and country
-            searchTerm = searchTerm.replace(',,', ',')
-            searchTerm = searchTerm.replace(',,', ',')
-            location = self.geolocator.geocode(searchTerm)
+            if self.city == "":
+                raise Exception('Could not find coordinates and there is no city given')
+            else:
+                searchTerm = str(self.city + ',' + self.state + ',' + self.country) #Search for only city, state (if there is one) and country
+                searchTerm = searchTerm.replace(',,', ',')
+                searchTerm = searchTerm.replace(',,', ',')
+                location = self.geolocator.geocode(searchTerm)
 
         self.latitude = str(location.latitude)
         self.longitude = str(location.longitude)
