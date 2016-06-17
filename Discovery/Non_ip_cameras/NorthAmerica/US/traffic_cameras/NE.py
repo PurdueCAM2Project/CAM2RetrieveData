@@ -31,7 +31,7 @@ import urllib
 import time
 import re
 
-class MO:
+class NE:
     def __init__(self):
         self.driver = webdriver.Firefox()
         self.geo = Geocoding('Google', None)
@@ -127,5 +127,5 @@ class MO:
             pass
 
 if __name__ == '__main__':
-    Missouri = MO()
-    Missouri.Navigate()
+    Nebraska = NE()
+    Nebraska.Navigate()
