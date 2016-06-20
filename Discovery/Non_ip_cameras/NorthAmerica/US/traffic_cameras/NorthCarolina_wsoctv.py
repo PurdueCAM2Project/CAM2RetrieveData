@@ -3,7 +3,7 @@
 Descriptive Name     : Parser for traffic cameras in NorthCarolina's traffic website
 Author               : Sanghyun Joo
 Contact Info         : joos@purdue.edu OR toughshj@gmail.com
-Date Written         : 
+Date Written         : 17 June 2016
 Description          : parses the city name, snapshot_url, latitude, and longitude for each camera
 Command to run script: python NorthCarolina_gov.py
 Usage                : N/A
@@ -16,7 +16,7 @@ located
 
 ----For Parsing Scripts---------------------------------------------------------
 Website Parsed       : http://www.wsoctv.com/traffic/nc-cams
-In database (Y/N)    : 
+In database (Y/N)    : N
 Date added to Database : 
 --------------------------------------------------------------------------------
 """
