@@ -94,21 +94,56 @@ class Idaho:
             token = ""
 
         return token
+
+    def get_descrip(self, soup_cam):
+        """ Get the description of location about a camera
+
+            The soup_cam is the parser for webpage of one camera.
+            This function parses the description data from it.
+
+            Args:
+                soup_cam: parser for webpage of one camera
+            
+            Return:
+                descrip: the description of the location about one camera
+        """
+        descrip = soup_cam.find("div", {"class" : "panelTitle"}).text
+        descrip = self.get_token(descrip, ":", "").strip()
+
+        return descrip
+
+    def get_img_src(self, soup_cam):
+        """ Get the image url for one camera
+
+            The img tag for cameras are two: cam-1-img and cam-0-img.
+            This function tries both of them to get the img_src of all cameras.
+
+            Args:
+                soup_cam: parser for webpage of one camera
+
+            Return:
+                img_src: the image url for the camera with the given webpage parser
+        """
+        for arg in [{"id" : "cam-1-img"}, {"id" : "cam-0-img"}]:
+            try:
+                img_src = soup_cam.find("img", arg).get('src')
+                break
+            except:
+                continue
+        
+        return img_src
     
     def main(self):
         # get parser for the traffic page
         variable = Geocoding('Nominatim', None)
         soup = self.get_soup(self.traffic_url)
 
-
         # store the href of each camera
-        links = []
-        for div_tag in soup.findAll("div", {"id" : "j_idt120"}):
-            links.append(div_tag.find("a").get('href'))
-
-        # loop through each camera to parse
         soup_cam = None
-        for link in links:
+        for div_tag in soup.findAll("div", {"id" : "j_idt120"}):
+            # get the link to the camera
+            link = div_tag.find("a").get('href')
+
             # if href of each link doesn't start with character "/", ignore it
             if link[0] != "/":
                 continue
@@ -117,17 +152,9 @@ class Idaho:
             soup_cam = self.get_soup(self.home_url + link)
 
             # get the description and city name of the camera
-            descrip = soup_cam.find("div", {"class" : "panelTitle"}).text
-            descrip = self.get_token(descrip, ":", "").strip()
+            descrip = self.get_descrip(soup_cam)
             city = descrip
-
-            # get the img_src
-            for arg in [{"id" : "cam-1-img"}, {"id" : "cam-0-img"}]:
-                try:
-                    img_src = soup_cam.find("img", arg).get('src')
-                    break
-                except:
-                    continue
+            img_src = self.get_img_src(soup_cam)
 
             print(descrip, img_src)
 
