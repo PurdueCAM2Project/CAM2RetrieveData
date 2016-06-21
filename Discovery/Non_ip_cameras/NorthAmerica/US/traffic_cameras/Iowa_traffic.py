@@ -15,7 +15,7 @@ this script and where
 located
 
 ----For Parsing Scripts---------------------------------------------------------
-Website Parsed       : http://lb.511.Iowa.gov/idlb/cameras/routeselect.jsf?view=state&textOnly=false
+Website Parsed       : http://lb.511.Iowa.gov/idlb/cameras/routeselect.jsf?vi
 In database (Y/N)    : Y
 Date added to Database : 16 June 2016
 --------------------------------------------------------------------------------
@@ -125,6 +125,7 @@ class Iowa:
             Return:
                 img_src: the image url for the camera with the given webpage parser
         """
+        img_src = ""
         for arg in [{"id" : "cam-1-img"}, {"id" : "cam-0-img"}]:
             try:
                 img_src = soup_cam.find("img", arg).get('src')
@@ -133,7 +134,31 @@ class Iowa:
                 continue
 
         return img_src
-    
+
+    def get_data(self, link):
+        """ Get the description, city name, and the image url of the given camera
+
+            The link is url to a camera.
+            This function creates parser for that and extracts the needed data.
+
+            Args:
+                link: url to a camera webpage that contains more detailed info about the camera
+
+            Return:
+                descrip: description about the given camera
+                city: city name of the given camera
+                img_src: image url of the given camera
+        """
+        # create html parser for the camera
+        soup_cam = self.get_soup(self.home_url + link)
+
+        # get the description, city name, and img_src of the camera
+        descrip = self.get_descrip(soup_cam)
+        city = descrip
+        img_src = self.get_img_src(soup_cam)
+
+        return descrip, city, img_src
+
     def main(self):
         # get parser for the traffic page
         variable = Geocoding('Nominatim', None)
@@ -142,20 +167,12 @@ class Iowa:
         # loop through each camera to parse
         soup_cam = None
         for div_tag in soup.findAll("div", {"id" : "j_idt126"}):
-            # get the link to the camera
+            # get the link to the camera. If href of each link doesn't start with character "/", ignore it
             link = div_tag.find("a").get('href')
-
-            # if href of each link doesn't start with character "/", ignore it
             if link[0] != "/":
                 continue
 
-            # create html parser for the camera
-            soup_cam = self.get_soup(self.home_url + link)
-
-            # get the description, city name, and img_src of the camera
-            descrip = self.get_descrip(soup_cam)
-            city = descrip
-            img_src = self.get_img_src(soup_cam)
+            descrip, city, img_src = self.get_data(link)
 
             print(descrip, img_src)
 
