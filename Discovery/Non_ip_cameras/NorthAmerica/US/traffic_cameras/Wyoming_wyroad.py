@@ -94,7 +94,35 @@ class Wyoming:
             token = ""
 
         return token
-    
+
+    def get_data(self, cam):
+        """ Get the description, image url, and city name of the given camera
+
+            The cam is a BeautifulSoup element that contains the infomation about one camera in <a href=""> tag
+            This function extracts the description, image url, and city name of the given data
+
+            Args:
+                cam: BeautifulSoup element that contains the infomation about one camera in <a href=""> tag
+
+            Return:
+                descrip: description about the given camera
+                img_src: image url of the given camera
+                city: city name of the given camera
+        """
+        # create parser for a camera
+        soup_cam = self.get_soup(self.home_url + cam.get('href'))
+
+        # create img_src, city, descrip for Geocoding
+        descrip = ""
+        img_src = soup_cam.find("img", {"class" : "photolarge"}).get('src')
+        city = cam.text
+
+        # complete the img_src
+        if img_src[0] == "/":
+            img_src = self.home_url + img_src
+
+        return descrip, img_src, city
+
     def main(self):
         # get parser for the traffic page
         variable = Geocoding('Nominatim', None)
@@ -109,18 +137,8 @@ class Wyoming:
 
             # loop through each camera in a link
             for cam in cam_table.findAll("a"):
-                # create parser for each camera
-                soup_cam = self.get_soup(self.home_url + cam.get('href'))
-
-                # create img_src, city, descrip for Geocoding
-                descrip = ""
-                img_src = soup_cam.find("img", {"class" : "photolarge"}).get('src')
-                city = cam.text
-
-                # complete the img_src
-                if img_src[0] == "/":
-                    img_src = self.home_url + img_src
-
+                descrip, img_src, city = self.get_data(cam)
+                
                 print(img_src, city)
 
                 try:
