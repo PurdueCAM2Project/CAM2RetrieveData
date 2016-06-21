@@ -165,7 +165,6 @@ class Iowa:
         soup = self.get_soup(self.traffic_url)
 
         # loop through each camera to parse
-        soup_cam = None
         for div_tag in soup.findAll("div", {"id" : "j_idt126"}):
             # get the link to the camera. If href of each link doesn't start with character "/", ignore it
             link = div_tag.find("a").get('href')
