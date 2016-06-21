@@ -172,8 +172,8 @@ class Iowa:
             if link[0] != "/":
                 continue
 
+            # get the description, city name, and image url for given camera
             descrip, city, img_src = self.get_data(link)
-
             print(descrip, img_src)
 
             try:
