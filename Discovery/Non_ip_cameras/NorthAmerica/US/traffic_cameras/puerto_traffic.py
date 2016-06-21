@@ -141,9 +141,9 @@ class Puerto:
         # loop through the a_tag about each camera
         soup_traffic_links = soup_traffic.find("div", {"id" : "bodyContent_bodyContent_cctv"})
         for a_tag in soup_traffic_links.findAll("a", {"target" : "_blank"}):
+
             # get the im_src, city name, and description about the camera
             img_src, city, descrip = self.get_data(a_tag)
-
             print(city, descrip, img_src)
             
             try:
