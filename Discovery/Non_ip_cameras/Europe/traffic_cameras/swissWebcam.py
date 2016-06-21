@@ -291,18 +291,16 @@ class SwissWebcam:
         return lat, lon
 
     def main(self):
-        """ main function to run the script
-        """
         self.click_all_button()                             # click to move
 
-        tabs = []
-        self.get_tabs(tabs)                                     # get the list of link addresses of the alphabet tabs
+        tabs = []                                           # list to store the list of link addresses of the alphabet tabs
+        self.get_tabs(tabs)                                 # get the list of link addresses of the alphabet tabs
         current_url = self.driver.current_url               # get the current webpage's url
 
         for i in range(len(tabs)):
             self.driver.get(tabs[i])                        # move to the next alphabet tab
 
-            cctvs = []
+            cctvs = []                                      # list to store the list of link addresses of the cameras in the selected alphabet tab
             self.get_cctvs(cctvs)                           # get the list of link addresses of the cameras in the selected alphabet tab
 
             for j in range(len(cctvs)):
