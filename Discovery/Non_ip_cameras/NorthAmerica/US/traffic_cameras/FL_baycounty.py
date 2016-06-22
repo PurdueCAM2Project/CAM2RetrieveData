@@ -3,21 +3,21 @@
 Descriptive Name     : Parser for traffic cameras in Florida bay county's traffic website
 Author               : Sanghyun Joo
 Contact Info         : joos@purdue.edu OR toughshj@gmail.com
-Date Written         : 
+Date Written         : 21 June 2016
 Description          : parses the city name, snapshot_url, latitude, and longitude for each camera
 Command to run script: python Florida_gov.py
 Usage                : N/A
 Input file format    : N/A
 Output               : list_Florida_traffic
-Note                 : 
+Note                 : N/A
 Other files required by : It requires Selenium and BeautifulSoup4 to be installed
 this script and where
 located
 
 ----For Parsing Scripts---------------------------------------------------------
-Website Parsed       : http://www.wsoctv.com/traffic/nc-cams
-In database (Y/N)    : N
-Date added to Database : 
+Website Parsed       : http://tmc.baycountyfl.gov/
+In database (Y/N)    : Y
+Date added to Database : 22 June 2016
 --------------------------------------------------------------------------------
 """
 
