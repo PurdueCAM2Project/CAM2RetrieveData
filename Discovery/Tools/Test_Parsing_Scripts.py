@@ -72,9 +72,6 @@ class Testing:
             count += 1
         DEVNULL.close()
         os.remove('errorFile.txt')
-        print "\nThe following files parsed successfully: " + ', '.join(self.scriptSuccess)
-        print "The following files had one or more errors: " + ', '.join(self.scriptFailure)
-        print "Check testOutput.txt for more details"
         
     def testOutputFile(self, inputfile):
         print "Testing output file of: " + inputfile
@@ -136,16 +133,17 @@ class Testing:
                         error = 1
                         self.testOutput.write(filename + " does not contain required elements. Please ensure header contains 'state' if country is USA\n")
 
-                lineNum = 0
-                for camera in lines:
-                    camera = camera.split('#')
-                    numFields = len(camera)
-                    if numFields == numHeadFields:
-                        pass
-                    else:
-                        error = 1
-                        print("Line " + str(lineNum) + " does not have the same number of fields as the header. Please ensure camera data matches the header.\n")
-                    lineNum += 1
+                if error == 0:
+                    lineNum = 0
+                    for camera in lines:
+                        camera = camera.split('#')
+                        numFields = len(camera)
+                        if numFields == numHeadFields:
+                            pass
+                        else:
+                            error = 1
+                            self.testOutput.write("Line " + str(lineNum) + " does not have the same number of fields as the header. Please ensure camera data matches the header.\n")
+                        lineNum += 1
                 
                 if error == 0:
                     self.testOutput.write(filename + " contains all required elements and the header is formatted correctly.\n")
@@ -164,9 +162,17 @@ class Testing:
                     print "Could not remove: " + filename
 
         print "Done. Please check testOutput.txt for more detailed information."
-                    
+
+    def SuccessFailure(self):
+        print "\nThe following files parsed successfully: " + ', '.join(self.scriptSuccess)
+        print "The following files had one or more errors: " + ', '.join(self.scriptFailure)
+        print "Check testOutput.txt for more details"
+
+        self.testOutput.write("\nThe following files parsed successfully: " + ', '.join(self.scriptSuccess))
+        self.testOutput.write("\nThe following files had one or more errors: " + ', '.join(self.scriptFailure))          
 
 if __name__ == '__main__':
     test = Testing()
     test.testRunWithoutError()
+    test.SuccessFailure()
     test.askDelete()
