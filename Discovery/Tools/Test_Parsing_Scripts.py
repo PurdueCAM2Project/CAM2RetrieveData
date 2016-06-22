@@ -51,9 +51,12 @@ class Testing:
                 print "Testing: " + item
                 errorFile = open('errorFile.txt', 'w')
                 self.testOutput.write("\nScript: " + item + "\n")
-                p = subprocess.Popen('python ' + item, stdout=DEVNULL, stderr=errorFile)
+                p = subprocess.Popen('python ' + item, stdout=DEVNULL, stderr=errorFile, preexec_fn=os.setsid, shell=True)
                 p.wait()
-                p.kill()
+                try:
+                    os.killpg(p.pid, signal.SIGTERM)
+                except:
+                    pass
                 errorFile.close()
                 errorFile = open('errorFile.txt', 'r')
                 err = errorFile.readlines()
