@@ -34,7 +34,7 @@ def Lafayette():
     iter = 0
 
     #create a file named file_lafa and creat Lf_ls txt file to be output
-    file_lafa = open('list_LafayetteLA','wb')
+    file_lafa = open('list_Lafayette_LA.txt','wb')
     file_lafa.write('country#state#city#description#snapshot_url#latitude#longitude'+'\n')
 
     #get list of links to append to url to create different soup
