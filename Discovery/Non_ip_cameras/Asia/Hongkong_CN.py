@@ -60,7 +60,7 @@ def getHK():
 	response = opener.open(url)
 	page = response.read()
 	soup = BeautifulSoup(page) # Create soup
-	f = open('list_Hongkong_CN','w') # Create file for output
+	f = open('list_Hongkong_CN.txt','w') # Create file for output
 	f.write('snapshot_url#description#latitude#longitude#country#city')
 	f.write('\n')
 	for tag in soup.find_all('image'):
