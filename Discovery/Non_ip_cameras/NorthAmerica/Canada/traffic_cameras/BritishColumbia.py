@@ -32,7 +32,7 @@ def BChighway():
 	BC_URL = "http://images.drivebc.ca/bchighwaycam/pub/html/www/index.html"
 	baseurl = 'http://images.drivebc.ca'
 	soup = BeautifulSoup(urllib2.urlopen(BC_URL).read())
-	f = open('list_BC','w')
+	f = open('list_BritishColumbia.txt','w')
 	f.write('country#city#snapshot_url#latitude#longitude'+'\n')
 	imgurl = []
 	titlelist = []
