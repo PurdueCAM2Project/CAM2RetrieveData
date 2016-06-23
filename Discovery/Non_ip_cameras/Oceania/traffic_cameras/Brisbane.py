@@ -20,7 +20,7 @@ import codecs
 class Brisbane:
     def __init__(self):
         self.driver = webdriver.Firefox()
-        self.f = open('list_Brisbane', 'w')
+        self.f = open('list_Brisbane.txt', 'w')
     
     def gAPI(self, locat, city, link, f):
         time.sleep(0.2);
