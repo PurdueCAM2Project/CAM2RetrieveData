@@ -29,7 +29,7 @@ def Navigate():
     driver.get("http://511.alberta.ca/cameras/")
 
     coords = Geocoding('Google', None)
-    file = WriteToFile(False, 'list_Alberta_CA.txt')
+    file = WriteToFile(False, 'list_Alberta.txt')
 
     option = Select(driver.find_element_by_id("highway_dropdown"))
     numOption = len(driver.find_elements_by_tag_name("option"))
