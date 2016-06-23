@@ -31,7 +31,7 @@ source_url = 'http://www.ilikephilly.com/traffic/'
 city = 'Philladelphia'
 state = 'PA'
 country = 'USA'
-f = open('philly', 'w')
+f = open('list_ilikephilly.txt', 'w')
 dupe_check = []
 f.write('country#state#city#description#snapshot_url#latitude#longitude\n')
 
