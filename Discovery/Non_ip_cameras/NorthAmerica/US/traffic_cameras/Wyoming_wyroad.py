@@ -5,7 +5,7 @@ Author               : Sanghyun Joo
 Contact Info         : joos@purdue.edu OR toughshj@gmail.com
 Date Written         : 15 June 2016
 Description          : parses the city name, snapshot_url, latitude, and longitude for each camera
-Command to run script: python 
+Command to run script: python Wyoming_wyroad.py
 Usage                : N/A
 Input file format    : N/A
 Output               : list_Wyoming_traffic
