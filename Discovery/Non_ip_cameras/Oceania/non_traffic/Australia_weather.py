@@ -5,7 +5,7 @@ Author               : Sanghyun Joo
 Contact Info         : joos@purdue.edu OR toughshj@gmail.com
 Date Written         : 22 June 2016
 Description          : parses the city name, snapshot_url, latitude, and longitude for each camera
-Command to run script: python 
+Command to run script: python Australia_weather.py
 Usage                : N/A
 Input file format    : N/A
 Output               : list_Australia_traffic
@@ -98,39 +98,40 @@ class Australia:
 
         return token
 
-    def get_data(self, a_tag):
+    def get_data(self, string):
         """ Get the description, image url, and city name of the given camera
 
-            The a_tag is a BeautifulSoup element that contains the infomation about one camera in <a> tag
-            This function extracts the description, image url, and city name of the given data
+            The string contains the location infomation about one camera
+            This function extracts the description and city name from the string
+            Also, it gets the img_src from the current webpage
 
             ArgsderLeft:
-                a_tag: BeautifulSoup element that contains the infomation about one camera in <a> tag
+                string: the location infomation about one camera
 
             Return:
-                descrip: description about the given camera
-                img_src: image url of the given camera
                 city: city name of the given camera
+                img_src: image url of the given camera
+                descrip: description about the given camera
         """
-        img_tag = a_tag.find("img")
+        img_src = self.driver.find_element_by_xpath("//div[@align='center']/img").get_attribute('src')
+        city = self.get_token(string, "-", "(").strip()
+        descrip = city + ", " + self.get_token(string, "", " ")
 
-        img_src = img_tag.get('src')
-        city = "New Australia"
-        descrip = img_tag.get('alt')
-
-        return descrip, img_src, city
+        return img_src, city, descrip
 
     def main(self):
         # get parser for the traffic page
         geo = Geocoding('Nominatim', None)
         self.driver.get(self.traffic_url)
 
-        #
+        # lists to store description and link to the image of each camera
         descrips = []
         links_to_img = []
 
         # loop through each link
         for div_tag in self.driver.find_elements_by_xpath("//div[@id='pageContent']/div"):
+
+            # try to get description and link to the image of a camera. if fails, it means that it reached the end so breaks out of the loop
             try:
                 descrip = div_tag.find_element_by_class_name("webcamHeaderLeft").text
                 link_to_img = div_tag.find_element_by_tag_name("a").get_attribute('href')
@@ -140,15 +141,17 @@ class Australia:
             except:
                 break
 
+        # loop through the stored links
         for i in range(len(links_to_img)):
+
+            # move to the link
             self.driver.get(links_to_img[i])
 
-            img_src = self.driver.find_element_by_xpath("//div[@align='center']/img").get_attribute('src')
-            city = self.get_token(descrips[i], "-", "(").strip()
-            descrip = city + ", " + self.get_token(descrips[i], "", " ")
-
+            # get the data about one camera
+            img_src, city, descrip = self.get_data(descrips[i])
             print(descrip, img_src, city)
 
+            # try to get the GPS data and write it to the file. if fails, move to the next camera
             try:
                 geo.locateCoords(descrip, city, self.state, self.country)
                 result = geo.city.replace(" ", "").title() + "#" + geo.country + "#" + geo.state + "#" + img_src + "#" + geo.latitude + "#" + geo.longitude + "\n"
