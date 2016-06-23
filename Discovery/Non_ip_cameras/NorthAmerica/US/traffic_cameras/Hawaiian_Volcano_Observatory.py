@@ -38,7 +38,7 @@ base_url = "http://hvo.wr.usgs.gov/cams"
 
 Input = urllib2.urlopen(base_url).read()
 
-f = open('list_HVO', 'w');
+f = open('list_Hawaiian_Volcano_Observatory.txt', 'w');
 
 f.write('description#snapshot_url#country#state#City')
 
