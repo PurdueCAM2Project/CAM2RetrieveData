@@ -29,7 +29,7 @@ def getSANA():
     driver = webdriver.Firefox()
     driver.get("http://www.transguide.dot.state.tx.us/ITS_WEB/Frontend/default.html?r=SAT&p=San%20Antonio&t=cctv")
     time.sleep(5)
-    file = open('SanAntonio_output.txt','w')
+    file = open('list_SanAntonio.txt','w')
     getRoadway(driver,file)
     file.close()
 
