@@ -27,7 +27,7 @@ def getRegion():
     weburl="http://dot.ri.gov/travel/cameras_metro.php"
     baseurl="http://dot.ri.gov" #Set main url for camera images
     soup = BeautifulSoup(urllib2.urlopen(weburl).read())
-    file = open('list_ProvidenceRI','w') #Open output file
+    file = open('list_Providence_RI.txt','w') #Open output file
     file.write("description#state#country#snapshot_url#latitude#longitude\n")
     for tag in soup.find_all("option"):
         region=tag.get('value')
