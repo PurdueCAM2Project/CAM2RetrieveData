@@ -29,7 +29,7 @@ import time
 
 def getSTL():
     #Use webdriver to fetch website and find camera list element
-    file = open('list_stlouis','w')
+    file = open('list_StLouis.txt','w')
     driver = webdriver.Firefox()
     driver.get("http://www.gatewayguide.com/")
     time.sleep(10)
