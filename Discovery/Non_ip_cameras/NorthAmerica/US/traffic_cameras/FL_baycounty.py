@@ -5,7 +5,7 @@ Author               : Sanghyun Joo
 Contact Info         : joos@purdue.edu OR toughshj@gmail.com
 Date Written         : 21 June 2016
 Description          : parses the city name, snapshot_url, latitude, and longitude for each camera
-Command to run script: python Florida_gov.py
+Command to run script: python FL_baycounty.py
 Usage                : N/A
 Input file format    : N/A
 Output               : list_Florida_traffic
