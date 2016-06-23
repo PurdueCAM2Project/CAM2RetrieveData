@@ -38,7 +38,7 @@ class SwissWebcam:
         self.state = ""
 
         # open the file to store the list and write the format of the list at the first line
-        self.f = open('list_swissWebcam_faster', 'w')
+        self.f = open('list_swissWebcam_faster.txt', 'w')
         self.f.write("city#country#snapshot_url#latitude#longitude" + "\n")
 
     def get_soup(self, url):
