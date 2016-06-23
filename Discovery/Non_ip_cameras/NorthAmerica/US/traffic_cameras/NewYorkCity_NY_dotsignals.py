@@ -39,7 +39,7 @@ def nycdot():
 	
 	JSonURL = "http://dotsignals.org/new-data.php" # URL to the JSon File Containing Map Data
 	CameraPopupURL = "http://dotsignals.org/google_popup.php?cid=" # URL to access the cameara URL
-	f = open('nycdot_list','w') # Open an output file for writing
+	f = open('list_NewYorkCity_NY_dotsignals','w') # Open an output file for writing
     
     # Write the header info into the file
 	f.write("description#snapshot_url#latitude#longitude#country#state#city\n")
