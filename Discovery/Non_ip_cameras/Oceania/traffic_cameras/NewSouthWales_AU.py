@@ -32,7 +32,7 @@ def getAU():
 	js = json.load(res)
 	#in_ = open('AU.json','r')
 	#js = json.load(in_)
-	out =open("AU.list",'w')
+	out =open("list_NewSouthWales_AU.txt",'w')
 	#sort jason
 	results = js['features']
 	out.write('description#city#country#longitude#latitude#snapshot_url'+'\n')
