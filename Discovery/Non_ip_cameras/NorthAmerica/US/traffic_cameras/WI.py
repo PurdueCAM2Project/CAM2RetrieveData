@@ -39,7 +39,7 @@ def main():
     driver.get("http://www.511wi.gov/web/traffic/cameras.aspx")
     driver.implicitly_wait(15)
     time.sleep(2)
-    f = open ('list_WI_USA','w')
+    f = open ('list_WI.txt','w')
     #Format of output
     att = []
     ls = []
