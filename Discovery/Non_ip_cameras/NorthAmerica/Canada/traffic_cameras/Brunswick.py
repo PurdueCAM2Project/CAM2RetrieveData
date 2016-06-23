@@ -46,7 +46,7 @@ class Brunswick:
         self.state = ""
 
         # open the file to store the list and write the format of the list at the first line
-        self.f = open('list_Brunswick_traffic', 'w')
+        self.f = open('list_Brunswick.txt', 'w')
         self.f.write("city#country#snapshot_url#latitude#longitude" + "\n")
 
     def get_soup(self, url):
