@@ -9,7 +9,7 @@ Command to run script:  python3 swissWebcam.py
 Usage                :  Parsing traffic cameras in SwissWebcam website
 Input file format    :  N/A
 Output               :  list_swissWebcam_traffic file
-Note                 :  it sometimes gives "TypeError: object of type 'NoneType' has no len()" error. If so, just re-run the script
+Note                 :  This website's pictures are all from the http://www.webcams.travel/ which we already have. Do not use to parse
 Other files required by : This code requires to install Selenium
 this script and where 
 located
