@@ -50,7 +50,7 @@ def scraping(address):
     fo.write(str(long) + "\n")
 
 if __name__ == '__main__':
-    fo = open("list_London.txt", "w")
+    fo = open("list_London_UK.txt", "w")
     fo.write("country#city#snapshot_url#latitude#longitude\n")
     origin = "http://www.trafficdelays.co.uk/london-traffic-cameras/"
     for page_num in xrange(1, 27): #iterate through each page from 1 to 26
