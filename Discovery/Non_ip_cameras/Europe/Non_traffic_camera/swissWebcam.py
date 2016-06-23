@@ -44,7 +44,7 @@ class SwissWebcam:
         self.country = "CH"
 
         # open the file to store the list and write the format of the list at the first line
-        self.f = open('list_swissWebcam', 'w')
+        self.f = open('list_swissWebcam.txt', 'w')
         self.f.write("country#city#snapshot_url#latitude#longitude" + "\n")
 
         # open the Firefox
