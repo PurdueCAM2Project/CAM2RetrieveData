@@ -5,7 +5,7 @@ Author               : Sanghyun Joo
 Contact Info         : joos@purdue.edu OR toughshj@gmail.com
 Date Written         : 17 June 2016
 Description          : parses the city name, snapshot_url, latitude, and longitude for each camera
-Command to run script: python NorthCarolina_gov.py
+Command to run script: python NorthCarolina_wsoctv.py
 Usage                : N/A
 Input file format    : N/A
 Output               : list_NorthCarolina_traffic
