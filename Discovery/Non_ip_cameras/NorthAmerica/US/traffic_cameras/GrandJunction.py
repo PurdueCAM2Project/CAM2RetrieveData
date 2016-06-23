@@ -31,7 +31,7 @@ def getGJ():
     baseroadurl='http://publicweb-fs.ci.grandjct.co.us/e-net/PublicWorks/TrafficCam/'
     #Open main page where all road ways are listed
     base='http://www.gjcity.org/TrafficVolumeCameras.aspx'
-    file = open('GrandJunction_output.txt','w') #Open output file
+    file = open('list_GrandJunction.txt','w') #Open output file
     roadlist=[]
     #Extract links which lead to camera feed pages of each road way
     soup = BeautifulSoup(urllib2.urlopen(base).read())
