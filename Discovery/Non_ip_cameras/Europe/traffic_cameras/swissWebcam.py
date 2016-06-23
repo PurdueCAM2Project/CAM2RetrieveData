@@ -43,7 +43,7 @@ class SwissWebcam:
         self.driver.get("http://en.swisswebcams.ch/verzeichnis/traffic/schweiz/beliebt")
 
         # open the file to store the list and write the format of the list at the first line
-        self.f = open('list_SwissWebcam_traffic', 'w')
+        self.f = open('list_swissWebcam', 'w')
         self.f.write("country#city#snapshot_url#latitude#longitude" + "\n")
 
         # wait object to use
