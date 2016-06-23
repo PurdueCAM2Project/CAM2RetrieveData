@@ -29,7 +29,7 @@ def getOH():
     root = ET.fromstring(xml_string)
     
     # The output file is OH_cams
-    out = open('OH_cams',"w")
+    out = open('list_OH.txt',"w")
 
     for camera_site in root:
     	
