@@ -59,8 +59,8 @@ class Snoweye:
     def __init__(self):
         #Open up Firefox and the file to be written to
         self.driver = webdriver.Firefox()
-        self.f = open('list_Snoweye.txt', 'w')
-        self.g = open('list_Snoweye_US.txt', 'w')
+        self.f = open('list_updated_Snoweye.txt', 'w')
+        self.g = open('list_updated_Snoweye_US.txt', 'w')
 
     def gAPI(self, locat, region, main_location, country, link, f, g):
         time.sleep(0.2);
