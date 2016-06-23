@@ -5,7 +5,7 @@ import re
 import sys
 import json
 
-f = open('nycdot', 'w')
+f = open('list_nycdot.txt', 'w')
 
 #connect to target URL and retrieve HTML
 url = 'http://nyctmc.org/'
