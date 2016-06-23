@@ -47,7 +47,7 @@ class NorthCarolina:
         self.state = "NC"
 
         # open the file to store the list and write the format of the list at the first line
-        self.f = open('list_NorthCarolina_traffic', 'w')
+        self.f = open('list_NorthCarolina_wsoctv.txt', 'w')
         self.f.write("city#country#state#snapshot_url#latitude#longitude" + "\n")
 
         # open the web-browser
