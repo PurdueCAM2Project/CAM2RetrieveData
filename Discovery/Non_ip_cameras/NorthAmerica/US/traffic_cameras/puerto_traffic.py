@@ -48,7 +48,7 @@ class Puerto:
         self.state = "PR"
 
         # open the file to store the list and write the format of the list at the first line
-        self.f = open('list_puerto_traffic', 'w')
+        self.f = open('list_puerto_traffic.txt', 'w')
         self.f.write("city#country#state#snapshot_url#latitude#longitude" + "\n")
         
     def get_soup(self, url):
