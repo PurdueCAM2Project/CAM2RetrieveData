@@ -9,8 +9,7 @@ Command to run script:  python swissWebcam_non_traffic.py
 Usage                :  Parsing cameras in SwissWebcam website
 Input file format    :  N/A
 Output               :  list_SwissWebcam_non_traffic
-Note                 :  This code is slower than swissWebcam_faster.py but parses almost every camera with more accuracy.
-                        If you want faster script, run swissWebcam_faster.py
+Note                 :  This website's pictures are all from the http://www.webcams.travel/ which we already have. Do not use to parse
 Other files required by : This code requires to install BeautifulSoup4 and Geocoding.py file from NetworkCameras/Discovery/Tools/Geocoding.py
 this script and where 
 located
@@ -26,6 +25,7 @@ In database (Y/N)    :  Y
 import urllib
 import re
 import time
+import traceback
 import selenium.webdriver.support.ui as ui
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -83,8 +83,11 @@ class SwissWebcam:
             Return:
                 img_src: the extracted image url from <img src=""> tag
         """
-        img_src = camera.find("img").get('src')
-        img_src = img_src.replace("toenail", "original")
+        soup_img = self.get_soup(self.home_url + camera.get('href'))
+        try:
+            img_src = soup_img.find("img", {"id" : "WEBCAM-bild"}).get('src')
+        except AttributeError:
+            img_src = self.home_url + soup_img.find("iframe").get('src')
 
         return img_src
 
@@ -244,12 +247,15 @@ class SwissWebcam:
     def main(self):
         # get parser for the homepage
         soup_home = self.get_soup(self.home_url)
-        variable = Geocoding('Nominatim', None)
+        geo = Geocoding('Nominatim', None)
 
         i = 1
 
         # loop through all the categories
         for link in soup_home.find_all("a", class_="kategorie"):
+            if "Traffic" in link.text:
+                continue
+            
             soup_cate = self.get_soup(self.home_url + link.get('href'))                                 # create parser for each category
             
             all_button_url = soup_cate.find("input", {"id" : "VERZEICHNIS-button_alle"}).get('onclick') # get the url of all_button of the category
@@ -270,12 +276,16 @@ class SwissWebcam:
                 for camera in soup_tab.find_all("a", {"class" : "thumbnail"}):
                     try:
                         img_src = self.get_img_src(camera)
-                        descrip = camera.get('title')   #self.get_descrip(camera)
+                        print(i, img_src)
+                        i += 1
+                        if "images.webcams.travel" in img_src:
+                            continue
+
+                        descrip = camera.get('title')
                         city    = self.get_city(camera)
                         cam_id  = self.get_cam_id(img_src)
 
-                        print(i, img_src, descrip, city)
-                        i += 1
+                        print(img_src, descrip, city)
 
                         # try to get the geological information and write it into the file. if fails, move to the next camera
                         self.driver.get(self.geo_url + cam_id)
@@ -283,8 +293,9 @@ class SwissWebcam:
 
                         self.f.write("CH#" + city.replace(" ", "").title() + "#" + img_src + "#" + str(lat) + "#" + str(lon) + "\n")
                     except:
-                        continue
                         print("error")
+                        traceback.print_exc()
+                        continue
 
 if __name__ == '__main__':
     SwissWebcam = SwissWebcam()

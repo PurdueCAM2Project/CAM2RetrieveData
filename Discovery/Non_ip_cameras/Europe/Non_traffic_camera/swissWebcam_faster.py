@@ -9,8 +9,7 @@ Command to run script:  python swissWebcam_faster.py
 Usage                :  Parsing cameras in SwissWebcam website
 Input file format    :  N/A
 Output               :  list_SwissWebcam_faster
-Note                 :  This code is much faster than swissWebcam.py but fails on Geocoding part for many cameras.
-                        If you want to parse every camera with more accuracy, run swissWebcam.py
+Note                 :  This website's pictures are all from the http://www.webcams.travel/ which we already have. Do not use to parse
 Other files required by : This code requires to install BeautifulSoup4 and Geocoding.py file from NetworkCameras/Discovery/Tools/Geocoding.py
                           It is MUCH FASTER than swissWebcam_non_traffic.py but fails to get the geo-location information of some cameras.
 this script and where 
@@ -67,8 +66,11 @@ class SwissWebcam:
             Return:
                 img_src: the extracted image url from <img src=""> tag
         """
-        img_src = camera.find("img").get('src')
-        img_src = img_src.replace("toenail", "original")
+        soup_img = self.get_soup(self.home_url + camera.get('href'))
+        try:
+            img_src = soup_img.find("img", {"id" : "WEBCAM-bild"}).get('src')
+        except AttributeError:
+            img_src = self.home_url + soup_img.find("iframe").get('src')
 
         return img_src
 
@@ -154,8 +156,14 @@ class SwissWebcam:
                 # loop through all the cameras of the selected tab
                 for camera in soup_tab.find_all("a", {"class" : "thumbnail"}):
                     img_src = self.get_img_src(camera)
-                    descrip = camera.get('title')   #self.get_descrip(camera)
+                    print(i, img_src)
+                    i += 1
+                    if "images.webcams.travel" in img_src:
+                        continue
+
+                    descrip = camera.get('title')
                     city    = self.get_city(camera)
+                    cam_id  = self.get_cam_id(img_src)
 
                     print(img_src, descrip, city)
 
