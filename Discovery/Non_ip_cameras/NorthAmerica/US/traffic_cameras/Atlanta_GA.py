@@ -36,7 +36,7 @@ def finding():
 	url = "http://files0.iteriscdn.com/WebApps/GA/SafeTravel4/data/geojson/icons.cctv.geojsonp"
 	soup = urllib2.urlopen(url).read()
 	#opening the file to write
-	f = open('Atlanta_GA','w')
+	f = open('list_Atlanta_GA.txt','w')
 	
 	#using regular expression to split data
 	dat = re.split("}},",soup)
