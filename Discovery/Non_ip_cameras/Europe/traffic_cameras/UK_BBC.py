@@ -72,7 +72,7 @@ def uk():
     f_list.close()
 
     # create and open a file named UK_ls to write as output
-    f = open('list_UK_BBC','wb')
+    f = open('list_UK_BBC.txt','wb')
 
     # Define Geocoder
     GAPI = Geocoding("Google", "None")
