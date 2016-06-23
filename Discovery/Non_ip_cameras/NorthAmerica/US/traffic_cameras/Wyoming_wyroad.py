@@ -46,7 +46,7 @@ class Wyoming:
         self.state = "WY"
 
         # open the file to store the list and write the format of the list at the first line
-        self.f = open('list_Wyoming_traffic', 'w')
+        self.f = open('list_Wyoming_wyroad.txt', 'w')
         self.f.write("city#country#state#snapshot_url#latitude#longitude" + "\n")
 
     def get_soup(self, url):
