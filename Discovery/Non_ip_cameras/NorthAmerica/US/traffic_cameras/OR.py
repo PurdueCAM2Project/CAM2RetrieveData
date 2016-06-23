@@ -29,7 +29,7 @@ def getOR():
 	out = open('OR.xml',"w")
 	out.write(xml.read())
 	out.close()
-	listFile = open("OR.list","w")
+	listFile = open("list_OR.txt","w")
 
 	xmldoc = minidom.parse("OR.xml")
 	root = xmldoc.getElementsByTagName('cCTVInventory') #extract cCTVInventory section from xml
