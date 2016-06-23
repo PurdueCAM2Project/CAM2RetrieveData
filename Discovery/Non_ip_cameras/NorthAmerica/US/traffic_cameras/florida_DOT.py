@@ -37,7 +37,7 @@ from selenium.common.exceptions import TimeoutException
 
 def scrapingFL():
     # setup
-    fo = open("list_FL.txt", "w")
+    fo = open("list_florida_DOT.txt", "w")
     # writing the header to the file
     fo.write("country#state#city#snapshot_url#latitude#longitude\n")
     driver = webdriver.Firefox()
