@@ -25,7 +25,7 @@ import re
 import sys
 import json
 
-f = open('ddot', 'w')
+f = open('list_ddot.txt', 'w')
 
 #connect to target URL and retrieve HTML
 url = 'http://app.ddot.dc.gov/'
