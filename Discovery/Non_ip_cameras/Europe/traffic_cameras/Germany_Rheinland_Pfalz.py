@@ -37,7 +37,7 @@ class Germany_Rheinland:
     def __init__(self):
         #Open up Firefox and the file to be written to
         self.driver = webdriver.Firefox()
-        self.f = open('list_Germany_Rheinland_Pfalz', 'w')
+        self.f = open('list_Germany_Rheinland_Pfalz.txt', 'w')
 
     def gAPI(self, locat, city, link, f):
         time.sleep(0.2);
