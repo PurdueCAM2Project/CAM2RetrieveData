@@ -45,7 +45,7 @@ def main():
     numregions = 0
     city = "Houston"
     #File was already created because each individual tab was run as a separate link
-    f = open('list_Houston', 'a')
+    f = open('list_Houston.txt', 'a')
     highway=driver.find_elements_by_css_selector(".roadbut.img-rounded")
     numhighway=len(highway)
 
