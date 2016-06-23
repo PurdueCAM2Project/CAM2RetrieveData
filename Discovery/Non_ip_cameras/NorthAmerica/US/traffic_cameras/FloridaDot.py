@@ -38,7 +38,7 @@ def main():
     driver.get("http://fl511.com/Cameras.aspx")
     driver.implicitly_wait(15)
     time.sleep(2)
-    f = open ('list_FloridaDot','w')
+    f = open ('list_FloridaDot.txt','w')
     #Format of output
     att = []
     ls = []
