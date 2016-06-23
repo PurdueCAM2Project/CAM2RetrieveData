@@ -31,7 +31,7 @@ class Prague:
     def __init__(self):
         #Open up Firefox and the file to be written to
         self.driver = webdriver.Firefox()
-        self.f = open('list_Prague', 'w')
+        self.f = open('list_Prague.txt', 'w')
 
     def gAPI(self, locat, city, link, f):
         time.sleep(0.2);
