@@ -9,15 +9,18 @@ Command to run script:  python swissWebcam_faster.py
 Usage                :  Parsing cameras in SwissWebcam website
 Input file format    :  N/A
 Output               :  list_SwissWebcam_faster
-Note                 :  This website's pictures are all from the http://www.webcams.travel/ which we already have. Do not use to parse
-Other files required by : This code requires to install BeautifulSoup4 and Geocoding.py file from NetworkCameras/Discovery/Tools/Geocoding.py
-                          It is MUCH FASTER than swissWebcam_non_traffic.py but fails to get the geo-location information of some cameras.
+Note                 :  This website's pictures are all from the http://www.webcams.travel/ which we 
+                        already have. Do not use to parse
+Other files required by : This code requires to install BeautifulSoup4 and Geocoding.py file 
+                          from NetworkCameras/Discovery/Tools/Geocoding.py
+                          It is MUCH FASTER than swissWebcam_non_traffic.py but fails to get 
+                          the geo-location information of some cameras.
 this script and where 
 located
 
 ----For Parsing Scripts---------------------------------------------------------
 Website Parsed       :  http://en.swisswebcams.ch
-In database (Y/N)    :  N
+In database (Y/N)    :  Y
 --------------------------------------------------------------------------------
 """
 
