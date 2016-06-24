@@ -3,12 +3,10 @@
 Descriptive Name     : Florida_DOT.py 
 Author               : Pongthip Srivarangkul
 Contact Info         : psrivara@purdue.edu
-Date Written         :  June 13, 2016
+Date Written         : June 13, 2016
 Description          : Parse cameras on Florida traffic camera
 Command to run script: python Florida_DOT.py
-Usage                : Run on operating system with requests, bs4 and re installed
-Input file format    : (eg. url#description (on each line))
-Output               : (eg. <file name> or <on screen>)
+Output               : list_floridaDOT.txt
 Note                 :
 Other files required by : N/A
 this script and where
@@ -16,8 +14,7 @@ located
 
 ----For Parsing Scripts---------------------------------------------------------
 Website Parsed       : http://fl511.com/Cameras.aspx
-In database (Y/N)    :
-Date added to Database :
+In database (Y/N)    : Y
 --------------------------------------------------------------------------------
 """
 import geopy
@@ -37,7 +34,7 @@ from selenium.common.exceptions import TimeoutException
 
 def scrapingFL():
     # setup
-    fo = open("list_florida_DOT.txt", "w")
+    fo = open("list_floridaDOT.txt", "w")
     # writing the header to the file
     fo.write("country#state#city#snapshot_url#latitude#longitude\n")
     driver = webdriver.Firefox()
