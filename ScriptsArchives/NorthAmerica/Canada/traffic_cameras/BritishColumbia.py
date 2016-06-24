@@ -7,7 +7,7 @@ Contact Info         : cwengyan@purdue.edu
 Date Written         : June 16,2016
 Description          : Parse cameras on the British Columbia, Canada traffic camera
 Command to run script: python BritishColumbia.py
-Output               : country#city#snapshot_url#latitude#longitude to <list_BC>
+Output               : country#city#snapshot_url#latitude#longitude to <list_BritishColumbia.txt>
 Note                 : 
 Other files required by : N/A
 this script and where 
