@@ -8,7 +8,7 @@ Description          : parses the city name, snapshot_url, latitude, and longitu
 Command to run script: python Australia_weather.py
 Usage                : N/A
 Input file format    : N/A
-Output               : list_Australia_traffic
+Output               : list_Australia_weather.txt
 Note                 : 
 Other files required by : It requires Selenium and BeautifulSoup4 to be installed
 this script and where
@@ -46,7 +46,7 @@ class Australia:
         self.state = ""
 
         # open the file to store the list and write the format of the list at the first line
-        self.f = open('list_Australia_traffic', 'w')
+        self.f = open('list_Australia_weather.txt', 'w')
         self.f.write("city#country#snapshot_url#latitude#longitude" + "\n")
 
         # open the webbrowser
