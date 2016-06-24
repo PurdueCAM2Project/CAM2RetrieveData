@@ -8,7 +8,7 @@ Description          : parses the city name, snapshot_url, latitude, and longitu
 Command to run script: python FL_baycounty.py
 Usage                : N/A
 Input file format    : N/A
-Output               : list_Florida_traffic
+Output               : list_FL_baycounty.txt
 Note                 : N/A
 Other files required by : It requires Selenium and BeautifulSoup4 to be installed
 this script and where
