@@ -6,7 +6,7 @@ Contact Info         : ssui@purdue.edu (Shengli Sui)
 Description          : Parse cameras on the Hawaiian_Volvano_Observatory camera website
 Command to run script: python Hawaiian_Volvano_Observatory.py
 Output               : output urls, country, city and latitude, longitude to a 
-                       textfile <list_HVO>
+                       textfile <list_Hawaiian_Volcano_Observatory.txt>
 Other files required by : N/A
 this script and where 
 located
