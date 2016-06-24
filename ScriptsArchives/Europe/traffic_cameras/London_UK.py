@@ -3,21 +3,20 @@
 Descriptive Name     : London_UK.py
 Author               : Pongthip Srivarangkul
 Contact Info         : psrivara@purdue.edu
-Date Written         :  June 9, 2016
+Date Written         : June 9, 2016
 Description          : Parse cameras on London, United Kingdom traffic camera
 Command to run script: python London_UK.py
 Usage                : Run on operating system with requests, bs4 and re installed
-Input file format    : (eg. url#description (on each line))
-Output               : (eg. <file name> or <on screen>)
-Note                 :
+Output               : list_London_UK.txt
+Note                 : N/A
 Other files required by : N/A
 this script and where
 located
 
 ----For Parsing Scripts---------------------------------------------------------
 Website Parsed       : http://www.trafficdelays.co.uk/london-traffic-cameras/
-In database (Y/N)    :
-Date added to Database :
+In database (Y/N)    : Y
+Date added to Database : June 10, 2016
 --------------------------------------------------------------------------------
 """
 
