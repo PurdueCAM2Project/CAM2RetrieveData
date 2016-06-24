@@ -9,17 +9,15 @@ Description     : Parse several european non traffic NON_IP cameras
 Command to run  : python eurocityNON_IP.py > euroErrorNON_IP
 script
 Output          : country#city#snapshot_url#latitude#longitude to 
-				  <list_eurocityNON_IP.txt>
-				  urls that raise errors will be redirected to <euroError>
+		  <list_eurocityNON_IP.txt>
+		  urls that raise errors will be redirected to <euroError>
 Note            : 1) this website uses a lot of non-ascii (unicode) characters.
-				    urllib2.urlopen cannot open urls with unicode so used 
-					request.get instead. Some discriptions scraped cannot be 
-					understood by google API so any errors should be redirected
-					to <euroError> and fix manually
-				  2) This script only gets all NON_IP cameras, another script
-				    is written to get IP ones
-
-				  3) Throws away urls with 'webcams.travel'
+		     urllib2.urlopen cannot open urls with unicode so used 
+		     request.get instead. Some discriptions scraped cannot be 
+		     understood by google API so any errors should be redirected
+		     to <euroError> and fix manually
+		  2) This script only gets all NON_IP cameras, another script
+		     is written to get IP ones
 
 Other files required by : N/A
 this script and where 
@@ -90,12 +88,12 @@ def individualImage(cityname,citylist,country,f):
 		except:
 			continue
 
-		if 'mjpg' or 'webcams.travel' not in imgurl:#find only IP cameras
+		if 'mjpg' not in imgurl:#find only IP cameras
 			#Format Google API input for every individual image
 			location=cityname[iter_city]+' '+ country
 			location=location.replace(" ","+")
 			location=location.strip()
-			api='https://maps.googleapis.com/maps/api/geocode/json?address='+location+'&key=AIzaSyDRb6HaVtHDbpHkJq8a3MEODFZlmkBt7f4'
+			api='https://maps.googleapis.com/maps/api/geocode/json?address='+location
 			response = urllib2.urlopen(api).read()
 			#Load by json module
 			parsed_json = json.loads(response)
@@ -121,7 +119,7 @@ def individualImage(cityname,citylist,country,f):
 				output = countryCode+'#'+city+'#'+imgurl+'#'+lat+'#'+lng
 				f.write(output.encode('utf-8')+'\n')
 
-			#output problematic urls to separate textfile
+			#redirect problematic urls to separate textfile
 			except:
 				try:
 					print('\n'+location.encode('utf-8'))
