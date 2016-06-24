@@ -8,7 +8,7 @@ Description          :  parses the city name, snapshot_url, latitude, and longit
 Command to run script:  python swissWebcam_non_traffic.py
 Usage                :  Parsing cameras in SwissWebcam website
 Input file format    :  N/A
-Output               :  list_SwissWebcam_non_traffic
+Output               :  list_swissWebcam.txt
 Note                 :  This website's pictures are all from the http://www.webcams.travel/ which we already have. Do not use to parse
 Other files required by : This code requires to install BeautifulSoup4 and Geocoding.py file from NetworkCameras/Discovery/Tools/Geocoding.py
 this script and where 
