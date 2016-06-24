@@ -7,7 +7,7 @@ Description          : This script creates a file that holds the title,url,latit
 Command to run script: Python BBC_UK.py
 Input file format    : This script takes in a file named "BBC_JSON_LIST" which is a list of JSon files associated with the camera data.
                        This was found manually by loading the page and monitering for JSon files. 
-Output               : UK_BBC_list
+Output               : list_UK_BBC.txt
 Note                 :
 Other files required by : N/A
 this script and where 
