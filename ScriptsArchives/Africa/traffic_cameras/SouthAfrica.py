@@ -58,7 +58,7 @@ def main():
 
     #Write format of output so it can be uploaded
     geoCode = Geocoding('Google', None)
-    file = WriteToFile(False, 'list_ZA_iTraffic.txt')
+    file = WriteToFile(False, 'list_SouthAfrica.txt')
 
     
     #Loop used to stop when there is no more next buttons to click
