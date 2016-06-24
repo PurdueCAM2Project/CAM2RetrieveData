@@ -8,7 +8,7 @@ Description          : Parse cameras on Germany Traffic Camera website
 Command to run script: python Germany_svz.py
 Usage                : N/A
 Input file format    : N/A
-Output               : list_germany_traffic
+Output               : list_Germany_svz.txt
 Note                 : Can't parse the image url because it keeps changing
 Other files required by : It requires Selenium to be installed
 this script and where
@@ -45,7 +45,7 @@ class Germany:
         self.driver = webdriver.Firefox()
 
         # open the file to store the list and write the format of the list at the first line
-        self.f = open('list_germany_traffic', 'w')
+        self.f = open('list_Germany_svz.txt', 'w')
         self.f.write("city#country#state#snapshot_url#latitude#longitude" + "\n")
 
     def get_token(self, string, front, end):
