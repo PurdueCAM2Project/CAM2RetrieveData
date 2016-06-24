@@ -8,7 +8,7 @@ Description          : parses the city name, snapshot_url, latitude, and longitu
 Command to run script: python Wyoming_wyroad.py
 Usage                : N/A
 Input file format    : N/A
-Output               : list_Wyoming_traffic
+Output               : list_Wyoming_wyroad.txt
 Note                 : 
 Other files required by : It requires Selenium and BeautifulSoup4 to be installed
 this script and where
