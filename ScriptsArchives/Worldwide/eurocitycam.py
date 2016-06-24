@@ -88,11 +88,10 @@ def individualImage(cityname,citylist,country,f):
 			continue
 
 		#Format Google API input for every individual image
-		imgurl = imgurl.replace("https://","").replace("?webcam.jpg","").replace("http://","")			
 		location=cityname[iter_city]+' '+ country
 		location=location.replace(" ","+")
 		location=location.strip()
-		api='https://maps.googleapis.com/maps/api/geocode/json?address='+location+'&key=AIzaSyCmrSFG2GCAnTKh7EtY0obD4_YnwSbjGxQ'
+		api='https://maps.googleapis.com/maps/api/geocode/json?address='+location+'&key=AIzaSyBvfN0TyrWPbYb2Cj2IoXCMs8qyaqCqJfs'
 		response = urllib2.urlopen(api).read()
 		#Load by json module
 		parsed_json = json.loads(response)
@@ -114,7 +113,7 @@ def individualImage(cityname,citylist,country,f):
 					countryCode = item['short_name']
 				if types[0] == 'locality':
 					city = item['long_name']
-				output = countryCode+'#'+city+'#'+imgurl+'#'+lat+'#'+lng
+			output = countryCode+'#'+city+'#'+imgurl+'#'+lat+'#'+lng
 			f.write(output.encode('utf-8')+'\n')
 		#redirect problematic urls to separate textfile
 		except:
@@ -126,6 +125,7 @@ def individualImage(cityname,citylist,country,f):
 			except:
 				e = str(sys.exc_info())
 				print '\n'+ str(e) + '\n'
+		
 		time.sleep(0.1)
 		iter_city += 1
 
