@@ -1,0 +1,14 @@
+country#city#snapshot_url#latitude#longitude
+NL#Almelo#https://images.webcam.nl/almelo1uur.jpg?webcam.jpg#52.3670267#6.6684919
+NL#Alphen aan den Rijn#http://www.weerstation-alphen.nl/cam2.jpg?webcam.jpg#52.1276577#4.6688508
+NL#Amsterdam#https://images.webcam.nl/dam01uur.jpg?webcam.jpg#52.3702157#4.8951679
+NL#Amsterdam#https://i.ytimg.com/vi/rIbKXnlgOME/maxresdefault_live.jpg?webcam.jpg#52.3702157#4.8951679
+NL#Amsterdam#http://webcam.high5.nl/wtc01uur.jpg?webcam.jpg#52.3702157#4.8951679
+NL#Amsterdam#https://images.webcam.nl/rai-kantoor1uur.jpg?webcam.jpg#52.3702157#4.8951679
+NL#Amsterdam#http://webcam.aebamsterdam.nl/Files/Webcam/Weegbrug/webcam.jpg?webcam.jpg#52.3702157#4.8951679
+NL#Leidschendam#http://cam.sheratonamsterdamairportview.com/view_live1.jpg?webcam.jpg#52.1043155#4.405926
+NL#Amsterdam-Zuidoost#http://overtoom.tv/webcam/cam3_00001.jpg?webcam.jpg#52.3103172#4.9704668
+NL#Arnhem#http://94.142.210.98/mjpg/video.mjpg?webcam.jpg#51.9851034#5.8987296
+NL#Barendrecht#http://barendweer.dyndns-ip.com:8080/cam_1.jpg?webcam.jpg#51.8515088#4.5485809
+NL#Bedum#http://82.72.77.72:8787/image/Cam1?webcam.jpg#53.3016754#6.5998288
+NL#Deventer#http://217.123.10.77/axis-cgi/mjpg/video.cgi?webcam.jpg#52.2660751#6.1552165

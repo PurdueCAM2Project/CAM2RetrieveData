@@ -1,0 +1,65 @@
+General Rule :
+	Each website including traffic camera should be in the correct
+	region folder. If websites is based on US, a parser program
+	should go to the "US" folder
+
+Filename Rule(Not for traffic camera) :
+	File name must be related to the website name. If it is from bbc, uk, 
+	file name should be bbc_uk.py in "UK" folder that is in "Europe" folder.
+	
+Output Filename Rule:
+	Output filename should always start with 'list_' followed by the name of the parsing 
+	script (without '.py') and should have file extension '.txt' If the output filename
+	does not match this convention, the testing script will not work.
+
+Traffic camera Rule :
+	In each region folder and country folder, there will be folder named "traffic_cameras"
+
+Traffic camera filename Rule :
+	For US :
+		State wide camera: <state>.py
+				i.e)CO.py, KY.py
+							   
+		County or city wide: <City>_<State>_<Source>.py
+				i.e)Lafayette_MS.py
+				    NewYorkCity_NY_dotsignals.py
+	Not US :
+		<City>_<Country>_<Source>.py  
+				i.e)Hongkong_CN.py
+                                    Barcelona_ES.py
+
+
+============
+= Folders =
+============
+
+Downloader
+	A Program that will be used for download images from dynamic url 
+	cameras in ee220cpc13
+
+Africa
+	A folder for Africa region
+
+Asia
+	A folder for Asia region
+
+Europe
+	A folder for Europe region
+
+NorthAmerica
+	A folder for North America region
+
+Oceania
+	A folder for Oceania region
+
+SouthAmerica
+	A folder for South America region
+
+WorldWide
+	A folder for websites that have cameras all over the world.
+	i.e) Webcams.travel , snoweye.com
+
+Note:
+	Each folder has sub folders for countries in that region. There
+	is also a traffic_cameras & non_traffic_cameras folder for programs
+	that parse cameras from multiple countries within that region.
