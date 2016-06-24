@@ -5,9 +5,9 @@ Author               : Ryan Dailey
 Contact Info         : dailey1@purdue.edu
 Date                 : 5/18/16
 Description          : Imports traffic cameras from Hongkong
-Command to run script: Hongkong_CN.py
+Command to run script: python Hongkong_CN.py
 Input file format    : N/A
-Output               : Hongkong_CN_list
+Output               : list_Hongkong_CN.txt
 Note                 :
 Other files required by : N/A
 this script and where 
