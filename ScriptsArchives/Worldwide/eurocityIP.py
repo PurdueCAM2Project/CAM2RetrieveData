@@ -86,13 +86,14 @@ def individualImage(cityname,citylist,country,f,urlIP):
 			soup = BeautifulSoup(page.content) 
 			img = soup.find('div',{'class':'rt-joomla'})
 			imgurl = img.find('img')
-			imgurl = imgurl['src'].replace('http://','').replace('?webcam.jpg','')
-			urlIP.write(imgurl+'\n')
+			imgurl = imgurl['src'])
 		except:
 			continue
 
 		if 'mjpg' in imgurl:#find only IP cameras
 			#Format Google API input for every individual image
+		    imgurl = imgurl.replace("https://","").replace("?webcam.jpg","").replace("http://","")			
+			urlIP.write(imgurl+'\n') 
 			location=cityname[iter_city]+' '+ country
 			location=location.replace(" ","+")
 			location=location.strip()
