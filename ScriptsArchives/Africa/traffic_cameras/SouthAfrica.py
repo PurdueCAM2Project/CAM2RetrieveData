@@ -9,10 +9,10 @@ Description          : This script will first get all the information it needs f
                        for coordinates with several different search queries. Then
                        it will navigate to the next page and repeat the process
                        until the entire site has been parsed.
-Command to run script: python South_Africa.py
+Command to run script: python SouthAfrica.py
 Usage                : Needs to be run on personal machine with geopy installed
 Input file format    : N/A
-Output               : list_South_Africa.txt
+Output               : list_SouthAfrica.txt
 Note                 : This script uses the geopy library to perform the geocoding
                        on the addresses given. Geopy is not installed on the 
                        development server as of this writing.
