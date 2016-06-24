@@ -7,7 +7,7 @@ Date                 : May 28, 2014 11:36:16 AM
 Description          : Parse cameras on the Ontario Ministry of Transportation traffic camera website
 Command to run script: python Ontario.py <outputfile_name>
 Output               : output urls, country, city and latitude, longitude to a 
-                       textfile <outputfile_name>
+                       textfile <list_Ontario.txt>
 Other files required by : N/A
 this script and where 
 located
@@ -81,7 +81,7 @@ def getON(outfile):
 	# Object model of the XML document (of type Document).
 	document = minidom.parseString(xml_string)
 
-	outfile_handle = open(outfile, 'w')
+	outfile_handle = open(list_Ontario.txt, 'w')
 
 	# Each area (or city) is represented by a `mapArea` element.
 	for area_element in document.getElementsByTagName("mapArea"):
