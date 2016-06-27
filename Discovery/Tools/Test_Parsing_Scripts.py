@@ -10,7 +10,7 @@ Description          : Test parsing scripts to ensure they run without error and
 Command to run script: python Test_Parsing_Scripts.py (Followed by any number of 
                        scripts you would like to test separated by spaces)
 Usage                : N/A
-Input file format    : .py file or .txt file with names of .py files on separate lines
+Input file format    : .py file or .txt file containing names of .py files on separate lines
 Output               : TestOutput.txt
 Note                 : Check the usage of the scripts you are trying to test. If the
                        scripts won't run on their own on certain machines, they 
