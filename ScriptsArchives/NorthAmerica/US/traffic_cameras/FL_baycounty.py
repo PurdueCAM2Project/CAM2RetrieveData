@@ -165,7 +165,7 @@ class Florida:
 
             try:
                 geo.locateCoords(descrip, city, self.state, self.country)
-                result = geo.city.replace(" ", "").title() + "#" + geo.country + "#" + geo.state + "#" + img_src + "#" + geo.latitude + "#" + geo.longitude + "\n"
+                result = geo.city + "#" + geo.country + "#" + geo.state + "#" + img_src + "#" + geo.latitude + "#" + geo.longitude + "\n"
                 result = result.replace("##", "#")
                 self.f.write(result)
             except:
