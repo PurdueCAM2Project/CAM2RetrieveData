@@ -148,7 +148,7 @@ class Puerto:
             
             try:
                 geo.locateCoords(descrip, city, self.state, self.country)
-                self.f.write(geo.city.replace(" ", "").title() + "#" + geo.country + "#" + geo.state + "#" + img_src + "#" + geo.latitude + "#" + geo.longitude + "\n")
+                self.f.write(geo.city + "#" + geo.country + "#" + geo.state + "#" + img_src + "#" + geo.latitude + "#" + geo.longitude + "\n")
             except:
                 print("can't find")
 
