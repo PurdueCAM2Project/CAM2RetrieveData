@@ -143,7 +143,7 @@ class Wyoming:
 
                 try:
                     variable.locateCoords(descrip, city, self.state, self.country)
-                    result = variable.city.replace(" ", "").title() + "#" + variable.country + "#" + variable.state + "#" + img_src + "#" + variable.latitude + "#" + variable.longitude + "\n"
+                    result = variable.city + "#" + variable.country + "#" + variable.state + "#" + img_src + "#" + variable.latitude + "#" + variable.longitude + "\n"
                     result = result.replace("##", "#")
                     self.f.write(result)
                 except:

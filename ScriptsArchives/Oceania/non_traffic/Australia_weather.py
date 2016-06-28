@@ -154,7 +154,7 @@ class Australia:
             # try to get the GPS data and write it to the file. if fails, move to the next camera
             try:
                 geo.locateCoords(descrip, city, self.state, self.country)
-                result = geo.city.replace(" ", "").title() + "#" + geo.country + "#" + geo.state + "#" + img_src + "#" + geo.latitude + "#" + geo.longitude + "\n"
+                result = geo.city + "#" + geo.country + "#" + geo.state + "#" + img_src + "#" + geo.latitude + "#" + geo.longitude + "\n"
                 result = result.replace("##", "#")
                 self.f.write(result)
             except:
