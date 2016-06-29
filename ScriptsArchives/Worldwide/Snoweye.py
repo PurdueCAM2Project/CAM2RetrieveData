@@ -1,46 +1,49 @@
-###############################################################################
-# Descriptive Name for File: Snoweye website parser
-#
-# Written by: Thomas Norling									      
-# Contact Info: thomas.l.norling@gmail.com
-#
-# URL of website being parsed: Snoweye.com
-# Command to Run Script: python Snoweye.py
-# Other files required by this script and where located: None
-#
-# Description:
-#   This parsing script will first call the Navigate function which is designed
-#   to navigate the website by clicking the tabs and drilling down into each
-#   sub-tab until it reaches a page of cameras. When a page is loaded, the getData
-#   function is called where the script then checks to see whether or not each 
-#   camera has a button to see more cameras, if it does that button is clicked
-#   and a new page is loaded. If this is the case, getMoreData is called and 
-#   the location data is used to call gAPI where the location is plugged into
-#   the google API and it will attempt to find the latitude and longitude 
-#   coordinates. If they are found, the information is written to the file.
-#   If there is no "more" button the script stays in getData and the same process
-#   is used to try to find coordinates and write to a file. When all cameras
-#   on the page have been parsed the script returns to the Navigate function where
-#   it navigates to a new page of cameras and the process repeats until all cameras
-#   have been parsed.
-#
-#   Note: This script uses the geopy library to perform the geocoding on the 
-#   addresses given. Geopy is not installed on the development server as of this 
-#   writing. This will not run on the development machine and thus will need to 
-#   be run on a machine with geopy installed.
-#
-#   Also Note: There are more cameras on this website than can be parsed in one 
-#   day with the google API. You will need to either use several geocoders or 
-#   parse different sections of the website on different days. In order to parse
-#   on multiple days update the countTabs variable in the Navigate function to
-#   the tab number where you last parsed cameras so that the script will start
-#   on that tab rather than from the beginning.
-#
-#
-#
-#
-# DO NOT PUT USERNAMES/PASSWORDS IN CODE
-###############################################################################
+""" 
+--------------------------------------------------------------------------------
+Descriptive Name     : Snoweye.py
+Author               : Thomas Norling								      
+Contact Info         : thomas.l.norling@gmail.com
+Date Written         : June 2016
+Description          : Parse worldwide cameras on the snoweye non traffic camera website
+Command to run script: python Snoweye.py
+Output               : list_Snoweye.txt & list_Snoweye_US.txt
+Description          : This parsing script will first call the Navigate function which is designed
+                       to navigate the website by clicking the tabs and drilling down into each
+                       sub-tab until it reaches a page of cameras. When a page is loaded, the getData
+                       function is called where the script then checks to see whether or not each 
+                       camera has a button to see more cameras, if it does that button is clicked
+                       and a new page is loaded. If this is the case, getMoreData is called and 
+                       the location data is used to call gAPI where the location is plugged into
+                       the google API and it will attempt to find the latitude and longitude 
+                       coordinates. If they are found, the information is written to the file.
+                       If there is no "more" button the script stays in getData and the same process
+                       is used to try to find coordinates and write to a file. When all cameras
+                       on the page have been parsed the script returns to the Navigate function where
+                       it navigates to a new page of cameras and the process repeats until all cameras
+                       have been parsed.
+                       
+Note                 : This script uses the geopy library to perform the geocoding on the 
+                       addresses given. Geopy is not installed on the development server as of this 
+                       writing. This will not run on the development machine and thus will need to 
+                       be run on a machine with geopy installed.
+                    
+                       There are more cameras on this website than can be parsed in one 
+                       day with the google API. You will need to either use several geocoders or 
+                       parse different sections of the website on different days. In order to parse
+                       on multiple days update the countTabs variable in the Navigate function to
+                       the tab number where you last parsed cameras so that the script will start
+                       on that tab rather than from the beginning.
+
+Other files required by : N/A
+this script and where 
+located
+
+----For Parsing Scripts---------------------------------------------------------
+Website Parsed       : http://www.snoweye.com/
+In database (Y/N)    : Y
+Date added to Database : June 2016
+--------------------------------------------------------------------------------
+"""
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -59,8 +62,8 @@ class Snoweye:
     def __init__(self):
         #Open up Firefox and the file to be written to
         self.driver = webdriver.Firefox()
-        self.f = open('list_updated_Snoweye.txt', 'w')
-        self.g = open('list_updated_Snoweye_US.txt', 'w')
+        self.f = open('list_Snoweye.txt', 'w')
+        self.g = open('list_Snoweye_US.txt', 'w')
 
     def gAPI(self, locat, region, main_location, country, link, f, g):
         time.sleep(0.2);
