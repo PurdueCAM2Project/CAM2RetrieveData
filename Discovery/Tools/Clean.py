@@ -54,6 +54,10 @@ class Clean:
         self.textString = self.textString.replace("South Bound", "")
         self.textString = self.textString.replace("West Bound", "")
         self.textString = self.textString.replace("East Bound", "")
+        self.textString = self.textString.replace("Northbound", "")
+        self.textString = self.textString.replace("Southbound", "")
+        self.textString = self.textString.replace("Westbound", "")
+        self.textString = self.textString.replace("Eastbound", "")
         self.textString = self.textString.replace("NB", "")
         self.textString = self.textString.replace("SB", "")
         self.textString = self.textString.replace("WB", "")
@@ -98,6 +102,12 @@ class Clean:
         self.textString = self.textString.replace("ramp", "")
         self.textString = self.textString.replace("Jct", "")
         self.textString = self.textString.replace("JCT", "")
+        self.textString = self.textString.replace("between", "")
+        self.textString = self.textString.replace("extension", "")
+        self.textString = self.textString.replace("split", "")
+        self.textString = self.textString.replace("Between", "")
+        self.textString = self.textString.replace("Extension", "")
+        self.textString = self.textString.replace("Split", "")
 
     def remove_repeating(self):
         self.textString = re.sub(r"\.{2,}", ".", self.textString)
