@@ -13,7 +13,8 @@ Note                 : This website contains a lot of cameras all over the world
                         For this reason, it has two output files, one for US and the other for non-US countries.
                         Also, since it contains many private cameras, this script parses only the cameras in the following categories to not violate the privacy
                         ['City', 'Village', 'River' 'Square', 'Construction', 'Bridge', 'Nature', 'Mountain', 'Traffic', 'Street', 'Road', 'Architecture', 'Port', 'Beach']
-Other files required by : It requires Selenium and BeautifulSoup4 to be installed
+Other files required by : It requires Selenium and BeautifulSoup4 to be installed.
+                          It requires states list from state_code.py to translate the state name into 2-letter state code.
 this script and where
 located
 
