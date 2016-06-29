@@ -1,4 +1,24 @@
 # encoding=utf8
+""" 
+--------------------------------------------------------------------------------
+Descriptive Name     : Queensland.py
+Author               : Shengli Sui								      
+Contact Info         : ssui@purdue.edu
+Date Written         : June 29,0216
+Description          : Parse cameras on the Queensland, AUS traffic camera website
+Command to run script: python Queensland.py
+Output               : list_Queensland.txt
+Note                 : 
+Other files required by : N/A
+this script and where 
+located
+
+----For Parsing Scripts---------------------------------------------------------
+Website Parsed       : http://www.tmr.qld.gov.au/Traffic-cameras-by-location.aspx
+In database (Y/N)    : Y
+Date added to Database : June 29, 2016
+--------------------------------------------------------------------------------
+"""
 import sys
 
 reload(sys)
@@ -20,7 +40,7 @@ import codecs
 class Brisbane:
     def __init__(self):
         self.driver = webdriver.Firefox()
-        self.f = open('list_Brisbane.txt', 'w')
+        self.f = open('list_Queensland.txt', 'w')
     
     def gAPI(self, locat, city, link, f):
         time.sleep(0.2);
