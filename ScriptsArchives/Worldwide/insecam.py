@@ -20,8 +20,8 @@ located
 
 ----For Parsing Scripts---------------------------------------------------------
 Website Parsed       : http://www.insecam.org/
-In database (Y/N)    : 
-Date added to Database : 
+In database (Y/N)    : Y
+Date added to Database : 27 June 2016
 --------------------------------------------------------------------------------
 """
 
