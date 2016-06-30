@@ -63,7 +63,7 @@ class Insecam:
 
         self.driver = webdriver.Firefox(firefox_profile=firefox_profile)
 
-        # list of categories that it will parse
+        # list of categories that it will parse and list of image URLs that should not be parsed
         self.categories = ['City', 'Village', 'River' 'Square', 'Construction', 'Bridge', 'Nature', 'Mountain', 'Traffic', 'Street', 'Road', 'Architecture', 'Port', 'Beach']
         self.invalid = ['http://admin:@50.30.102.221:85/videostream.cgi',
                         'http://198.1.4.43:80/mjpg/video.mjpg?COUNTER',
