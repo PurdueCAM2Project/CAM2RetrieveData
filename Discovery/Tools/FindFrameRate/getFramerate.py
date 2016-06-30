@@ -74,6 +74,7 @@ import time
 import logging
 import datetime
 import MySQLdb
+import getpass
 
 # activateCamera is used to take cameras from the input file and swap them out with a new camera. 
 # activateCamera will then check if the first image (reference image) can be downloaded.  
@@ -93,7 +94,7 @@ def activateCamera(camera, cameras, activeCameras, refFiles, connection):
         return camera, cameras, activeCameras, refFiles
         
     except Exception as e:
-        logging.error(e)
+        logging.debug(e)
         raise e
 
 # getRefImage function attempts to download the reference image from website.
@@ -109,7 +110,7 @@ def getRefImage(camera, cameras, activeCameras, refFiles, connection):
         refFiles[str(camera)] = file_name
 
     except Exception, e:
-        logging.error(e)
+        logging.debug(e)
         camera, cameras, activeCameras, refFiles = activateCamera(camera, cameras, activeCameras, refFiles, connection)
     
     return camera, cameras, activeCameras, refFiles
@@ -125,7 +126,7 @@ def getStartImage(cameras, activeCameras, refFiles, startTimes, connection):
                 file_name, frame_timestamp = archiver.archive(cameraInfo, connection)
                 if file_name == None or frame_timestamp == None:
                     raise(Exception("StartERROR: Image could not be retrieved."))
-                    logging.error(camera)
+                    logging.debug(camera)
 
                 if filecmp.cmp(str(refFiles.get(str(camera))), file_name) == False:
                     startTimes[str(camera)] = frame_timestamp
@@ -138,7 +139,7 @@ def getStartImage(cameras, activeCameras, refFiles, startTimes, connection):
                     camera, cameras, activeCameras, refFiles = activateCamera(camera, cameras, activeCameras, refFiles, connection)
 
                 else:
-                    logging.error(e)
+                    logging.debug(e)
                     raise(e)
 
     return startTimes
@@ -168,7 +169,7 @@ def getEndImage(camera, cameras, activeCameras, refFiles, startTimes, f, connect
                     logging.warning(e)
                     logging.warning("ID:{}".format(camera))
                 else:
-                    logging.error(e)
+                    logging.debug(e)
                     raise(e)
 
     return camera, activeCameras, refFiles, startTimes, cameras
@@ -190,7 +191,7 @@ def dumpCameras(cameras, dumpedCams, activeCameras, camera_dump_threshold, timeI
                     timeInQueue[str(camera)] = time.time()
                 
             except Exception, e:
-                logging.error(e)
+                logging.debug(e)
             
         # timeInQueue[str(camera)] = time.time() 
         return dumpedCams, timeInQueue, activeCameras, refFiles, startTimes, cameras
@@ -243,32 +244,49 @@ def getConnection():
     # Try to access database:
     connection = None
     try:
-        databaseRead = open("databaseConfig.config", "r")
+        databaseRead = open("database.config", "r")
         databaseInfo = list(databaseRead)
         for info in databaseInfo:
             if info.find("DB_SERVER") != -1:
                 DB_SERVER = re.search(r"DB_SERVER = (?P<SERVER>[\S]*)", databaseInfo[1]).group("SERVER")
             elif info.find("DB_USER_NAME") != -1:
                 DB_USER_NAME = re.search(r"DB_USER_NAME = (?P<USER>[\S]*)", databaseInfo[2]).group("USER")
-            elif info.find("DB_PASSWORD") != -1:  
-                DB_PASSWORD = re.search(r"DB_PASSWORD = (?P<PSWD>[\S]*)", databaseInfo[3]).group("PSWD")
+            # elif info.find("DB_PASSWORD") != -1:  
+            #     DB_PASSWORD = re.search(r"DB_PASSWORD = (?P<PSWD>[\S]*)", databaseInfo[3]).group("PSWD")
             elif info.find("DB_NAME") != -1:
-                DB_NAME = re.search(r"DB_NAME = (?P<NAME>[\S]*)", databaseInfo[4]).group("NAME")
+                DB_NAME = re.search(r"DB_NAME = (?P<NAME>[\S]*)", databaseInfo[3]).group("NAME")
+        print("database.config found.\nUsing:\n\tDB_SERVER = {}\n\tDB_USER_NAME = {}\n\tDB_NAME = {}".format(DB_SERVER, DB_USER_NAME, DB_NAME))
 
-        # Connect to the database, and get the connection cursor
-        connection = MySQLdb.connect(DB_SERVER, DB_USER_NAME, DB_PASSWORD, DB_NAME)
 
     except Exception as e:
         logging.debug(e)
-        print("databaseConfig.config missing!!")
-        print("Creating databaseConfig.config")
-        databaseRead = open("databaseConfig.config", "w")
+        print("database.config missing!!")
+        print("Creating database.config")
+        databaseRead = open("database.config", "w")
         databaseRead.write("# The server database credentials.")
         DB_SERVER = raw_input("DB_SERVER = ")
         DB_USER_NAME = raw_input("DB_USER_NAME = ")
-        DB_PASSWORD = raw_input("DB_PASSWORD = ")
         DB_NAME = raw_input("DB_NAME = ")
-        databaseRead.write("# The server database credentials.\nDB_SERVER = {}\nDB_USER_NAME = {}\nDB_PASSWORD = {}\nDB_NAME = {}".format(DB_SERVER, DB_USER_NAME, DB_PASSWORD, DB_NAME))
+        databaseRead.write("# The server database credentials.\nDB_SERVER = {}\nDB_USER_NAME = {}\nDB_NAME = {}".format(DB_SERVER, DB_USER_NAME, DB_NAME))
+
+    try:
+        print("Input Database Password or /c to change info:")
+        DB_PASSWORD = getpass.getpass("\nDB_PASSWORD = ")
+
+        if DB_PASSWORD == "/c":
+            databaseRead = open("database.config", "w")
+            databaseRead.write("# The server database credentials.")
+            DB_SERVER = raw_input("DB_SERVER = ")
+            DB_USER_NAME = raw_input("DB_USER_NAME = ")
+            DB_NAME = raw_input("DB_NAME = ")
+            databaseRead.write("# The server database credentials.\nDB_SERVER = {}\nDB_USER_NAME = {}\nDB_NAME = {}".format(DB_SERVER, DB_USER_NAME, DB_NAME))
+        else:
+            # Connect to the database, and get the connection cursor
+            connection = MySQLdb.connect(DB_SERVER, DB_USER_NAME, DB_PASSWORD, DB_NAME)
+    except KeyboardInterrupt:
+        connection = -1;
+    except:
+        connection = None
 
 
     databaseRead.close()
@@ -335,7 +353,7 @@ def setup(fInput, duration, amountToProcess, camera_dump_threshold, results_path
         os.makedirs('Pictures')
     except OSError:
         pass
-      
+
     logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
                     datefmt='%m-%d %H:%M:%S',
@@ -359,10 +377,15 @@ def setup(fInput, duration, amountToProcess, camera_dump_threshold, results_path
     logging.debug("Results Path: {}".format(results_path))
     logging.debug("Is Video: {}".format(is_video))
 
+
     connection = None
 
     while connection == None:
         connection = getConnection()
+        if connection == None and connection != -1:
+            print("Connection info not correct...\n\tTry again:")
+        elif connection == -1:
+            return
 
     print("Database Successfully Opened")
 
@@ -462,29 +485,29 @@ def main(args):
         if duration != '':
             duration = int(duration)
         else:
-            print("No duration entered using default.")
             duration = 10*60
+            print("\tNo duration entered using default: {}sec".format(duration))
 
         amountToProcess = raw_input('Number of feeds to process at once: ')
         if amountToProcess != '':
             amountToProcess = int(amountToProcess)
         else:
-            print("No number entered using default.")
-            amountToProcess = 50
+            amountToProcess = 30
+            print("\tNo number entered using default: {}".format(amountToProcess))
 
         camera_dump_threshold = raw_input('Longest possible time to assess camera before dumped (seconds): ')
         if camera_dump_threshold != '':
             camera_dump_threshold = int(camera_dump_threshold)
         else:
-            print("No number entered using default.")
             camera_dump_threshold = 20*60
+            print("\tNo number entered using default: {}sec".format(camera_dump_threshold))
 
         results_path = raw_input('Path to save reports: ')
         if results_path != '':
             results_path = int(results_path)
         else:
-            print("No path entered using default.")
             results_path = "results"
+            print("\tNo path entered using default: {}/".format(results_path))
 
     except KeyboardInterrupt:
         print("\n")
