@@ -326,6 +326,16 @@ def assessFramerate(camera_dump_threshold, camera, cameras, activeCameras, refFi
 
 
 def setup(fInput, duration, amountToProcess, camera_dump_threshold, results_path, is_video):
+    # Create the results directory.
+    try:
+        os.makedirs(results_path)
+    except OSError:
+        pass
+    try:
+        os.makedirs('Pictures')
+    except OSError:
+        pass
+      
     logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
                     datefmt='%m-%d %H:%M:%S',
@@ -348,16 +358,6 @@ def setup(fInput, duration, amountToProcess, camera_dump_threshold, results_path
     logging.debug("Camera Dump Threshold: {}".format(camera_dump_threshold))
     logging.debug("Results Path: {}".format(results_path))
     logging.debug("Is Video: {}".format(is_video))
-
-    # Create the results directory.
-    try:
-        os.makedirs(results_path)
-    except OSError:
-        pass
-    try:
-        os.makedirs('Pictures')
-    except OSError:
-        pass
 
     connection = None
 
