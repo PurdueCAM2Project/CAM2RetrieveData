@@ -5,10 +5,10 @@ Author               : Sanghyun Joo
 Contact Info         : joos@purdue.edu OR toughshj@gmail.com
 Date Written         : 16 June 2016
 Description          : parses the city name, snapshot_url, latitude, and longitude for each camera
-Command to run script: python SouthDakota_dot.py
+Command to run script: python SD_dot.py
 Usage                : N/A
 Input file format    : N/A
-Output               : list_SouthDakota_traffic
+Output               : list_SD_doc.txt
 Note                 : 
 Other files required by : It requires Selenium and BeautifulSoup4 to be installed
 this script and where
@@ -47,7 +47,7 @@ class SouthDakota:
         self.state = "SD"
 
         # open the file to store the list and write the format of the list at the first line
-        self.f = open('list_SouthDakota_dot.txt', 'w')
+        self.f = open('list_SD_dot.txt', 'w')
         self.f.write("city#country#state#snapshot_url#latitude#longitude" + "\n")
 
     def get_soup(self, url):
