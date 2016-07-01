@@ -1,11 +1,11 @@
 """ 
 --------------------------------------------------------------------------------
-Descriptive Name     : ilikephilly.py
+Descriptive Name     : PA_ilikephilly.py
 Author               : unknown							      
 Contact Info         : cwengyan@purdue.edu (Chan Weng Yan)
 Date Written         : unknown
 Description          : Parse cameras on the Philadelphia Live Traffic Cameras website)
-Command to run script: python ilikephilly.py
+Command to run script: python PA_ilikephilly.py
 Output               : output urls, country, city and latitude, longitude to a 
                        textfile <philly>
 Note                 : 
@@ -31,7 +31,7 @@ source_url = 'http://www.ilikephilly.com/traffic/'
 city = 'Philladelphia'
 state = 'PA'
 country = 'USA'
-f = open('list_ilikephilly.txt', 'w')
+f = open('list_PA_ilikephilly.txt', 'w')
 dupe_check = []
 f.write('country#state#city#description#snapshot_url#latitude#longitude\n')
 
