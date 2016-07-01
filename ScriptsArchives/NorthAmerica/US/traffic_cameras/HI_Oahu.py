@@ -1,15 +1,15 @@
 """
 --------------------------------------------------------------------------------
-Descriptive Name     : Oahu_HI
+Descriptive Name     : HI_Oahu
 Author               : Thomas Norling								      
 Contact Info         : tnorling@purdue.edu
 Date Written         : June 28, 2016
 Description          : Parse cameras on the goAkamai website for traffic cameras
                        on O'ahu island Hawaii
-Command to run script: python Oahu_HI
+Command to run script: python HI_Oahu
 Usage                : None
 Input file format    : N/A
-Output               : list_Oahu_HI.txt
+Output               : list_HI_Oahu.txt
 Note                 : 
 Other files required by : Geocoding.py, Clean.py, WriteToFile.py all located in
 this script and where     NetworkCameras/Discovery/Tools
@@ -36,7 +36,7 @@ class Oahu:
     def __init__(self):
         self.driver = webdriver.Firefox()
         self.geo = Geocoding('Google', None)
-        self.write = WriteToFile(True, 'list_Oahu_HI.txt')
+        self.write = WriteToFile(True, 'list_HI_Oahu.txt')
 
     def Navigate(self):
         self.driver.get('http://goakamai.org/icx/pages/cameras.aspx')
