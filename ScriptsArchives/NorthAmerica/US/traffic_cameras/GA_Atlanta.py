@@ -1,11 +1,11 @@
 """ 
 --------------------------------------------------------------------------------
-Descriptive Name     : Atlanta_GA.py
+Descriptive Name     : GA_Atlanta.py
 Author               : Honey Singh								      
 Contact Info         : N/A
 Date                 : Oct 23, 2014
 Description          : Parse cameras on the Atlanta, Georgia traffic camera website
-Command to run script: python Atlanta_GA.py
+Command to run script: python GA_Atlanta.py
 Output               : output urls, country, city and latitude, longitude to a 
                        textfile <Atlanta_GA>
 Other files required by : N/A
@@ -36,7 +36,7 @@ def finding():
 	url = "http://files0.iteriscdn.com/WebApps/GA/SafeTravel4/data/geojson/icons.cctv.geojsonp"
 	soup = urllib2.urlopen(url).read()
 	#opening the file to write
-	f = open('list_Atlanta_GA.txt','w')
+	f = open('list_GA_Atlanta.txt','w')
 	
 	#using regular expression to split data
 	dat = re.split("}},",soup)
