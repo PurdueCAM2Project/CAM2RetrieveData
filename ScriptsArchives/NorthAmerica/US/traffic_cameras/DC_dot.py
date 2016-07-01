@@ -1,12 +1,12 @@
 #JSON in script tag style
 """ 
 --------------------------------------------------------------------------------
-Descriptive Name     : ddot.py
+Descriptive Name     : DC_dot.py
 Author               : unknown								      
 Contact Info         : cwengyan@purdue.edu (Chan Weng Yan)
 Date Written         : unknown
 Description          : Parse cameras on the Washington,DC traffic camera website
-Command to run script: python ddot.py
+Command to run script: python DC_dot.py
 Output               : country#state#city#description#snapshot_url#latitude#longitude to textfile  
 Note                 : 
 Other files required by : N/A
@@ -25,7 +25,7 @@ import re
 import sys
 import json
 
-f = open('list_ddot.txt', 'w')
+f = open('list_DC_dot.txt', 'w')
 
 #connect to target URL and retrieve HTML
 url = 'http://app.ddot.dc.gov/'
