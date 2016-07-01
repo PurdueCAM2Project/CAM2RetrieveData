@@ -5,10 +5,10 @@ Author               : Thomas Norling
 Contact Info         : tnorling@purdue.edu 
 Date Written         : June 30, 2016
 Description          : Parse cameras on City of Redmond site
-Command to run script: python Redmond_WA.py
+Command to run script: python WA_Redmond.py
 Usage                : None
 Input file format    : N/A
-Output               : list_Redmond_WA.txt
+Output               : list_WA_Redmond.txt
 Note                 : 
 Other files required by : Geocoding.py, WriteToFile.py located in 
 this script and where     NetworkCameras/Discovery/Tools
