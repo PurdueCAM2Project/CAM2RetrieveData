@@ -1,12 +1,12 @@
 #!/usr/bin/python
 '''
 --------------------------------------------------------------------------------
-Descriptive Name     : LafayetteLA.py
+Descriptive Name     : LA_Lafayette.py
 Author               : Chan Weng Yan (Adapted from unknown author) 
 Contact Info         : cwengyan@purdue.edu
 Date Written         : June 13, 2016
 Description          : Parse cameras on the Lafayette, Louisiana traffic camera website
-Command to run script: python Lafayatte_LA.py
+Command to run script: python LA_Lafayatte.py
 Output               : country#state#description#url#lat#long to <list_LafayetteLA.txt>
 Note                 : 
 Other files required by : N/A
@@ -34,7 +34,7 @@ def Lafayette():
     iter = 0
 
     #create a file named file_lafa and creat Lf_ls txt file to be output
-    file_lafa = open('list_LafayetteLA.txt','w')
+    file_lafa = open('list_LA_Lafayette.txt','w')
     file_lafa.write('country#state#city#description#snapshot_url#latitude#longitude'+'\n')
 
     #get list of links to append to url to create different soup
