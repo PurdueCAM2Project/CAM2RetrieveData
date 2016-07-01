@@ -35,10 +35,10 @@ import signal
 
 class Testing:
     def __init__(self):
-        self.scriptsToTest = sys.argv
-        self.testOutput = open('testOutput.txt', 'w')
-        self.scriptSuccess = []
-        self.scriptFailure = []
+        self.scriptsToTest = sys.argv 
+        self.testOutput = open('testOutput.txt', 'w') #Output Log File
+        self.scriptSuccess = [] #List of Scripts that ran successfully
+        self.scriptFailure = [] #List of Scripts that had one or more errors
 
     def testRunWithoutError(self):
         DEVNULL = open(os.devnull, 'w')
@@ -46,7 +46,7 @@ class Testing:
         count = 0
         for item in self.scriptsToTest:
             if (count == 0) or (item == "Test_Parsing_Scripts.py") or (re.search(r".txt", item)):
-                if re.search(r".txt", item):
+                if re.search(r".txt", item): #If an argument is a .txt file read the file and use each line as a script to test
                     argFile = open(item, 'r')
                     for line in argFile.readlines():
                         line = line.replace("\n", "")
@@ -56,32 +56,32 @@ class Testing:
                 print "Testing: " + item
                 errorFile = open('errorFile.txt', 'w')
                 self.testOutput.write("\nScript: " + item + "\n")
-                p = subprocess.Popen('python ' + item, stdout=DEVNULL, stderr=errorFile, preexec_fn=os.setsid, shell=True)
+                p = subprocess.Popen('python ' + item, stdout=DEVNULL, stderr=errorFile, preexec_fn=os.setsid, shell=True) #Run the script
                 p.wait()
                 try:
-                    os.killpg(p.pid, signal.SIGTERM)
+                    os.killpg(p.pid, signal.SIGTERM) #If the script failed, close all open processes
                 except:
                     pass
                 errorFile.close()
                 errorFile = open('errorFile.txt', 'r')
-                err = errorFile.readlines()
+                err = errorFile.readlines() #Read error information
                 errorFile.close()
                 time.sleep(1)
                 
-                if p.returncode == 0:
+                if p.returncode == 0: #Script ran successfully, write appropriate message to log file and add script to Success list
                     self.testOutput.write(item + " ran without error\n")                  
                     self.testOutputFile(item)
                     if item not in self.scriptFailure:
                         self.scriptSuccess.append(item)
-                else:
+                else: #Script failed, write appropriate message to log file and add script to Failure list
                     self.testOutput.write(item + " failed to run. Please try debugging this script and try again. Error message is located below:\n\n")
                     self.testOutput.write(''.join(err))
                     self.scriptFailure.append(item)
             count += 1
         DEVNULL.close()
-        os.remove('errorFile.txt')
+        os.remove('errorFile.txt') #Remove temporary error file
         
-    def testOutputFile(self, inputfile):
+    def testOutputFile(self, inputfile): #Test that the parsing script output file exists, is formatted correctly and contains at least 1 camera
         print "Testing output file of: " + inputfile
         filename = "list_" + inputfile.split('.')[0] + ".txt"
         self.testOutput.write("\nOutput file: " + filename + "\n")
@@ -158,7 +158,7 @@ class Testing:
                 else:
                     self.scriptFailure.append(inputfile)
 
-    def askDelete(self):
+    def askDelete(self): #Removes all parsing script output files if user wants to
         delete = raw_input("\nWould you like to delete output text files from the parsing scripts? (y/n): ")
         if delete == "y" or delete == "Y":
             for file in self.scriptsToTest[1:]:
