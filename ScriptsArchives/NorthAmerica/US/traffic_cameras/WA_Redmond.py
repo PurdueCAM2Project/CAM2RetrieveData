@@ -1,6 +1,6 @@
 """
 --------------------------------------------------------------------------------
-Descriptive Name     : Redmond_WA.py
+Descriptive Name     : WA_Redmond.py
 Author               : Thomas Norling								      
 Contact Info         : tnorling@purdue.edu 
 Date Written         : June 30, 2016
@@ -32,7 +32,7 @@ class Redmond:
         self.website = urllib2.urlopen('http://gis.redmond.gov/arcgis/rest/services/TrafficCameras/MapServer/1/query?f=json&where=1%3D1&returnGeometry=true&spatialRel=esriSpatialRelIntersects&outFields=*&outSR=102100').read()
         self.jsonInfo = json.loads(self.website)
         self.geo = Geocoding('Google', None)
-        self.write = WriteToFile(True, 'list_Redmond_WA.txt')
+        self.write = WriteToFile(True, 'list_WA_Redmond.txt')
 
     def getInfo(self):
         features = self.jsonInfo['features']
