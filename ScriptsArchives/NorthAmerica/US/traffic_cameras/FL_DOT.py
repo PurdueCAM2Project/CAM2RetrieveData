@@ -1,12 +1,12 @@
 """
 --------------------------------------------------------------------------------
-Descriptive Name     : Florida_DOT.py 
+Descriptive Name     : FL_DOT.py 
 Author               : Pongthip Srivarangkul
 Contact Info         : psrivara@purdue.edu
 Date Written         : June 13, 2016
 Description          : Parse cameras on Florida traffic camera
-Command to run script: python Florida_DOT.py
-Output               : list_floridaDOT.txt
+Command to run script: python FL_DOT.py
+Output               : list_FL_DOT.txt
 Note                 :
 Other files required by : N/A
 this script and where
@@ -34,7 +34,7 @@ from selenium.common.exceptions import TimeoutException
 
 def scrapingFL():
     # setup
-    fo = open("list_floridaDOT.txt", "w")
+    fo = open("list_FL_DOT.txt", "w")
     # writing the header to the file
     fo.write("country#state#city#snapshot_url#latitude#longitude\n")
     driver = webdriver.Firefox()
