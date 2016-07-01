@@ -5,10 +5,10 @@ Author               : Sanghyun Joo
 Contact Info         : joos@purdue.edu OR toughshj@gmail.com
 Date Written         : 15 June 2016
 Description          : parses the city name, snapshot_url, latitude, and longitude for each camera
-Command to run script: python Idaho_gov.py
+Command to run script: python ID_gov.py
 Usage                : N/A
 Input file format    : N/A
-Output               : list_Idaho_traffic
+Output               : list_ID_traffic.txt
 Note                 : 
 Other files required by : It requires Selenium and BeautifulSoup4 to be installed
 this script and where
@@ -46,7 +46,7 @@ class Idaho:
         self.state = "ID"
 
         # open the file to store the list and write the format of the list at the first line
-        self.f = open('list_Idaho_gov.txt', 'w')
+        self.f = open('list_ID_gov.txt', 'w')
         self.f.write("city#country#state#snapshot_url#latitude#longitude" + "\n")
 
     def get_soup(self, url):
