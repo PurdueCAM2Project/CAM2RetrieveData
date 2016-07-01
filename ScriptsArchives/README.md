@@ -21,7 +21,7 @@ This folder contains used parsing scripts ONLY. Meaning they work, or at least u
 ####Traffic camera filename Rule :
 * In the US:<br>
 State wide camera: `<state_abbreviation>.py` eg: NY.py <br>
-County or city wide: `<City><State>_<Source>.py` eg: LafayetteMS.py, NewYorkCityNY_dotsignals.py
+County or city wide: `<State>_<City>_<Source>.py` eg: MS_Lafayette.py, NY_NewYorkCity_dotsignals.py
 	
 * Not US: <br>
 `<City><Country>_<Source>.py` eg: Hongkong_CN.py, Barcelona_ES.py
