@@ -1,12 +1,12 @@
 """
 --------------------------------------------------------------------------------
-Descriptive Name     : NewYorkCity_NY_dotsignals
+Descriptive Name     : NY_NewYorkCity_dotsignals
 Author               : Ryan Dailey				      
 Contact Info         : dailey1@purdue.edu
 Description          : Parses the New York City Camera Website http://dotsignals.org/
-Command to run script: NewYorkCity_NE_dotsignals.py
+Command to run script: NY_NewYorkCity_dotsignals.py
 Input file format    : N/A
-Output               : NewYorkCity_NY_dotsignals_list
+Output               : list_NY_NewYorkCity_dotsignals.txt
 Note                 :
 Other files required by : This code requires PhantomJS a headless web browser found at https://nodejs.org/en/
 this script and where 	  to be located in the same directory as the script.
@@ -39,7 +39,7 @@ def nycdot():
 	
 	JSonURL = "http://dotsignals.org/new-data.php" # URL to the JSon File Containing Map Data
 	CameraPopupURL = "http://dotsignals.org/google_popup.php?cid=" # URL to access the cameara URL
-	f = open('list_NewYorkCity_NY_dotsignals','w') # Open an output file for writing
+	f = open('list_NY_NewYorkCity_dotsignals.txt','w') # Open an output file for writing
     
     # Write the header info into the file
 	f.write("description#snapshot_url#latitude#longitude#country#state#city\n")
