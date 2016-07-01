@@ -1,14 +1,14 @@
 """
 --------------------------------------------------------------------------------
-Descriptive Name     : Tallahassee_FL.py
+Descriptive Name     : FL_Tallahassee.py
 Author               : Thomas Norling								      
 Contact Info         : tnorling@purdue.edu
 Date Written         : June 30, 2016
 Description          : Parses cameras in the City of Tallahassee
-Command to run script: python Tallahassee_FL.py
+Command to run script: python FL_Tallahassee.py
 Usage                : None
 Input file format    : N/A
-Output               : list_Tallahassee_FL.txt
+Output               : list_FL_Tallahassee.txt
 Note                 : 
 Other files required by : Geocoding.py, WriteToFile.py located in 
 this script and where     NetworkCameras/Discovery/Tools
@@ -31,7 +31,7 @@ class FL:
     def __init__(self):
         self.driver = webdriver.Firefox()
         self.geo = Geocoding('Google', None)
-        self.write = WriteToFile(True, 'list_Tallahassee_FL.txt')
+        self.write = WriteToFile(True, 'list_FL_Tallahassee.txt')
         self.urlList = []
 
     def Navigate(self):
