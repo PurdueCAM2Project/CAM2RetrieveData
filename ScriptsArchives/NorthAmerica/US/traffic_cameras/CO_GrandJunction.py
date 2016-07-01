@@ -1,13 +1,13 @@
 #!/usr/bin/python
 """ 
 --------------------------------------------------------------------------------
-Descriptive Name     : GrandJunction.py
+Descriptive Name     : CO_GrandJunction.py
 Author               : unknown							      
 Contact Info         : ssui@purdue.edu (Shengli Sui)
 Description          : Parse cameras on the City of Grand Junction traffic camera website
-Command to run script: python GrandJunction.py
+Command to run script: python CO_GrandJunction.py
 Output               : output urls, country, city and latitude, longitude to a 
-                       textfile <GrandJunction_output.txt>
+                       textfile <list_CO_GrandJunction.txt>
 Other files required by : N/A
 this script and where 
 located
@@ -31,7 +31,7 @@ def getGJ():
     baseroadurl='http://publicweb-fs.ci.grandjct.co.us/e-net/PublicWorks/TrafficCam/'
     #Open main page where all road ways are listed
     base='http://www.gjcity.org/TrafficVolumeCameras.aspx'
-    file = open('list_GrandJunction.txt','w') #Open output file
+    file = open('list_CO_GrandJunction.txt','w') #Open output file
     roadlist=[]
     #Extract links which lead to camera feed pages of each road way
     soup = BeautifulSoup(urllib2.urlopen(base).read())
