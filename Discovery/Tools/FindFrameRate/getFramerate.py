@@ -106,8 +106,8 @@ def getRefImage(camera, cameras, activeCameras, refFiles, connection):
         file_name, frame_timestamp = archiver.archive(cameraInfo, connection)
         if file_name == None or frame_timestamp == None:
             raise(Exception('RefERROR: Image could not be retrieved for ID: {}'.format(camera)))
-
-        refFiles[str(camera)] = file_name
+        else:
+            refFiles[str(camera)] = file_name
 
     except Exception, e:
         logging.debug(e)
@@ -117,9 +117,7 @@ def getRefImage(camera, cameras, activeCameras, refFiles, connection):
 
 # getStartImage gets the starting image described in the overview.
 def getStartImage(cameras, activeCameras, refFiles, startTimes, connection):
-    logging.debug(activeCameras)
     for camera in activeCameras:
-        logging.debug(camera)
         if startTimes.get(str(camera)) == 0:
             try:
                 cameraInfo = [None, camera, 0, 'start']
@@ -180,7 +178,7 @@ def dumpCameras(cameras, dumpedCams, activeCameras, camera_dump_threshold, timeI
     for camera in activeCameras:
         if timeInQueue.get(str(camera)) != None and (time.time() - timeInQueue.get(str(camera))) > camera_dump_threshold:
             try:
-                logging.debug("ID: {} exceeded camera threshold.                                                         ".format(camera))
+                logging.debug("ID: {} exceeded camera threshold.".format(camera))
                 startTimes.pop(str(camera))
                 timeInQueue.pop(str(camera))
                 dumpedCams.append(camera)
@@ -239,7 +237,7 @@ def cleanUp(cameras, activeCameras, startTimes, fLong, dumpedCams, end_compare_c
         for camera in end_compare_cameras:
             fLong.write("{}\n".format(camera))
 
-def getConnection():
+def getConnection(DB_PASSWORD):
 
     # Try to access database:
     connection = None
@@ -270,8 +268,9 @@ def getConnection():
         databaseRead.write("# The server database credentials.\nDB_SERVER = {}\nDB_USER_NAME = {}\nDB_NAME = {}".format(DB_SERVER, DB_USER_NAME, DB_NAME))
 
     try:
-        print("Input Database Password or /c to change info:")
-        DB_PASSWORD = getpass.getpass("\nDB_PASSWORD = ")
+        if DB_PASSWORD == None:
+            print("Input Database Password or /c to change info:")
+            DB_PASSWORD = getpass.getpass("\nDB_PASSWORD = ")
 
         if DB_PASSWORD == "/c":
             databaseRead = open("database.config", "w")
@@ -309,6 +308,9 @@ def assessFramerate(camera_dump_threshold, camera, cameras, activeCameras, refFi
 
     try:
         while (time.time() - start_timestamp) < duration and len(activeCameras) > 0 :
+            cycle_start = time.time()
+            num_passes = 0
+            cycle_times = 0
             try:
                 startTimes = getStartImage(cameras, activeCameras, refFiles, startTimes, connection)
                 print("\rAssessment Runtime: {}sec Max Runtime: {}sec. Processing {}of{}          ".format(round(time.time()-assessTime_start), duration, totalCams - len(cameras), totalCams), end = '\r')
@@ -330,12 +332,15 @@ def assessFramerate(camera_dump_threshold, camera, cameras, activeCameras, refFi
             except Exception as e:
                 print("Error! dumpCameras Failed")
                 raise e
+            cycle_times += (time.time() - cycle_start)
+            num_passes += 1
     except:
         logging.info("Stopped, Cleaning Up...")
-        pass
 
     if time.time() - start_timestamp > duration:
         logging.info("Assessment Limit Time Reached, Cleaning Up....")
+    
+    logging.debug("Average Cycle Time: {}".format(float(cycle_times/num_passes)))
 
     return cameras, activeCameras, startTimes, fLong, dumpedCams
     # cleanUp(cameras, activeCameras, startTimes, fLong, dumpedCams)
@@ -343,7 +348,7 @@ def assessFramerate(camera_dump_threshold, camera, cameras, activeCameras, refFi
     # print("Done. Exit...")
 
 
-def setup(fInput, duration, amountToProcess, camera_dump_threshold, results_path, is_video):
+def setup(inputFile, duration, amountToProcess, camera_dump_threshold, results_path, is_video, DB_PASSWORD):
     # Create the results directory.
     try:
         os.makedirs(results_path)
@@ -370,7 +375,7 @@ def setup(fInput, duration, amountToProcess, camera_dump_threshold, results_path
     # add the handler to the root logger
     logging.getLogger('').addHandler(console)
 
-    logging.debug("Input File: {}".format(fInput))
+    logging.debug("Input File: {}".format(inputFile))
     logging.debug("Input Duration: {}".format(duration))
     logging.debug("Number of feeds processed at a time: {}".format(amountToProcess))
     logging.debug("Camera Dump Threshold: {}".format(camera_dump_threshold))
@@ -381,7 +386,7 @@ def setup(fInput, duration, amountToProcess, camera_dump_threshold, results_path
     connection = None
 
     while connection == None:
-        connection = getConnection()
+        connection = getConnection(DB_PASSWORD)
         if connection == None and connection != -1:
             print("Connection info not correct...\n\tTry again:")
         elif connection == -1:
@@ -396,16 +401,20 @@ def setup(fInput, duration, amountToProcess, camera_dump_threshold, results_path
 
     logging.info("Loading cameras...")
 
-    # program_start_time = datetime.datetime()
-    # logging.info("Program Start Time: {}".format(program_start_time))
-
+    try:
+        fInput = open(inputFile)
+    except:
+        logging.Error("File Not Loaded")
+        return
     cameras = list(fInput)
     end_compare_cameras = list(fInput)
     fInput.close()
+
+
     if cameras == None or len(cameras) == 0:
         logging.info("Problem loading cameras...")
         return
-        pass
+
     logging.info("Cameras loaded successfully")
     logging.info("Setting up reference images...")
 
@@ -438,6 +447,8 @@ def setup(fInput, duration, amountToProcess, camera_dump_threshold, results_path
     connection.close()
     fLong.close()
     f.close()
+    return cameras, activeCameras, startTimes, dumpedCams, end_compare_cameras, DB_PASSWORD
+
 
 
 def main(args):
@@ -471,6 +482,7 @@ def main(args):
                 except:
                     pass
                 fInput = open(inputFile, "r")
+                fInput.close()
 
                 break
             except Exception as e:
@@ -516,7 +528,7 @@ def main(args):
 
     is_video = 0
 
-    setup(fInput, duration, amountToProcess, camera_dump_threshold, results_path, is_video)
+    setup(inputFile, duration, amountToProcess, camera_dump_threshold, results_path, is_video, None)
 
 if __name__ == '__main__':
     main(sys.argv)
