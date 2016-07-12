@@ -130,12 +130,7 @@ class WorldWebcam:
                 descrip:    The description of the given camera
         """
         self.gps.locateCoords(descrip, city, state, country)
-        result = self.gps.city.encode("UTF-8") + "#"
-        result = result + self.gps.country + "#"
-        result = result + self.gps.state + "#"
-        result = result + img_src + "#"
-        result = result + self.gps.latitude + "#" + self.gps.longitude + "\n"
-        #result = self.gps.city.encode("UTF-8") + "#" + self.gps.country + "#" + self.gps.state + "#" + img_src + "#" + self.gps.latitude + "#" + self.gps.longitude + "\n"
+        result = self.gps.city.encode("UTF-8") + "#" + self.gps.country + "#" + self.gps.state + "#" + img_src + "#" + self.gps.latitude + "#" + self.gps.longitude + "\n"
         result = result.replace("##", "#")
 
         self.list_file.write(result)
