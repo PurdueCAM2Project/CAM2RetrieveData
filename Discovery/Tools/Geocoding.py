@@ -21,8 +21,8 @@
 #   locat is the street address, intersection, county, etc.
 #   city is the city, if you don't have a city name: city = "" (the API will
 #   fill it in for you) 
-#   state is the 2 digit state code, if the country is not USA: state = ""
-#   country is the 2 digit country code
+#   state is the state name or 2 digit state code, if the country is not USA: state = ""
+#   country is the country name or 2 digit country code
 #
 #   4. To do the reverse (find city, state, country from coordinates):
 #   Call the function: variable.reverse(latitude, longitude)
