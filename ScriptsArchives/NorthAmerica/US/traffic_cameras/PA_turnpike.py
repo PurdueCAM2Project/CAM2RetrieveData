@@ -8,7 +8,7 @@ Description     : Parse several Pennsylvania traffic cameras
 Command to run  : python PA_turnpike.py
 script
 Output          : country#state#city#snapshot_url#latitude#longitude to <list_PA_turnpike.txt>
-Other files required by : N/A
+Other files required by : script reads from PA_turnpike.kml rather than from the website
 this script and where 
 located
 
