@@ -10,9 +10,10 @@ Usage                : N/A
 Input file format    : N/A
 Output               : list_WorldWebcam_Other.txt list_WorldWebcam_US.txt
 Note                 : This website contains a lot of cameras all over the world.
-                        For this reason, it has two output files, one for US and the other for non-US countries.
+                       For this reason, it has two output files, one for US and the other for non-US countries.
 Other files required by : It requires Selenium and BeautifulSoup4 to be installed.
-                            It also requires to install pycountry
+                          It requires to install pycountry
+                          It requires Geocoding.py from Tools directory
 this script and where
 located
 
@@ -59,7 +60,6 @@ class WorldWebcam:
         self.countries = {}
         for country in pycountry.countries:
             self.countries[country.name] = country.alpha2
-
 
     def get_soup(self, url):
         """ Create beautifulSoup object with the given url and return it
@@ -196,7 +196,7 @@ class WorldWebcam:
         print(country, state, city, img_src, descrip)
 
     def main(self):
-        geo = Geocoding('Nominatim', None)
+        geo = Geocoding('Google', "AIzaSyDRb6HaVtHDbpHkJq8a3MEODFZlmkBt7f4")
 
         # loop through each continent category
         soup_traffic = self.get_soup(self.traffic_url)
@@ -215,6 +215,7 @@ class WorldWebcam:
                         country, state, city, img_src, descrip = self.get_data(cam)
                         self.write_to_file(geo, country, state, city, img_src, descrip)
                     except:
+                        traceback.print_exc()
                         print("ERROR")
 
 if __name__ == '__main__':
