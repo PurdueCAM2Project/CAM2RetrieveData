@@ -50,6 +50,9 @@ class SouthDakota:
         self.f = open('list_SD_dot.txt', 'w')
         self.f.write("city#country#state#snapshot_url#latitude#longitude" + "\n")
 
+        # gps module
+        self.gps = Geocoding('Google', None)
+
     def get_soup(self, url):
         """ Create beautifulSoup object with the given url and return it
 
@@ -98,7 +101,6 @@ class SouthDakota:
     
     def main(self):
         # get parser for the traffic page
-        variable = Geocoding('Nominatim', None)
         soup_traffic = self.get_soup(self.traffic_url)
 
         # loop through each camera
@@ -116,10 +118,10 @@ class SouthDakota:
             print(img_src, city)
 
             try:
-                variable.locateCoords(descrip, city, self.state, self.country)
-                result = variable.city + "#" + variable.country + "#" + variable.state + "#" + img_src + "#" + variable.latitude + "#" + variable.longitude + "\n"
-                result = result.replace("##", "#")
-                self.f.write(result)
+                self.gps.locateCoords(descrip, city, self.state, self.country)
+                input_format = self.gps.city + "#" + self.gps.country + "#" + self.gps.state + "#" + img_src + "#" + self.gps.latitude + "#" + self.gps.longitude + "\n"
+                input_format = input_format.replace("##", "#")
+                self.f.write(input_format)
             except:
                 print("can't find")
 
