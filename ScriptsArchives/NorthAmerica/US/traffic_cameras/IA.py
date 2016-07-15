@@ -15,9 +15,9 @@ this script and where
 located
 
 ----For Parsing Scripts---------------------------------------------------------
-Website Parsed       : http://lb.511.Iowa.gov/idlb/cameras/routeselect.jsf?vi
+Website Parsed       : http://lb.511.Iowa.gov/idlb/cameras/routeselect.jsf
 In database (Y/N)    : Y
-Date added to Database : 16 June 2016
+Date added to Database : 15 July 2016
 --------------------------------------------------------------------------------
 """
 
@@ -48,6 +48,9 @@ class Iowa:
         # open the file to store the list and write the format of the list at the first line
         self.f = open('list_IA.txt', 'w')
         self.f.write("city#country#state#snapshot_url#latitude#longitude" + "\n")
+
+        # gps module
+        self.gps = Geocoding('Google', None)
 
     def get_soup(self, url):
         """ Create beautifulSoup object with the given url and return it
@@ -154,14 +157,13 @@ class Iowa:
 
         # get the description, city name, and img_src of the camera
         descrip = self.get_descrip(soup_cam)
-        city = descrip
+        city = ""
         img_src = self.get_img_src(soup_cam)
 
         return descrip, city, img_src
 
     def main(self):
         # get parser for the traffic page
-        variable = Geocoding('Nominatim', None)
         soup = self.get_soup(self.traffic_url)
 
         # loop through each camera to parse
@@ -176,11 +178,12 @@ class Iowa:
             print(descrip, img_src)
 
             try:
-                variable.locateCoords(descrip, city, self.state, self.country)
-                result = variable.city + "#" + variable.country + "#" + variable.state + "#" + img_src + "#" + variable.latitude + "#" + variable.longitude + "\n"
-                result = result.replace("##", "#")
-                self.f.write(result)
+                self.gps.locateCoords(descrip, city, self.state, self.country)
+                input_format = self.gps.city + "#" + self.gps.country + "#" + self.gps.state + "#" + img_src + "#" + self.gps.latitude + "#" + self.gps.longitude + "\n"
+                input_format = input_format.replace("##", "#")
+                self.f.write(input_format)
             except:
+                traceback.print_exc()
                 print("can't find")
 
 if __name__ == '__main__':
