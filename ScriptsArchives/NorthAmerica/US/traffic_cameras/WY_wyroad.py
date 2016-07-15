@@ -49,6 +49,9 @@ class Wyoming:
         self.f = open('list_WY_wyroad.txt', 'w')
         self.f.write("city#country#state#snapshot_url#latitude#longitude" + "\n")
 
+        # gps module
+        self.gps = Geocoding('Google', None)
+
     def get_soup(self, url):
         """ Create beautifulSoup object with the given url and return it
 
@@ -125,12 +128,12 @@ class Wyoming:
 
     def main(self):
         # get parser for the traffic page
-        variable = Geocoding('Nominatim', None)
         soup_traffic = self.get_soup(self.traffic_url)
 
         # loop through each link
         link_table = soup_traffic.find("table", {"class" : "table"})
         for a_tag in link_table.findAll("a"):
+
             # create parser for each link
             soup_link = self.get_soup(self.home_url + a_tag.get('href'))
             cam_table = soup_link.find("table", {"class" : "table"})
@@ -142,10 +145,10 @@ class Wyoming:
                 print(img_src, city)
 
                 try:
-                    variable.locateCoords(descrip, city, self.state, self.country)
-                    result = variable.city + "#" + variable.country + "#" + variable.state + "#" + img_src + "#" + variable.latitude + "#" + variable.longitude + "\n"
-                    result = result.replace("##", "#")
-                    self.f.write(result)
+                    self.gps.locateCoords(descrip, city, self.state, self.country)
+                    input_format = self.gps.city + "#" + self.gps.country + "#" + self.gps.state + "#" + img_src + "#" + self.gps.latitude + "#" + self.gps.longitude + "\n"
+                    input_format = input_format.replace("##", "#")
+                    self.f.write(input_format)
                 except:
                     print("can't find")
 
