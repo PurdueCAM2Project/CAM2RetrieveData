@@ -5,12 +5,13 @@ Author               : Sanghyun Joo
 Contact Info         : joos@purdue.edu OR toughshj@gmail.com
 Date Written         : 22 June 2016
 Description          : parses the city name, snapshot_url, latitude, and longitude for each camera
-Command to run script: python Brunswick.py
+Command to run script: python NewBrunswick.py
 Usage                : N/A
 Input file format    : N/A
-Output               : list_Brunswick.txt
+Output               : list_NewBrunswick.txt
 Note                 : 
 Other files required by : It requires Selenium and BeautifulSoup4 to be installed
+                          It requires Geocoding.py from Tools directory
 this script and where
 located
 
@@ -37,7 +38,7 @@ from selenium.common.exceptions import UnexpectedAlertPresentException
 from selenium.common.exceptions import TimeoutException
 from bs4 import BeautifulSoup
 
-class Brunswick:
+class NewBrunswick:
     def __init__(self):
         # store the url of homepage, traffic page, the country code, and the state code
         self.home_url = "http://www2.gnb.ca"
@@ -46,7 +47,7 @@ class Brunswick:
         self.state = ""
 
         # open the file to store the list and write the format of the list at the first line
-        self.f = open('list_Brunswick.txt', 'w')
+        self.f = open('list_NewBrunswick.txt', 'w')
         self.f.write("city#country#snapshot_url#latitude#longitude" + "\n")
 
     def get_soup(self, url):
@@ -112,14 +113,14 @@ class Brunswick:
         img_tag = a_tag.find("img")
 
         img_src = img_tag.get('src')
-        city = "New Brunswick"
+        city    = "New Brunswick"
         descrip = img_tag.get('alt')
 
         return descrip, img_src, city
 
     def main(self):
         # get parser for the traffic page
-        geo = Geocoding('Nominatim', None)
+        geo = Geocoding('Google', None)
         soup_traffic = self.get_soup(self.traffic_url)
 
         # loop through each link
@@ -138,5 +139,5 @@ class Brunswick:
                 print("can't find")
 
 if __name__ == '__main__':
-    Brunswick = Brunswick()
-    Brunswick.main()
+    NewBrunswick = NewBrunswick()
+    NewBrunswick.main()
