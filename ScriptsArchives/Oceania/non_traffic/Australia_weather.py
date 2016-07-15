@@ -52,6 +52,9 @@ class Australia:
         # open the webbrowser
         self.driver = webdriver.Firefox()
 
+        # gps moduel
+        self.gps = Geocoding('Google', None)
+
     def get_soup(self, url):
         """ Create beautifulSoup object with the given url and return it
 
@@ -121,7 +124,6 @@ class Australia:
 
     def main(self):
         # get parser for the traffic page
-        geo = Geocoding('Nominatim', None)
         self.driver.get(self.traffic_url)
 
         # lists to store description and link to the image of each camera
@@ -153,10 +155,10 @@ class Australia:
 
             # try to get the GPS data and write it to the file. if fails, move to the next camera
             try:
-                geo.locateCoords(descrip, city, self.state, self.country)
-                result = geo.city + "#" + geo.country + "#" + geo.state + "#" + img_src + "#" + geo.latitude + "#" + geo.longitude + "\n"
-                result = result.replace("##", "#")
-                self.f.write(result)
+                self.gps.locateCoords(descrip, city, self.state, self.country)
+                input_format = self.gps.city + "#" + self.gps.country + "#" + self.gps.state + "#" + img_src + "#" + self.gps.latitude + "#" + self.gps.longitude + "\n"
+                input_format = input_format.replace("##", "#")
+                self.f.write(input_format)
             except:
                 print("can't find")
 
