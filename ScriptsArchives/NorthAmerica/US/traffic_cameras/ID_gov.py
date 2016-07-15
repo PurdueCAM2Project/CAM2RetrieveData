@@ -49,6 +49,9 @@ class Idaho:
         self.f = open('list_ID_gov.txt', 'w')
         self.f.write("city#country#state#snapshot_url#latitude#longitude" + "\n")
 
+        # gps module
+        self.gps = Geocoding('Google', None)
+
     def get_soup(self, url):
         """ Create beautifulSoup object with the given url and return it
 
@@ -153,14 +156,13 @@ class Idaho:
 
         # get the description and city name of the camera
         descrip = self.get_descrip(soup_cam)
-        city = descrip
+        city = ""
         img_src = self.get_img_src(soup_cam)
 
         return descrip, city, img_src
     
     def main(self):
         # get parser for the traffic page
-        variable = Geocoding('Nominatim', None)
         soup = self.get_soup(self.traffic_url)
 
         # store the href of each camera
@@ -175,10 +177,10 @@ class Idaho:
             print(descrip, img_src)
 
             try:
-                variable.locateCoords(descrip, city, self.state, self.country)
-                result = variable.city + "#" + variable.country + "#" + variable.state + "#" + img_src + "#" + variable.latitude + "#" + variable.longitude + "\n"
-                result = result.replace("##", "#")
-                self.f.write(result)
+                self.gps.locateCoords(descrip, city, self.state, self.country)
+                input_format = self.gps.city + "#" + self.gps.country + "#" + self.gps.state + "#" + img_src + "#" + self.gps.latitude + "#" + self.gps.longitude + "\n"
+                input_format = input_format.replace("##", "#")
+                self.f.write(input_format)
             except:
                 print("can't find")
 
