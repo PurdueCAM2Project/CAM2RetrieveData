@@ -17,6 +17,9 @@ Other files required by : It requires Selenium and BeautifulSoup4 to be installe
                           It requires states list from state_code.py to translate the state name into 2-letter state code.
 this script and where
 located
+Other files required by : state_code.py in NetworkCameras/Discovery/Tools
+this script and where     It requires Selenium and BeautifulSoup4 to be installed.
+located
 
 ----For Parsing Scripts---------------------------------------------------------
 Website Parsed       : http://www.insecam.org/
