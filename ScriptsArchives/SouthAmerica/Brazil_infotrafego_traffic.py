@@ -10,9 +10,8 @@ Usage                : N/A
 Input file format    : N/A
 Output               : list_infotrafego_traffic.txt
 Note                 : 
-Other files required by : It requires Selenium and BeautifulSoup4 to be installed.
-                          It requires Geocoding.py from the Tools directory
-this script and where
+Other files required by : Geocoding.py in NetworkCameras/Discovery/Tools
+this script and where     It also requires to install Selenium and BeautifulSoup4
 located
 
 ----For Parsing Scripts---------------------------------------------------------
