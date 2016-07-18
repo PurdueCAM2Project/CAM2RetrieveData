@@ -30,8 +30,6 @@ import time
 import urllib
 import re
 import traceback
-from CameraData import CameraData
-from Geocoding import Geocoding
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
