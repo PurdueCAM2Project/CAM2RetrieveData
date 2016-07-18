@@ -29,11 +29,11 @@ Date added to Database : 27 June 2016
 import selenium.webdriver.support.ui as ui
 import time
 import urllib
-import urllib2
 import re
 import traceback
 from state_code import states
 from Geocoding import Geocoding
+from Useful import Useful
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
@@ -42,7 +42,7 @@ from selenium.common.exceptions import UnexpectedAlertPresentException
 from selenium.common.exceptions import TimeoutException
 from bs4 import BeautifulSoup
 
-class Insecam:
+class Insecam(Useful):
     def __init__(self):
         # store the url of homepage, traffic page, the country code, and the state code
         self.home_url = "http://www.insecam.org"
@@ -76,56 +76,6 @@ class Insecam:
                         "http://201.229.94.197:80/mjpg/video.mjpg?COUNTER"
                        ]
 
-    def get_soup(self, url):
-        """ Create beautifulSoup object with the given url and return it
-
-            Args:
-                url: the URL address of the webpage to be parsed
-
-            Return:
-                soup: beautifulSoup object to parse the given URL
-        """
-
-        opener = urllib2.build_opener() 
-        opener.addheaders = [('User-agent', 'Mozilla/5.0')] # Add header information
-        response = opener.open(url)
-        page = response.read()
-        soup = BeautifulSoup(page, "html.parser")           # Create soup
-
-        return soup
-
-    def get_token(self, string, front, end):
-        """ Extract the substring between <front> and <end> string
-            
-            The string contains string or html element
-            This function extract the substring between <front> and <end> string
-            If front string is empty, return string from the first character to the split of end string
-            If end string is empty, return string from the end character to the split of the front string
-
-            Args:
-                string: string or html element
-                front: string at the left of the wanted substring
-                end: string at the right of the wanted substring
-
-            Return:
-                token: the string between <front> and <end> string OR if DNE, return empty string
-        """
-        try:
-            s = str(string)
-            if front == "":
-                token = s.split(end)[0]
-            elif end == "":
-                token = s.split(front)[1]
-            else:
-                front_split = s.split(front)[1]
-                token = front_split.split(end)[0]
-        except:
-            print("get_token error")
-            traceback.print_exc()
-            token = ""
-
-        return token
-
     def valid_type(self, category):
         """ Check if the given category is OK to parse or not
 
@@ -153,7 +103,7 @@ class Insecam:
                 page_num: the maximum page number of given category of cameras
         """
         pages = soup_cate.find("div", {"id" : "navbar"})
-        page_num = int(self.get_token(pages, ",", ","))
+        page_num = int(Useful.get_token_between(self, pages, ",", ","))
 
         return page_num
 
@@ -175,7 +125,7 @@ class Insecam:
                 img_src: the image URL of the camera 
         """
         # get parser for the camera webpage AND get the table that has all the data
-        soup_cam = self.get_soup(self.home_url + cam.find("a").get('href'))
+        soup_cam = Useful.get_parser_with_soup(self, self.home_url + cam.find("a").get('href'))
         rows = soup_cam.find("table").findAll("tr")
 
         # extract the data from the table
@@ -249,11 +199,11 @@ class Insecam:
 
             # if valid category, move to the pages of the given category and loop through the pages
             category_url = self.home_url + category.get('href')
-            soup_cate = self.get_soup(category_url)
+            soup_cate = Useful.get_parser_with_soup(self, category_url)
             for i in range(self.get_page_num(soup_cate)):
 
                 # For each page, loop through all the cameras to parse them
-                soup_page = self.get_soup(category_url + "?page=" + str(i + 1))
+                soup_page = Useful.get_parser_with_soup(self, category_url + "?page=" + str(i + 1))
                 for cam in soup_page.findAll("div", {"class" : "thumbnail"}):
                     
                     # try to extract the data and write them into the files. if fails, move to the next camera

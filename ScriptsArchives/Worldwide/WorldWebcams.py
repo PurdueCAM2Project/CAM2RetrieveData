@@ -26,11 +26,10 @@ Date added to Database : 30 June 2016
 
 import selenium.webdriver.support.ui as ui
 import time
-import urllib
-import urllib2
 import re
 import traceback
 import pycountry
+from Useful import Useful
 from state_code import states
 from Geocoding import Geocoding
 from selenium import webdriver
@@ -41,7 +40,7 @@ from selenium.common.exceptions import UnexpectedAlertPresentException
 from selenium.common.exceptions import TimeoutException
 from bs4 import BeautifulSoup
 
-class WorldWebcam:
+class WorldWebcam(Useful):
     def __init__(self):
         # store the url of homepage, traffic page, the country code, and the state code
         self.home_url = "http://www.meteosurfcanarias.com"
@@ -61,57 +60,7 @@ class WorldWebcam:
         
         # gps module
         self.gps = Geocoding('Google', None)
-
-    def get_soup(self, url):
-        """ Create beautifulSoup object with the given url and return it
-
-            Args:
-                url: the URL address of the webpage to be parsed
-
-            Return:
-                soup: beautifulSoup object to parse the given URL
-        """
-
-        opener = urllib2.build_opener() 
-        opener.addheaders = [('User-agent', 'Mozilla/5.0')] # Add header information
-        response = opener.open(url)
-        page = response.read()
-        soup = BeautifulSoup(page, "html.parser")           # Create soup
-
-        return soup
-
-    def get_token(self, string, front, end):
-        """ Extract the substring between <front> and <end> string
-            
-            The string contains string or html element
-            This function extract the substring between <front> and <end> string
-            If front string is empty, return string from the first character to the split of end string
-            If end string is empty, return string from the end character to the split of the front string
-
-            Args:
-                string: string or html element
-                front: string at the left of the wanted substring
-                end: string at the right of the wanted substring
-
-            Return:
-                token: the string between <front> and <end> string OR if DNE, return empty string
-        """
-        try:
-            s = str(string)
-            if front == "":
-                token = s.split(end)[0]
-            elif end == "":
-                token = s.split(front)[1]
-            else:
-                front_split = s.split(front)[1]
-                token = front_split.split(end)[0]
-        except:
-            print("get_token error")
-            traceback.print_exc()
-            token = ""
-
-        return token
-
+    
     def get_data(self, cam):
         """ Get the country-code, state-code, city name, image URL, and description about the given camera
 
@@ -156,14 +105,14 @@ class WorldWebcam:
             Args:
                 text: description text of a camera
         """
-        country = self.get_token(text, "Country:", "Webcam").strip()
+        country = Useful.get_token_between(self, text, "Country:", "Webcam").strip()
 
         if country == "United States":
             country = "USA"
             try:
-                state = states[self.get_token(text, "state:", "Country").strip()]
+                state = states[Useful.get_token_between(self, text, "state:", "Country").strip()]
             except:
-                state = states[self.get_token(text, "Region:", "Country").strip()]
+                state = states[Useful.get_token_between(self, text, "Region:", "Country").strip()]
         else:
             country = self.countries.get(country, 'Unknown code')
             state = ""
@@ -198,15 +147,15 @@ class WorldWebcam:
     def main(self):
 
         # loop through each continent category
-        soup_traffic = self.get_soup(self.traffic_url)
+        soup_traffic = Useful.get_parser_with_soup(self, self.traffic_url)
         for continent in soup_traffic.findAll("area"):
 
             # loop through each country from the continent
-            soup_continent = self.get_soup(self.home_url + continent.get('href'))
+            soup_continent = Useful.get_parser_with_soup(self, self.home_url + continent.get('href'))
             for country in soup_continent.findAll("div", {"class" : "country-button"}):
 
                 # loop through the camears of each country
-                soup_country = self.get_soup(self.home_url + country.find("a").get('href'))
+                soup_country = Useful.get_parser_with_soup(self, self.home_url + country.find("a").get('href'))
                 for cam in soup_country.findAll("div", {"class" : ["display-webcams-peq", "display-webcams-med"]}):
 
                     # try to extract the data and write them into the files, if fails, ignore it and move to the next camera
