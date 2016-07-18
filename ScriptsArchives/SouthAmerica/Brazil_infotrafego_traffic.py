@@ -40,7 +40,7 @@ from selenium.common.exceptions import UnexpectedAlertPresentException
 from selenium.common.exceptions import TimeoutException
 from bs4 import BeautifulSoup
 
-class WorldWebcam:
+class Brazil_infotrafego:
     def __init__(self):
         # store the url of homepage, traffic page, the country code, and the state code
         self.home_url = "http://infotrafego.pbh.gov.br"
@@ -163,5 +163,5 @@ class WorldWebcam:
                 traceback.print_exc()
 
 if __name__ == '__main__':
-    WorldWebcam = WorldWebcam()
-    WorldWebcam.main()
+    Brazil_infotrafego = Brazil_infotrafego()
+    Brazil_infotrafego.main()
