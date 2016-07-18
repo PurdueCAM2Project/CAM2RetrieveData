@@ -10,8 +10,8 @@ Usage                : N/A
 Input file format    : N/A
 Output               : list_Australia_weather.txt
 Note                 : 
-Other files required by : It requires Selenium and BeautifulSoup4 to be installed
-this script and where
+Other files required by : Geocoding.py and Useful.py in NetworkCameras/Discovery/Tools
+this script and where     It requires Selenium and BeautifulSoup4 to be installed  
 located
 
 ----For Parsing Scripts---------------------------------------------------------
@@ -30,6 +30,7 @@ import re
 import traceback
 from Geocoding import Geocoding
 from selenium import webdriver
+from Useful import Useful
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.ui import Select
@@ -37,7 +38,7 @@ from selenium.common.exceptions import UnexpectedAlertPresentException
 from selenium.common.exceptions import TimeoutException
 from bs4 import BeautifulSoup
 
-class Australia:
+class Australia(Useful):
     def __init__(self):
         # store the url of homepage, traffic page, the country code, and the state code
         self.home_url = "http://www.weathercamnetwork.com.au"
@@ -117,8 +118,8 @@ class Australia:
                 descrip: description about the given camera
         """
         img_src = self.driver.find_element_by_xpath("//div[@align='center']/img").get_attribute('src')
-        city = self.get_token(string, "-", "(").strip()
-        descrip = city + ", " + self.get_token(string, "", " ")
+        city    = Useful.get_token_between(self, string, "-", "(").strip()
+        descrip = city + ", " + Useful.get_token_between(self, string, "", " ")
 
         return img_src, city, descrip
 
