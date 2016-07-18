@@ -10,9 +10,10 @@ Usage                : N/A
 Input file format    : N/A
 Output               : list_WorldWebcam_Other.txt list_WorldWebcam_US.txt
 Note                 : This website contains a lot of cameras all over the world.
-                        For this reason, it has two output files, one for US and the other for non-US countries.
+                       For this reason, it has two output files, one for US and the other for non-US countries.
 Other files required by : It requires Selenium and BeautifulSoup4 to be installed.
-                            It also requires to install pycountry
+                          It requires to install pycountry
+                          It requires Geocoding.py from Tools directory
 this script and where
 located
 
@@ -59,7 +60,9 @@ class WorldWebcam:
         self.countries = {}
         for country in pycountry.countries:
             self.countries[country.name] = country.alpha2
-
+        
+        # gps module
+        self.gps = Geocoding('Google', None)
 
     def get_soup(self, url):
         """ Create beautifulSoup object with the given url and return it
@@ -169,7 +172,7 @@ class WorldWebcam:
 
         return country, state
 
-    def write_to_file(self, geo, country, state, city, img_src, descrip):
+    def write_to_file(self, country, state, city, img_src, descrip):
         """ Writes the extracted data into the list files
             
             It locates the GPS with the Geocoding module.
@@ -177,15 +180,14 @@ class WorldWebcam:
             Since the format of US file and other countries' file, check the country name before writing.
 
             Args:
-                geo:        A Geocoding object to locate the GPS location
                 country:    The 2-letter country code of the given camera
                 state:      The 2-letter state code of the given camera
                 city:       The city name of the given camera
                 img_src:    The image URL of the given camera
                 descrip:    The description of the given camera
         """
-        geo.locateCoords(descrip, city, state, country)
-        result = geo.city + "#" + geo.country + "#" + geo.state + "#" + img_src + "#" + geo.latitude + "#" + geo.longitude + "\n"
+        self.gps.locateCoords(descrip, city, state, country)
+        result = self.gps.city + "#" + self.gps.country + "#" + self.gps.state + "#" + img_src + "#" + self.gps.latitude + "#" + self.gps.longitude + "\n"
         result = result.replace("##", "#")
 
         if country == "USA":
@@ -196,7 +198,6 @@ class WorldWebcam:
         print(country, state, city, img_src, descrip)
 
     def main(self):
-        geo = Geocoding('Nominatim', None)
 
         # loop through each continent category
         soup_traffic = self.get_soup(self.traffic_url)
@@ -213,8 +214,9 @@ class WorldWebcam:
                     # try to extract the data and write them into the files, if fails, ignore it and move to the next camera
                     try:
                         country, state, city, img_src, descrip = self.get_data(cam)
-                        self.write_to_file(geo, country, state, city, img_src, descrip)
+                        self.write_to_file(country, state, city, img_src, descrip)
                     except:
+                        traceback.print_exc()
                         print("ERROR")
 
 if __name__ == '__main__':

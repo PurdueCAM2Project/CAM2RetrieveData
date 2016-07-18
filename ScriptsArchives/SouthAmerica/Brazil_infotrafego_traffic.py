@@ -40,7 +40,7 @@ from selenium.common.exceptions import UnexpectedAlertPresentException
 from selenium.common.exceptions import TimeoutException
 from bs4 import BeautifulSoup
 
-class WorldWebcam:
+class Brazil_infotrafego:
     def __init__(self):
         # store the url of homepage, traffic page, the country code, and the state code
         self.home_url = "http://infotrafego.pbh.gov.br"
@@ -155,13 +155,13 @@ class WorldWebcam:
     def main(self):
         self.driver.get(self.traffic_url)
 
+        # loop through the camera data on html
         for cam in self.driver.find_elements_by_class_name("camThumb"):
             try:
                 self.parse_cam(cam)
             except:
                 traceback.print_exc()
-                print("Error")
 
 if __name__ == '__main__':
-    WorldWebcam = WorldWebcam()
-    WorldWebcam.main()
+    Brazil_infotrafego = Brazil_infotrafego()
+    Brazil_infotrafego.main()

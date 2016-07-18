@@ -58,6 +58,9 @@ class Florida:
         self.driver = webdriver.Firefox()
         self.wait = ui.WebDriverWait(self.driver, 10)
 
+        # gps module
+        self.gps = Geocoding('Google', None)
+
     def get_soup(self, url):
         """ Create beautifulSoup object with the given url and return it
 
@@ -125,15 +128,8 @@ class Florida:
             result = string
 
         return result
-    
-    def main(self):
-        # open the browser and move to the traffic page
-        geo = Geocoding('Nominatim', None)
-        self.driver.get(self.home_url)
 
-        # lists to store the description and the link to the image of each camera
-        links_to_img = []
-        descrips = []
+    def get_links_descrips(self, links_to_img, descrips):
 
         # loop through each camera to get the description and the link to the image of them
         for cam in self.driver.find_elements_by_class_name("cameras"):
@@ -149,6 +145,16 @@ class Florida:
             # append the data to the lists 
             links_to_img.append(link_to_img)
             descrips.append(desc)
+    
+    def main(self):
+        # open the browser and move to the traffic page
+        self.driver.get(self.home_url)
+
+        # lists to store the description and the link to the image of each camera
+        links_to_img = []
+        descrips = []
+
+        self.get_links_descrips(links_to_img, descrips)
 
         # loop through the links to the images to get the image URLs
         for i in range(len(links_to_img)):
@@ -157,15 +163,15 @@ class Florida:
             self.driver.get(links_to_img[i])
 
             # get the description, image URL, and the city name of the camera
-            descrip = self.get_descrip(descrips[i])
+            descrip = descrips[i]
             img_src = self.driver.find_element_by_id("CamImage").get_attribute('src')
             city = "Bay County"
             
             print(descrip, img_src)
 
             try:
-                geo.locateCoords(descrip, city, self.state, self.country)
-                result = geo.city + "#" + geo.country + "#" + geo.state + "#" + img_src + "#" + geo.latitude + "#" + geo.longitude + "\n"
+                self.gps.locateCoords(descrip, city, self.state, self.country)
+                result = self.gps.city + "#" + self.gps.country + "#" + self.gps.state + "#" + img_src + "#" + self.gps.latitude + "#" + self.gps.longitude + "\n"
                 result = result.replace("##", "#")
                 self.f.write(result)
             except:

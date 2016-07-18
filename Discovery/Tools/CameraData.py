@@ -9,7 +9,7 @@ Command to run script: N/A
 Usage                : N/A
 Input file format    : N/A
 Output               : N/A
-Note                 : This class creates an instance that contains img_src, country, state, city, and description as isntance variables
+Note                 : This class creates an instance that contains img_src, country, state, city, and description as instance variables variables
 Other files required by : N/A
 this script and where
 located

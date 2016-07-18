@@ -51,6 +51,9 @@ class Cleveland:
         self.file = open('list_Cleveland_Ohio.txt', 'w')
         self.file.write("city#country#state#snapshot_url#latitude#longitude" + "\n")
 
+        # gps module
+        self.gps = Geocoding('Google', None)
+
     def get_soup(self, url):
         """ Create beautifulSoup object with the given url and return it
 
@@ -97,34 +100,6 @@ class Cleveland:
 
         return token
 
-    def get_data(self, cam):
-        """ Get the description, image url, and city name of the given camera
-
-            The cam is a BeautifulSoup element that contains the infomation about one camera in <a href=""> tag
-            This function extracts the description, image url, and city name of the given data
-
-            Args:
-                cam: BeautifulSoup element that contains the infomation about one camera in <a href=""> tag
-
-            Return:
-                descrip: description about the given camera
-                img_src: image url of the given camera
-                city: city name of the given camera
-        """
-        # create parser for a camera
-        soup_cam = self.get_soup(self.home_url + cam.get('href'))
-
-        # create img_src, city, descrip for Geocoding
-        descrip = ""
-        img_src = soup_cam.find("img", {"class" : "photolarge"}).get('src')
-        city = cam.text
-
-        # complete the img_src
-        if img_src[0] == "/":
-            img_src = self.home_url + img_src
-
-        return descrip, img_src, city
-
     def get_camera_data(self, cam_element):
         img_src     = self.get_img_src(cam_element)
         description = self.get_description(cam_element)
@@ -154,17 +129,13 @@ class Cleveland:
     def multiple_spaces_into_single_space(self, string):
         return ' '.join(string.split())
 
-    def convert_parsed_data_into_input_format(self, gps_module, camera_data):
-        description = camera_data.get_description()
-        city        = camera_data.get_city()
-        state       = camera_data.get_state()
-        country     = camera_data.get_country()
-        img_src     = camera_data.get_img_src()
+    def convert_parsed_data_into_input_format(self, camera_data):
+        self.gps.locateCoords(camera_data.get_description(),
+                              camera_data.get_city(),
+                              camera_data.get_state(),
+                              camera_data.get_country())
 
-        print(description, city, state)
-
-        gps_module.locateCoords(description, city, state, country)
-        input_format = gps_module.city + "#" + gps_module.country + "#" + gps_module.state + "#" + img_src + "#" + gps_module.latitude + "#" + gps_module.longitude + "\n"
+        input_format = self.gps.city + "#" + self.gps.country + "#" + self.gps.state + "#" + camera_data.get_img_src() + "#" + self.gps.latitude + "#" + self.gps.longitude + "\n"
         input_format = input_format.replace("##", "#")    # if no state exists, state == ""
 
         return input_format
@@ -174,17 +145,17 @@ class Cleveland:
 
     def main(self):
         # get parser for the traffic page
-        gps_module = Geocoding('Google', None)
-        soup_traffic = self.get_soup(self.traffic_url)
+        parser_for_traffic_website = self.get_soup(self.traffic_url)
 
-        soup_traffic_table = soup_traffic.find("table", {"class" : "wxForecastBox"})
-        for cam_element in soup_traffic_table.findAll("td", {"class" : "wx"}):
+        parser_for_traffic_website_table = parser_for_traffic_website.find("table", {"class" : "wxForecastBox"})
+        for cam_element in parser_for_traffic_website_table.findAll("td", {"class" : "wx"}):
             try:
-                camera_data = self.get_camera_data(cam_element)
-                input_format = self.convert_parsed_data_into_input_format(gps_module, camera_data)
+                camera_data     = self.get_camera_data(cam_element)
+                input_format    = self.convert_parsed_data_into_input_format(camera_data)
 
                 self.write_to_file(input_format)
             except:
+                traceback.print_exc()
                 print("ERROR")
 
 if __name__ == '__main__':
