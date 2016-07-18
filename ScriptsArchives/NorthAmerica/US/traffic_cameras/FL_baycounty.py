@@ -10,8 +10,8 @@ Usage                : N/A
 Input file format    : N/A
 Output               : list_FL_baycounty.txt
 Note                 : N/A
-Other files required by : It requires Selenium and BeautifulSoup4 to be installed
-this script and where
+Other files required by : Geocoding.py from in NetworkCameras/Discovery/Tools
+this script and where     It requires Selenium and BeautifulSoup4 to be installed
 located
 
 ----For Parsing Scripts---------------------------------------------------------
