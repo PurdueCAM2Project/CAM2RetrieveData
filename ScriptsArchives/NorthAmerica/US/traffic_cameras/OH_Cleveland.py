@@ -10,7 +10,7 @@ Usage                : N/A
 Input file format    : N/A
 Output               : list_Cleveland_Ohio.txt
 Note                 : 
-Other files required by : Geocoding.py from in NetworkCameras/Discovery/Tools
+Other files required by : Geocoding.py and Useful.py in NetworkCameras/Discovery/Tools
 this script and where     It requires Selenium and BeautifulSoup4 to be installed
 located
 
@@ -25,10 +25,10 @@ Date added to Database : 5 July 2016
 
 import selenium.webdriver.support.ui as ui
 import time
-import urllib
 import re
 import traceback
 from CameraData import CameraData
+from Useful import Useful
 from Geocoding import Geocoding
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -38,7 +38,7 @@ from selenium.common.exceptions import UnexpectedAlertPresentException
 from selenium.common.exceptions import TimeoutException
 from bs4 import BeautifulSoup
 
-class Cleveland:
+class Cleveland(Useful):
     def __init__(self):
         # store the url of homepage, traffic page, the country code, and the state code
         self.home_url = "http://web.live.weatherbug.com/LiveCameras/2/LiveCameras.aspx"
@@ -52,52 +52,6 @@ class Cleveland:
 
         # gps module
         self.gps = Geocoding('Google', None)
-
-    def get_soup(self, url):
-        """ Create beautifulSoup object with the given url and return it
-
-            Args:
-                url: the URL address of the webpage to be parsed
-
-            Return:
-                soup: beautifulSoup object to parse the given URL
-        """
-        soup_url = urllib.urlopen(url.encode("UTF-8")).read()
-        soup = BeautifulSoup(soup_url, "html.parser")
-
-        return soup
-
-    def get_token(self, string, front, end):
-        """ Extract the substring between <front> and <end> string
-            
-            The string contains string or html element
-            This function extract the substring between <front> and <end> string
-            If front string is empty, return string from the first character to the split of end string
-            If end string is empty, return string from the end character to the split of the front string
-
-            Args:
-                string: string or html element
-                front: string at the left of the wanted substring
-                end: string at the right of the wanted substring
-
-            Return:
-                token: the string between <front> and <end> string OR if DNE, return empty string
-        """
-        try:
-            s = str(string)
-            if front == "":
-                token = s.split(end)[0]
-            elif end == "":
-                token = s.split(front)[1]
-            else:
-                front_split = s.split(front)[1]
-                token = front_split.split(end)[0]
-        except:
-            print("get_token error")
-            traceback.print_exc()
-            token = ""
-
-        return token
 
     def get_camera_data(self, cam_element):
         img_src     = self.get_img_src(cam_element)
@@ -143,8 +97,7 @@ class Cleveland:
         self.file.write(input_format)
 
     def main(self):
-        # get parser for the traffic page
-        parser_for_traffic_website = self.get_soup(self.traffic_url)
+        parser_for_traffic_website = Useful.get_parser_with_soup(self, self.traffic_url)
 
         parser_for_traffic_website_table = parser_for_traffic_website.find("table", {"class" : "wxForecastBox"})
         for cam_element in parser_for_traffic_website_table.findAll("td", {"class" : "wx"}):

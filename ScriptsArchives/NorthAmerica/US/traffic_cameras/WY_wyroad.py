@@ -10,7 +10,7 @@ Usage                : N/A
 Input file format    : N/A
 Output               : list_WY_wyroad.txt
 Note                 : 
-Other files required by : Geocoding.py from in NetworkCameras/Discovery/Tools
+Other files required by : Geocoding.py and Useful.py from in NetworkCameras/Discovery/Tools
 this script and where     It requires Selenium and BeautifulSoup4 to be installed
 located
 
@@ -25,10 +25,10 @@ Date added to Database : 15 June 2016
 
 import selenium.webdriver.support.ui as ui
 import time
-import urllib
 import re
 import traceback
 from Geocoding import Geocoding
+from Useful import Useful
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
@@ -37,7 +37,7 @@ from selenium.common.exceptions import UnexpectedAlertPresentException
 from selenium.common.exceptions import TimeoutException
 from bs4 import BeautifulSoup
 
-class Wyoming:
+class Wyoming(Useful):
     def __init__(self):
         # store the url of homepage, traffic page, the country code, and the state code
         self.home_url = "http://www.wyoroad.info"
@@ -51,52 +51,6 @@ class Wyoming:
 
         # gps module
         self.gps = Geocoding('Google', None)
-
-    def get_soup(self, url):
-        """ Create beautifulSoup object with the given url and return it
-
-            Args:
-                url: the URL address of the webpage to be parsed
-
-            Return:
-                soup: beautifulSoup object to parse the given URL
-        """
-        soup_url = urllib.urlopen(url.encode("UTF-8")).read()
-        soup = BeautifulSoup(soup_url, "html.parser")
-
-        return soup
-
-    def get_token(self, string, front, end):
-        """ Extract the substring between <front> and <end> string
-            
-            The string contains string or html element
-            This function extract the substring between <front> and <end> string
-            If front string is empty, return string from the first character to the split of end string
-            If end string is empty, return string from the end character to the split of the front string
-
-            Args:
-                string: string or html element
-                front: string at the left of the wanted substring
-                end: string at the right of the wanted substring
-
-            Return:
-                token: the string between <front> and <end> string OR if DNE, return empty string
-        """
-        try:
-            s = str(string)
-            if front == "":
-                token = s.split(end)[0]
-            elif end == "":
-                token = s.split(front)[1]
-            else:
-                front_split = s.split(front)[1]
-                token = front_split.split(end)[0]
-        except:
-            print("get_token error")
-            traceback.print_exc()
-            token = ""
-
-        return token
 
     def get_data(self, cam):
         """ Get the description, image url, and city name of the given camera
@@ -113,7 +67,7 @@ class Wyoming:
                 city: city name of the given camera
         """
         # create parser for a camera
-        soup_cam = self.get_soup(self.home_url + cam.get('href'))
+        soup_cam = Useful.get_parser_with_soup(self, self.home_url + cam.get('href'))
 
         # create img_src, city, descrip for Geocoding
         descrip = ""
@@ -128,14 +82,14 @@ class Wyoming:
 
     def main(self):
         # get parser for the traffic page
-        soup_traffic = self.get_soup(self.traffic_url)
+        soup_traffic = Useful.get_parser_with_soup(self, self.traffic_url)
 
         # loop through each link
         link_table = soup_traffic.find("table", {"class" : "table"})
         for a_tag in link_table.findAll("a"):
 
             # create parser for each link
-            soup_link = self.get_soup(self.home_url + a_tag.get('href'))
+            soup_link = Useful.get_parser_with_soup(self, self.home_url + a_tag.get('href'))
             cam_table = soup_link.find("table", {"class" : "table"})
 
             # loop through each camera in a link

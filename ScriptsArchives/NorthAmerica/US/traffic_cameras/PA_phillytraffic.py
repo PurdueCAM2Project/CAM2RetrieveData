@@ -58,52 +58,6 @@ class Philadelphia:
         self.driver = webdriver.Firefox(firefox_profile=firefox_profile)
         self.wait = ui.WebDriverWait(self.driver, 10)
 
-    def get_soup(self, url):
-        """ Create beautifulSoup object with the given url and return it
-
-            Args:
-                url: the URL address of the webpage to be parsed
-
-            Return:
-                soup: beautifulSoup object to parse the given URL
-        """
-        soup_url = urllib.urlopen(url.encode("UTF-8")).read()
-        soup = BeautifulSoup(soup_url, "html.parser")
-
-        return soup
-
-    def get_token(self, string, front, end):
-        """ Extract the substring between <front> and <end> string
-            
-            The string contains string or html element
-            This function extract the substring between <front> and <end> string
-            If front string is empty, return string from the first character to the split of end string
-            If end string is empty, return string from the end character to the split of the front string
-
-            Args:
-                string: string or html element
-                front: string at the left of the wanted substring
-                end: string at the right of the wanted substring
-
-            Return:
-                token: the string between <front> and <end> string OR if DNE, return empty string
-        """
-        try:
-            s = str(string)
-            if front == "":
-                token = s.split(end)[0]
-            elif end == "":
-                token = s.split(front)[1]
-            else:
-                front_split = s.split(front)[1]
-                token = front_split.split(end)[0]
-        except:
-            print("get_token error")
-            traceback.print_exc()
-            token = ""
-
-        return token
-
     def write_to_file(self, description, img_src):
         self.file.write(description + "#" + img_src + "\n")
 

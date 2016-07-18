@@ -10,7 +10,7 @@ Usage                : N/A
 Input file format    : N/A
 Output               : list_FL_baycounty.txt
 Note                 : N/A
-Other files required by : Geocoding.py from in NetworkCameras/Discovery/Tools
+Other files required by : Geocoding.py and Useful.py in NetworkCameras/Discovery/Tools
 this script and where     It requires Selenium and BeautifulSoup4 to be installed
 located
 
@@ -25,10 +25,10 @@ Date added to Database : 22 June 2016
 
 import selenium.webdriver.support.ui as ui
 import time
-import urllib
 import re
 import traceback
 from Geocoding import Geocoding
+from Useful import Useful
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
@@ -38,7 +38,7 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.action_chains import ActionChains
 from bs4 import BeautifulSoup
 
-class Florida:
+class Florida(Useful):
     def __init__(self):
         # store the url of homepage, traffic page, the country code, and the state code
         self.home_url = "http://tmc.baycountyfl.gov"
@@ -60,52 +60,6 @@ class Florida:
 
         # gps module
         self.gps = Geocoding('Google', None)
-
-    def get_soup(self, url):
-        """ Create beautifulSoup object with the given url and return it
-
-            Args:
-                url: the URL address of the webpage to be parsed
-
-            Return:
-                soup: beautifulSoup object to parse the given URL
-        """
-        soup_url = urllib.urlopen(url.encode("UTF-8")).read()
-        soup = BeautifulSoup(soup_url, "html.parser")
-
-        return soup
-
-    def get_token(self, string, front, end):
-        """ Extract the substring between <front> and <end> string
-            
-            The string contains string or html element
-            This function extract the substring between <front> and <end> string
-            If front string is empty, return string from the first character to the split of end string
-            If end string is empty, return string from the end character to the split of the front string
-
-            Args:
-                string: string or html element
-                front: string at the left of the wanted substring
-                end: string at the right of the wanted substring
-
-            Return:
-                token: the string between <front> and <end> string OR if DNE, return empty string
-        """
-        try:
-            s = str(string)
-            if front == "":
-                token = s.split(end)[0]
-            elif end == "":
-                token = s.split(front)[1]
-            else:
-                front_split = s.split(front)[1]
-                token = front_split.split(end)[0]
-        except:
-            print("get_token error")
-            traceback.print_exc()
-            token = ""
-
-        return token
 
     def get_string(self, string):
         """ Extrac the description out of the string and return it
