@@ -11,8 +11,8 @@ Input file format    : N/A
 Output               : list_puerto_traffic
 Note                 : Do not use Google API for Geocoding. It gives wrong latitude and longitude
                        It only parse two cameras out of about 50 or more cameras because it fails on geocoding
-Other files required by : It requires Selenium to be installed
-this script and where
+Other files required by : Geocoding.py from in NetworkCameras/Discovery/Tools
+this script and where     It requires Selenium and BeautifulSoup4 to be installed
 located
 
 ----For Parsing Scripts---------------------------------------------------------
