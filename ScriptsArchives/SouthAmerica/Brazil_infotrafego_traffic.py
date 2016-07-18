@@ -155,12 +155,12 @@ class WorldWebcam:
     def main(self):
         self.driver.get(self.traffic_url)
 
+        # loop through the camera data on html
         for cam in self.driver.find_elements_by_class_name("camThumb"):
             try:
                 self.parse_cam(cam)
             except:
                 traceback.print_exc()
-                print("Error")
 
 if __name__ == '__main__':
     WorldWebcam = WorldWebcam()
