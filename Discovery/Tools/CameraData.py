@@ -5,19 +5,21 @@ Author               : Sanghyun Joo
 Contact Info         : joos@purdue.edu OR toughshj@gmail.com
 Date Written         : 30 June 2016
 Description          : parses the city name, snapshot_url, latitude, and longitude for each camera
-Command to run script: N/A
+Command to run script: python WorldCameras.py
 Usage                : N/A
 Input file format    : N/A
-Output               : N/A
-Note                 : This class creates an instance that contains img_src, country, state, city, and description as instance variables variables
-Other files required by : N/A
+Output               : list_WorldCamera_Other.txt list_WorldCamera_US.txt
+Note                 : This website contains a lot of cameras all over the world.
+                        For this reason, it has two output files, one for US and the other for non-US countries.
+Other files required by : It requires Selenium and BeautifulSoup4 to be installed.
+                            It also requires to install pycountry
 this script and where
 located
 
 ----For Parsing Scripts---------------------------------------------------------
-Website Parsed       : N/A
-In database (Y/N)    : N/A
-Date added to Database : N/A
+Website Parsed       : http://www.meteosurfcanarias.com/en/webcams
+In database (Y/N)    : Y
+Date added to Database : 30 June 2016
 --------------------------------------------------------------------------------
 """
 class CameraData:
