@@ -11,11 +11,9 @@ Input file format    : N/A
 Output               : list_WorldWebcam_Other.txt list_WorldWebcam_US.txt
 Note                 : This website contains a lot of cameras all over the world.
                        For this reason, it has two output files, one for US and the other for non-US countries.
-Other files required by : It requires Selenium and BeautifulSoup4 to be installed.
-                          It requires to install pycountry
-                          It requires Geocoding.py from Tools directory
-this script and where
-located
+Other files required by : Geocoding.py in NetworkCameras/Discovery/Tools
+this script and where     It requires Selenium and BeautifulSoup4 to be installed.
+located                   It requires to install pycountry.
 
 ----For Parsing Scripts---------------------------------------------------------
 Website Parsed       : http://www.meteosurfcanarias.com/en/webcams
