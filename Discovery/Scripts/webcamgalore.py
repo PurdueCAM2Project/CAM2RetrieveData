@@ -59,8 +59,9 @@ def webcamgaloreNavigate():
 			print elem.get_attribute("href")
 			cameraPageLinks.append(elem.get_attribute("href"))
 	for i in cameraPageLinks:
-		if "https://www.webcamgalore.com/webcam/USA/" in i:
-			USLinks.append(cameraPageLinks.pop(cameraPageLinks.index(i)))
+		if "webcamgalore.com/webcam/USA" in i:
+			USLinks.append(i)
+			cameraPageLinks.remove(i)
 	listfile = open("list_webcamgalore.txt", "a")
 	listfile.write("country#city#snapshot_url#latitude#longitude\n")
 	time.sleep(0.5)
