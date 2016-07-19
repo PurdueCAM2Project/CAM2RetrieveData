@@ -9,7 +9,9 @@ Command to run script: python Iceland_DOT.py
 Usage                : Run on operating system with requests, bs4 and re installed
 Input file format    : (eg. url#description (on each line))
 Output               : list_Iceland.txt
-Note                 :
+Note                 : This code can only parse aound 1/4 of it. 
+                        Reason:
+                        Reverse geocoding cannot return city name.
 Other files required by : N/A
 this script and where
 located
