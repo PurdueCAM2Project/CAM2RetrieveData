@@ -75,3 +75,27 @@ class Useful:
             token = ""
 
         return token
+
+    def convert_parsed_data_into_input_format(self, camera_data):
+        """ Get the input format to the list file from the camera data
+
+            Args:
+                camera_data: CameraData object that contains all the data about a camera
+
+            Return:
+                input_format: one line input format that will be appended on the list file
+        """
+        self.gps.locateCoords(camera_data.get_description(),
+                              camera_data.get_city(),
+                              camera_data.get_state(),
+                              camera_data.get_country())
+
+        input_format = self.gps.city + "#" + self.gps.country + "#" + self.gps.state + "#" + camera_data.get_img_src() + "#" + self.gps.latitude + "#" + self.gps.longitude + "\n"
+        input_format = input_format.replace("##", "#")    # if no state exists, state == ""
+
+        return input_format
+
+    def write_to_file(self, input_format):
+        """ write the input file into the list file
+        """
+        self.list_file.write(input_format)
