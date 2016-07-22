@@ -46,7 +46,6 @@ def get_text_excluding_children(driver, element):
 
 def webcamgaloreNavigate():
 	cameraPageLinks = []
-	USLinks = []
 	driver = webdriver.Firefox()
 	geocoder = Geocoding("Google",geocodingKeys[0])
 	API_num = 0
@@ -57,10 +56,9 @@ def webcamgaloreNavigate():
 		for elem in driver.find_elements_by_xpath("/html/body/table/tbody/tr/td[@valign='top']/a"):
 			print elem.get_attribute("href")
 			cameraPageLinks.append(elem.get_attribute("href"))
-	for i in cameraPageLinks:
-		if "webcamgalore.com/webcam/USA" in i:
-			USLinks.append(i)
-			cameraPageLinks.remove(i)
+	USLinks = [link for link in cameraPageLinks if "USA" in link]
+	for i in USLinks:
+		cameraPageLinks.remove(i)
 	listfile = open("list_webcamgalore.txt", "a")
 	listfile.write("country#city#snapshot_url#latitude#longitude\n")
 	time.sleep(0.5)
