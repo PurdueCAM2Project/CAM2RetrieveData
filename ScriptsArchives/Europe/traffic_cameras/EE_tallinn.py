@@ -38,7 +38,7 @@ from selenium.common.exceptions import UnexpectedAlertPresentException
 from selenium.common.exceptions import TimeoutException
 from bs4 import BeautifulSoup
 
-class Cleveland(Useful):
+class Estonia(Useful):
     def __init__(self):
         # store the url of homepage, traffic page, the country code, and the state code
         self.home_url = "http://ristmikud.tallinn.ee"
@@ -91,5 +91,5 @@ class Cleveland(Useful):
                 traceback.print_exc()
 
 if __name__ == '__main__':
-    Cleveland = Cleveland()
-    Cleveland.main()
+    Estonia = Estonia()
+    Estonia.main()
