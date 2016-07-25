@@ -9,15 +9,15 @@ Command to run script: python webcamgalore.py
 Usage                : N/A
 Input file format    : N/A
 Output               : list_webcamgalore.txt, list_US_webcamgalore.txt
-Note                 : Should be only a substitute until we can find a way to parse most of the Flash video feeds the website links to. Also, takes a lot of time.
+Note                 : Should be only a substitute until we can find a way to parse most of the Flash video feeds the website links to.
 Other files required by : Geocoding.py (NetworkCameras/Discovery/Tools/Geocoding.py)
 this script and where
 located
 
 ----For Parsing Scripts---------------------------------------------------------
 Website Parsed       : webcamgalore.com
-In database (Y/N)    : N
-Date added to Database :
+In database (Y/N)    : Y
+Date added to Database : July 25, 2016
 --------------------------------------------------------------------------------
 """
 
