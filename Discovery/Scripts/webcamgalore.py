@@ -90,13 +90,10 @@ def webcamgaloreNavigate():
 						pass
 				try:
 					geocoder.locateCoords(locat, city, state, country)
-					time.sleep(1.5)
 					geocoder.reverse(geocoder.latitude, geocoder.longitude)
-					time.sleep(1.5)
 					info = geocoder.country + '#' + state + '#' + geocoder.city + '#' + snapshot_link + '#' + str(geocoder.latitude) + '#' + str(geocoder.longitude)
 					print info
 					listfile.write(info.replace(" ","").replace("##", "#").replace("\n",'')+'\n')
-					time.sleep(1.0)
 				# API key cycling courtesy of Ryan
 				except Exception as error:
 					if str(error) == "Your request was denied." or str(error) == "The given key has gone over the requests limit in the 24 hour period or has submitted too many requests in too short a period of time.":
@@ -119,7 +116,7 @@ def webcamgaloreNavigate():
 	for i in USLinks:
 		driver.get(i)
 		try:
-			locationString = driver.get_text_excluding_children(driver, driver.find_element_by_xpath("/html/body/table/tbody/tr/td[@valign='top']/h1"))
+			locationString = get_text_excluding_children(driver, driver.find_element_by_xpath("/html/body/table/tbody/tr/td[@valign='top']/h1"))
 			if "Several" not in locationString:
 				country = locationString.split(":")[0].split(",")[-1].strip()
 				city = locationString.split(":")[0].split(",")[0].strip()
@@ -128,7 +125,6 @@ def webcamgaloreNavigate():
 				resultwords  = [word for word in locatwords if word.lower() not in stopwords]
 				locat = ' '.join(resultwords)
 				state = locationString.split(":")[0].split(",")[1].strip()
-				snapshot_link = urllib.quote(driver.find_element_by_xpath("/html/body/table/tbody/tr/td[@valign='top']/table[2]/tbody/tr/td[@style='padding-left:10px']/center/a/img").get_attribute("src"), safe = ':?,=/&')
 				print locat
 				locat = locat.encode('utf-8').replace("ë","e").replace("ö","o").replace("ß","s").replace("Ö","O").replace("Ë","E").replace("ẞ","S").replace("ş","s").replace("Ş","S").replace("Ç","C").replace("ç","c").replace("ı","i").replace("İ","I").replace("â","a").replace("é","e").replace("Î","I").replace("î","i").replace("É","E").replace("è","e").replace("È","E").replace("À","A").replace("à","a").replace("ü","u").replace("Ü","U").replace("ğ","g").decode('utf-8')
 				state = state.encode('utf-8').replace("ë","e").replace("ö","o").replace("ß","s").replace("Ö","O").replace("Ë","E").replace("ẞ","S").replace("ş","s").replace("Ş","S").replace("Ç","C").replace("ç","c").replace("ı","i").replace("İ","I").replace("â","a").replace("é","e").replace("Î","I").replace("î","i").replace("É","E").replace("è","e").replace("È","E").replace("À","A").replace("à","a").replace("ü","u").replace("Ü","U").replace("ğ","g").decode('utf-8')
@@ -143,12 +139,10 @@ def webcamgaloreNavigate():
 						pass
 				try:
 					geocoder.locateCoords(locat, city, state, country)
-					time.sleep(1.5)
 					geocoder.reverse(geocoder.latitude, geocoder.longitude)
-					time.sleep(1.5)
-					info = geocoder.country + '#' + geocoder.state + '#' + geocoder.city + '#' + snapshot_link + '#' + str(geocoder.latitude) + '#' + str(geocoder.longitude)
+					info = geocoder.country + '#' + state + '#' + geocoder.city + '#' + snapshot_link + '#' + str(geocoder.latitude) + '#' + str(geocoder.longitude)
+					print info
 					listfileUS.write(info.replace(" ","").replace("##", "#").replace("\n",'')+'\n')
-					time.sleep(1.0)
 				# API key cycling courtesy of Ryan
 				except Exception as error:
 					if str(error) == "Your request was denied." or str(error) == "The given key has gone over the requests limit in the 24 hour period or has submitted too many requests in too short a period of time.":
