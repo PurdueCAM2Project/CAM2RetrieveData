@@ -29,6 +29,7 @@ import time
 import re
 import traceback
 import pycountry
+from CameraData import CameraData
 from Useful import Useful
 from state_code import states
 from Geocoding import Geocoding
@@ -43,8 +44,9 @@ from bs4 import BeautifulSoup
 class WorldWebcam(Useful):
     def __init__(self):
         # store the url of homepage, traffic page, the country code, and the state code
-        self.home_url = "http://www.meteosurfcanarias.com"
-        self.traffic_url = "http://www.meteosurfcanarias.com/en/webcams"
+        self.home_url       = "http://www.meteosurfcanarias.com"
+        self.traffic_url    = "http://www.meteosurfcanarias.com/en/webcams"
+        self.country        = ""
 
         # open the file to store the list and write the format of the list at the first line
         self.us = open('list_WorldWebcam_US.txt', 'w')
@@ -71,29 +73,26 @@ class WorldWebcam(Useful):
                 cam: BeautifulSoup4 element that contains all the information about one camera
 
             Return:
-                country:    The 2-letter country code of the given camera
-                state:      The 2-letter state code of the given camera
-                city:       The city name of the given camera
-                img_src:    The image URL of the given camera
-                descrip:    The description of the given camera
-
+                camera_data: CameraData instance that contains the parsed information of a camera
         """
         # extract the description text
         text = cam.find("p", {"class" : "description"}).text.encode("UTF-8")
 
-        # extract the image URL of the camera
+        img_src         = self.get_img_src(cam)
+        descrip         = ""
+        city            = cam.find("p", {"class" : "one-webcam-header"}).text.strip()
+        country, state  = self.get_country_state(text)
+
+        camera_data = CameraData(img_src, country, state, city, descrip)
+
+        return camera_data
+
+    def get_img_src(self, cam):
         img_src = cam.find("img").get('src')
         if img_src[0] == '/':
             img_src = self.home_url + img_src
-
-        # extract the country name and convert it to the 2-letter code
-        country, state = self.get_country_state(text)
-
-        # extract the city name
-        city = cam.find("p", {"class" : "one-webcam-header"}).text.strip()
-        descrip = ""
-
-        return country, state, city, img_src, descrip
+        
+        return img_src
 
     def get_country_state(self, text):
         """ Get the country and state code of a camera
@@ -117,54 +116,39 @@ class WorldWebcam(Useful):
             country = self.countries.get(country, 'Unknown code')
             state = ""
 
+        self.country = country
+
         return country, state
 
-    def write_to_file(self, country, state, city, img_src, descrip):
-        """ Writes the extracted data into the list files
-            
-            It locates the GPS with the Geocoding module.
-            If success, it writes the result into the files.
-            Since the format of US file and other countries' file, check the country name before writing.
-
-            Args:
-                country:    The 2-letter country code of the given camera
-                state:      The 2-letter state code of the given camera
-                city:       The city name of the given camera
-                img_src:    The image URL of the given camera
-                descrip:    The description of the given camera
-        """
-        self.gps.locateCoords(descrip, city, state, country)
-        result = self.gps.city + "#" + self.gps.country + "#" + self.gps.state + "#" + img_src + "#" + self.gps.latitude + "#" + self.gps.longitude + "\n"
-        result = result.replace("##", "#")
-
-        if country == "USA":
-            self.us.write(result)
+    def write_to_file(self, input_format):
+        if self.country == "USA":
+            self.us.write(input_format)
         else:
-            self.ot.write(result)
+            self.ot.write(input_format)
 
-        print(country, state, city, img_src, descrip)
+        print(input_format)
 
     def main(self):
-
         # loop through each continent category
-        soup_traffic = Useful.get_parser_with_soup(self, self.traffic_url)
+        soup_traffic = self.get_parser_with_soup(self.traffic_url)
         for continent in soup_traffic.findAll("area"):
 
             # loop through each country from the continent
-            soup_continent = Useful.get_parser_with_soup(self, self.home_url + continent.get('href'))
+            soup_continent = self.get_parser_with_soup(self.home_url + continent.get('href'))
             for country in soup_continent.findAll("div", {"class" : "country-button"}):
 
                 # loop through the camears of each country
-                soup_country = Useful.get_parser_with_soup(self, self.home_url + country.find("a").get('href'))
+                soup_country = self.get_parser_with_soup(self.home_url + country.find("a").get('href'))
                 for cam in soup_country.findAll("div", {"class" : ["display-webcams-peq", "display-webcams-med"]}):
 
                     # try to extract the data and write them into the files, if fails, ignore it and move to the next camera
                     try:
-                        country, state, city, img_src, descrip = self.get_data(cam)
-                        self.write_to_file(country, state, city, img_src, descrip)
+                        camera_data     = self.get_data(cam)
+                        input_format    = self.convert_parsed_data_into_input_format(camera_data)
+
+                        self.write_to_file(input_format)
                     except:
                         traceback.print_exc()
-                        print("ERROR")
 
 if __name__ == '__main__':
     WorldWebcam = WorldWebcam()
