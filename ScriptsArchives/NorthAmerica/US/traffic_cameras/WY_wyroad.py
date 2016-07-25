@@ -27,6 +27,7 @@ import selenium.webdriver.support.ui as ui
 import time
 import re
 import traceback
+from CameraData import CameraData
 from Geocoding import Geocoding
 from Useful import Useful
 from selenium import webdriver
@@ -40,19 +41,19 @@ from bs4 import BeautifulSoup
 class Wyoming(Useful):
     def __init__(self):
         # store the url of homepage, traffic page, the country code, and the state code
-        self.home_url = "http://www.wyoroad.info"
-        self.traffic_url = "http://www.wyoroad.info/highway/webcameras/webcameras.html"
-        self.country = "USA"
-        self.state = "WY"
+        self.home_url       = "http://www.wyoroad.info"
+        self.traffic_url    = "http://www.wyoroad.info/highway/webcameras/webcameras.html"
+        self.country        = "USA"
+        self.state          = "WY"
 
         # open the file to store the list and write the format of the list at the first line
-        self.f = open('list_WY_wyroad.txt', 'w')
-        self.f.write("city#country#state#snapshot_url#latitude#longitude" + "\n")
+        self.list_file = open('list_WY_wyroad.txt', 'w')
+        self.list_file.write("city#country#state#snapshot_url#latitude#longitude" + "\n")
 
         # gps module
         self.gps = Geocoding('Google', None)
 
-    def get_data(self, cam):
+    def get_camera_data(self, cam):
         """ Get the description, image url, and city name of the given camera
 
             The cam is a BeautifulSoup element that contains the infomation about one camera in <a href=""> tag
@@ -62,23 +63,30 @@ class Wyoming(Useful):
                 cam: BeautifulSoup element that contains the infomation about one camera in <a href=""> tag
 
             Return:
-                descrip: description about the given camera
-                img_src: image url of the given camera
-                city: city name of the given camera
+                camera_data: CameraData instance that contains the parsed information about a camera
         """
         # create parser for a camera
-        soup_cam = Useful.get_parser_with_soup(self, self.home_url + cam.get('href'))
+        soup_cam = self.get_parser_with_soup(self.home_url + cam.get('href'))
 
         # create img_src, city, descrip for Geocoding
-        descrip = ""
+        img_src     = self.get_img_src(soup_cam)
+        description = ""
+        city        = cam.text
+        state       = self.state
+        country     = self.country
+
+        camera_data = CameraData(img_src, country, state, city, description)
+
+        return camera_data
+
+    def get_img_src(self, soup_cam):
         img_src = soup_cam.find("img", {"class" : "photolarge"}).get('src')
-        city = cam.text
 
         # complete the img_src
         if img_src[0] == "/":
             img_src = self.home_url + img_src
-
-        return descrip, img_src, city
+        
+        return img_src
 
     def main(self):
         # get parser for the traffic page
@@ -94,17 +102,13 @@ class Wyoming(Useful):
 
             # loop through each camera in a link
             for cam in cam_table.findAll("a"):
-                descrip, img_src, city = self.get_data(cam)
-                
-                print(img_src, city)
-
                 try:
-                    self.gps.locateCoords(descrip, city, self.state, self.country)
-                    input_format = self.gps.city + "#" + self.gps.country + "#" + self.gps.state + "#" + img_src + "#" + self.gps.latitude + "#" + self.gps.longitude + "\n"
-                    input_format = input_format.replace("##", "#")
-                    self.f.write(input_format)
+                    camera_data     = self.get_camera_data(cam)
+                    input_format    = self.convert_parsed_data_into_input_format(camera_data)
+
+                    self.write_to_file(input_format)
                 except:
-                    print("can't find")
+                    traceback.print_exc()
 
 if __name__ == '__main__':
     Wyoming = Wyoming()

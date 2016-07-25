@@ -28,6 +28,7 @@ import time
 import urllib
 import re
 import traceback
+from CameraData import CameraData
 from Geocoding import Geocoding
 from selenium import webdriver
 from Useful import Useful
@@ -47,8 +48,8 @@ class Iowa(Useful):
         self.state = "IA"
 
         # open the file to store the list and write the format of the list at the first line
-        self.f = open('list_IA.txt', 'w')
-        self.f.write("city#country#state#snapshot_url#latitude#longitude" + "\n")
+        self.list_file = open('list_IA.txt', 'w')
+        self.list_file.write("city#country#state#snapshot_url#latitude#longitude" + "\n")
 
         # gps module
         self.gps = Geocoding('Google', None)
@@ -94,7 +95,7 @@ class Iowa(Useful):
 
         return img_src
 
-    def get_data(self, link):
+    def get_camera_data(self, link):
         """ Get the description, city name, and the image url of the given camera
 
             The link is url to a camera.
@@ -112,11 +113,15 @@ class Iowa(Useful):
         soup_cam = Useful.get_parser_with_soup(self, self.home_url + link)
 
         # get the description, city name, and img_src of the camera
-        descrip = self.get_descrip(soup_cam)
-        city = ""
-        img_src = self.get_img_src(soup_cam)
+        description = self.get_descrip(soup_cam)
+        city        = description
+        img_src     = self.get_img_src(soup_cam)
+        state       = self.state
+        country     = self.country
 
-        return descrip, city, img_src
+        camera_data = CameraData(img_src, country, state, city, description)
+
+        return camera_data
 
     def main(self):
         # get parser for the traffic page
@@ -129,18 +134,13 @@ class Iowa(Useful):
             if link[0] != "/":
                 continue
 
-            # get the description, city name, and image url for given camera
-            descrip, city, img_src = self.get_data(link)
-            print(descrip, img_src)
-
             try:
-                self.gps.locateCoords(descrip, city, self.state, self.country)
-                input_format = self.gps.city + "#" + self.gps.country + "#" + self.gps.state + "#" + img_src + "#" + self.gps.latitude + "#" + self.gps.longitude + "\n"
-                input_format = input_format.replace("##", "#")
-                self.f.write(input_format)
+                camera_data     = self.get_camera_data(link)
+                input_format    = self.convert_parsed_data_into_input_format(camera_data)
+
+                self.write_to_file(input_format)
             except:
                 traceback.print_exc()
-                print("can't find")
 
 if __name__ == '__main__':
     Iowa = Iowa()

@@ -28,6 +28,7 @@ import selenium.webdriver.support.ui as ui
 import time
 import re
 import traceback
+from CameraData import CameraData
 from Geocoding import Geocoding
 from Useful import Useful
 from selenium import webdriver
@@ -48,8 +49,8 @@ class Puerto(Useful):
         self.state = "PR"
 
         # open the file to store the list and write the format of the list at the first line
-        self.f = open('list_puerto_traffic.txt', 'w')
-        self.f.write("city#country#state#snapshot_url#latitude#longitude" + "\n")
+        self.list_file = open('list_puerto_traffic.txt', 'w')
+        self.list_file.write("city#country#state#snapshot_url#latitude#longitude" + "\n")
 
         # gps module
         self.gps = Geocoding('Nominatim', None)
@@ -66,17 +67,19 @@ class Puerto(Useful):
                 a_tag: Selenium element that contains the html data about one camera
 
             Return:
-                img_src: the img_src of the given camera
-                desc: the detailed location information
-                city: the city name about one camera
+                camera_data: CameraData instance that contains the parsed information about the given camera
         """
         link_to_cam = a_tag.get('href')
 
         img_src     = self.get_img_src(self.parent_url + link_to_cam)
         city        = a_tag.text.split("-")[0]
         description = Useful.get_token_between(self, a_tag.text.encode("UTF-8"), "(", ")").strip()
+        state       = self.state
+        country     = self.country
 
-        return img_src, city, description
+        camera_data = CameraData(img_src, country, state, city, description)
+
+        return camera_data
     
     def get_img_src(self, cam_src):
         """ Get the img_src of one camera
@@ -106,16 +109,13 @@ class Puerto(Useful):
         # loop through the a_tag about each camera
         soup_traffic_links = soup_traffic.find("div", {"id" : "bodyContent_bodyContent_cctv"})
         for a_tag in soup_traffic_links.findAll("a", {"target" : "_blank"}):
-
-            # get the im_src, city name, and description about the camera
-            img_src, city, descrip = self.get_data(a_tag)
-            print(city, descrip, img_src)
-            
             try:
-                self.gps.locateCoords(descrip, city, self.state, self.country)
-                self.f.write(self.gps.city + "#" + self.gps.country + "#" + self.gps.state + "#" + img_src + "#" + self.gps.latitude + "#" + self.gps.longitude + "\n")
+                camera_data     = self.get_data(a_tag)
+                input_format    = self.convert_parsed_data_into_input_format(camera_data)
+            
+                self.write_to_file(input_format)
             except:
-                print("can't find")
+                traceback.print_exc()
 
 if __name__ == '__main__':
     Puerto = Puerto()
