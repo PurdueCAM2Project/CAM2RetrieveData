@@ -1,5 +1,6 @@
+module Api
 module V1
-	class CamerasController < ApplicationController
+	class Api::V1::CamerasController < ApplicationController
 		include ActionController::HttpAuthentication::Token::ControllerMethods
 		before_action :restrict_access
 	
@@ -31,4 +32,5 @@ module V1
 				params.require(:camera).permit(:name,:city,:state,:url,:country)
 			end
 	end
+end
 end
