@@ -22,3 +22,14 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
+
+
+-----------------------------------------
+
+In the future this README should be fully fleshed out.  
+
+This is the API for NetworkCameras database.  It is built with Ruby on Rails.  Before modifying this code, please make sure you fully understand Model View Controller web development, and Ruby on Rails.
+
+Ruby Version: 2.3.1
+
+
