@@ -31,18 +31,13 @@ def cleanUp(cameras, activeCameras, errorCameras, end_compare_cameras, fFailure)
 	if cameras != None:
 		fFailure.write("\nCameras Not Loaded:\n")
 		for camera in cameras:
-			fFailure.write(str(camera.id))
+			fFailure.write("{}\n".format(str(camera.id)))
 			if camera in end_compare_cameras:
 				end_compare_cameras.pop(end_compare_cameras.index(camera))
 
 	if end_compare_cameras != None:
 		for camera in end_compare_cameras:
-			fFailure.write(camera)
-
-#     if end_compare_cameras != None:
-#         fFailure.write("Cameras that could not be accessed:\n")
-#         for camera in end_compare_cameras:
-#             fFailure.write("{}\n".format(camera))
+			fFailure.write("{}\n".format(camera))
 
 
 def assessFramerate(cameras, activeCameras, errorCameras, threshold, duration, totalCams, fSuccess, fFailure):
