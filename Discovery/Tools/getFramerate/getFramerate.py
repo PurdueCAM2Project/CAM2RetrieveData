@@ -9,7 +9,7 @@ import logging
 import datetime
 import MySQLdb
 import getpass
-
+import error
 
 # Cameras that exceeded threshold (Handled by checkThreshold())
 # Cameras that could not be loaded.
@@ -38,11 +38,6 @@ def cleanUp(cameras, activeCameras, errorCameras, end_compare_cameras, fFailure)
 	if end_compare_cameras != None:
 		for camera in end_compare_cameras:
 			fFailure.write(camera)
-
-#     if end_compare_cameras != None:
-#         fFailure.write("Cameras that could not be accessed:\n")
-#         for camera in end_compare_cameras:
-#             fFailure.write("{}\n".format(camera))
 
 
 def assessFramerate(cameras, activeCameras, errorCameras, threshold, duration, totalCams, fSuccess, fFailure):
@@ -129,11 +124,11 @@ def setup(inputFile, duration, amountToProcess, threshold, results_path, is_vide
 	logging.debug("Is Video: {}".format(is_video))
 
 	# Create Results Files:
-	fSuccess = open(results_path+"/SuccessfulOutput.txt", "w") # Output file contains list of cameras with frame rates. Format ID frame_rate
+	fSuccess = open("{}/{}SuccessfulOutput.txt".format(results_path, results_path), "w") # Output file contains list of cameras with frame rates. Format ID frame_rate
 	fFailure = open(results_path+"/CameraErrorReport.txt", "w") # The program trys to determine frame rates less than 1 min if longer it writes them here
 	fFailure.write("Assment Info:\n**\nInput: {}\nMax Runtime: {}\nSize of Queue: {}\nThreshold: {}\n**\n".format(inputFile, duration, amountToProcess, threshold))
 	fFailure.write("Cameras that exceeded threshold:\n")
-
+	print(results_path)
 
 	if fSuccess == None or fFailure == None:
 		return
@@ -144,12 +139,12 @@ def setup(inputFile, duration, amountToProcess, threshold, results_path, is_vide
 	try:
 		fInput = open(inputFile)
 	except:
-		logging.Error("File Not Loaded")
+		logging.error("File: \"{}\" Not Loaded".format(inputFile))
 		return
 
 	camera_ids = list(fInput)
 	end_compare_cameras = list(fInput)
-	cameras = frameCapture.loadCameras(camera_ids, None)
+	cameras = frameCapture.loadCameras(camera_ids, DB_PASSWORD)
 	fInput.close()
 
 	if cameras == None or len(cameras) == 0:
@@ -193,7 +188,16 @@ def setup(inputFile, duration, amountToProcess, threshold, results_path, is_vide
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	logging.info("Determining frame rates... This may take a while...")
-	cameras, activeCameras, errorCameras = assessFramerate(cameras, activeCameras, errorCameras, threshold, duration, totalCams, fSuccess, fFailure)
+	try:
+			cameras, activeCameras, errorCameras = assessFramerate(cameras, activeCameras, errorCameras, threshold, duration, totalCams, fSuccess, fFailure)
+	except KeyboardInterrupt:
+		print("\n")
+		cleanUp(cameras, activeCameras, errorCameras, end_compare_cameras, fFailure)
+		logging.info("Done. Exit...")
+
+		fFailure.close()
+		fSuccess.close()
+		raise(KeyboardInterrupt)
 	
 
 	cleanUp(cameras, activeCameras, errorCameras, end_compare_cameras, fFailure)
@@ -244,7 +248,7 @@ def main(args):
 				pass
 	except KeyboardInterrupt:
 		print("\n")
-		return
+		raise(KeyboardInterrupt)
 
 	try:
 		duration = raw_input('Assessment Duration (seconds): ')

@@ -2,43 +2,41 @@ import getFramerate
 import sys
 import os
 import re
+import error
+
 def main(args):
-
-    fInput = "nyctest.txt"
-    duration = 60*60*10
-    amountToProcess = 40
-    camera_dump_threshold = 60*20  
-    results_path = "result1"
-    is_video = 0
-
-    DB_PASSWORD = ''
-
-    print("Pass: 1")
-
     try:
-        cameras, activeCameras, startTimes, dumpedCams, end_compare_cameras, DB_PASSWORD = getFramerate.setup(fInput, duration, amountToProcess, camera_dump_threshold, results_path, is_video, DB_PASSWORD)
-    except Exception, e:
-        print("Error: {}".format(e))
-        pass
+        assert len(args) == 2
+        folder_to_load = args[1]
+    except Exception as e:
+        print("Input Folder Not Found.")
+        print("Call Syntax:\n python manageGetFramerate.py <Input Directory> ")
+        return
 
-    reviewOutput(cameras, activeCameras, startTimes, dumpedCams, end_compare_cameras, results_path)
-    
-    print("Pass: 2")
-    results_path = "result2"
-    try:
-        cameras, activeCameras, startTimes, dumpedCams, end_compare_cameras, DB_PASSWORD = getFramerate.setup(fInput, duration, amountToProcess, camera_dump_threshold, results_path, is_video, DB_PASSWORD)
-    except Exception, e:
-        print("Error: {}".format(e))
-        pass
+    files = os.listdir(folder_to_load)
+    output = [] # List of all cameras in all files
+    x = 0
+    for onefile in files:
+        if onefile.find(".txt") != -1:
+                fInput = "{}{}".format(folder_to_load, onefile)
+                print(fInput)
+                onefile = re.search(r'(?P<filename>[^.]*)', onefile)
+                duration = -1
+                amountToProcess = 50
+                camera_dump_threshold = 60*60
+                is_video = 0
 
-    print("Pass: 3")
-    results_path = "result3"
-    try:
-        cameras, activeCameras, startTimes, dumpedCams, end_compare_cameras, DB_PASSWORD = getFramerate.setup(fInput, duration, amountToProcess, camera_dump_threshold, results_path, is_video, DB_PASSWORD)
-    except Exception, e:
-        print("Error: {}".format(e))
-        pass
+                DB_PASSWORD = ''
 
+                for x in range(1,4):
+                    results_path = "{}{}".format(onefile.group("filename"),x)
+                    print("Pass: {}".format(x))
+                    try:
+                        getFramerate.setup(fInput, duration, amountToProcess, camera_dump_threshold, results_path, is_video, DB_PASSWORD)
+                    except KeyboardInterrupt:
+                        raise(KeyboardInterrupt)
+                    except Exception, e:
+                        print("Error: {}".format(e))
 
 if __name__ == '__main__':
     main(sys.argv)

@@ -9,6 +9,7 @@ import MySQLdb
 import logging
 import re
 import getpass
+import error
 
 
 def get_camera(camera_id, connection):

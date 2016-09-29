@@ -6,6 +6,7 @@ import sys
 import time
 import datetime
 import filecmp
+import error
 
 
 class Camera():
