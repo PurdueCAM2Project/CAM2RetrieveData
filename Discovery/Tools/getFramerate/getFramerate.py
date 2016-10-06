@@ -124,8 +124,8 @@ def setup(inputFile, duration, amountToProcess, threshold, results_path, is_vide
 	logging.debug("Is Video: {}".format(is_video))
 
 	# Create Results Files:
-	fSuccess = open("{}/{}SuccessfulOutput.txt".format(results_path, results_path), "w") # Output file contains list of cameras with frame rates. Format ID frame_rate
-	fFailure = open(results_path+"/CameraErrorReport.txt", "w") # The program trys to determine frame rates less than 1 min if longer it writes them here
+	fSuccess = open("{}/{}_SuccessfulOutput.txt".format(results_path, results_path), "w") # Output file contains list of cameras with frame rates. Format ID frame_rate
+	fFailure = open("{}/{}_CameraErrorReport.txt".format(results_path, results_path), "w") # The program trys to determine frame rates less than 1 min if longer it writes them here
 	fFailure.write("Assment Info:\n**\nInput: {}\nMax Runtime: {}\nSize of Queue: {}\nThreshold: {}\n**\n".format(inputFile, duration, amountToProcess, threshold))
 	fFailure.write("Cameras that exceeded threshold:\n")
 	print(results_path)
