@@ -3,7 +3,7 @@ import os
 import re
 import filecmp
 import sys
-import frameCapture
+import camera as importCameras
 import time
 import logging
 import datetime
@@ -144,7 +144,7 @@ def setup(inputFile, duration, amountToProcess, threshold, results_path, is_vide
 
 	camera_ids = list(fInput)
 	end_compare_cameras = list(fInput)
-	cameras = frameCapture.loadCameras(camera_ids, DB_PASSWORD)
+	cameras = importCameras.loadCameras(camera_ids, DB_PASSWORD)
 	fInput.close()
 
 	if cameras == None or len(cameras) == 0:

@@ -1,12 +1,17 @@
-import error
-import stream_parser
 import os
 import cv2
 import sys
 import time
 import datetime
+import MySQLdb
 import filecmp
+import getpass
+import logging
+import re
+
 import error
+import stream_parser
+import getConnection
 
 
 class Camera():
@@ -132,3 +137,58 @@ def getNewCam(camera_pos, cameras, activeCameras, errorCameras):
             errorCameras.append(camera)
 
     return cameras, activeCameras, errorCameras
+
+
+def get_camera(camera_id, connection):
+    """ Get a camera from the database. """
+
+    camera = None
+
+    cursor = connection.cursor()
+
+    # Get the non-IP camera with the given ID.
+    cursor.execute('select camera.id, non_ip_camera.snapshot_url '
+                   'FROM camera, non_ip_camera '
+                   'WHERE camera.id = non_ip_camera.camera_id '
+                   'and camera.id = {};'.format(camera_id))
+    camera_row = cursor.fetchone()
+
+    # Create a NonIPCamera object.
+    if camera_row:
+        camera = Camera(camera_row[0], camera_row[1])
+
+    cursor.close()
+
+    if not camera:
+        return None
+
+    return camera
+
+
+def loadCameras(camera_ids, DB_PASSWORD):
+    # Setup Database Connection:
+    connection = None
+
+    while connection == None:
+        connection = getConnection.getConnection(DB_PASSWORD)
+        if connection == None and connection != -1:
+            print("Connection info not correct...\n\tTry again:")
+        elif connection == -1:
+            return
+
+    logging.info("Database Successfully Opened")
+
+    cameras = []
+    for camera_id in camera_ids:
+        camera = None
+        # Get the camera information from the database.
+        camera = get_camera(camera_id, connection)
+        # Check if camera returned
+        if camera == None:
+            print Exception('There is no camera with the ID {}.'.format(camera_id.rstrip()))
+            pass
+        else:
+            cameras.append(camera)
+
+    connection.close()
+    return(cameras)
