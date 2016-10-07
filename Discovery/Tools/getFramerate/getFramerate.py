@@ -31,13 +31,13 @@ def cleanUp(cameras, activeCameras, errorCameras, end_compare_cameras, fFailure)
 	if cameras != None:
 		fFailure.write("\nCameras Not Loaded:\n")
 		for camera in cameras:
-			fFailure.write(str(camera.id))
+			fFailure.write(str(camera.id)+"\n")
 			if camera in end_compare_cameras:
 				end_compare_cameras.pop(end_compare_cameras.index(camera))
 
 	if end_compare_cameras != None:
 		for camera in end_compare_cameras:
-			fFailure.write(camera)
+			fFailure.write(str(camera)+"\n")
 
 
 def assessFramerate(cameras, activeCameras, errorCameras, threshold, duration, totalCams, fSuccess, fFailure):
@@ -55,25 +55,22 @@ def assessFramerate(cameras, activeCameras, errorCameras, threshold, duration, t
 					print("\rAssessment Runtime: {}sec Max Runtime: {}sec. Processing {}of{}          ".format(round(time.time()-start_timestamp), duration, totalCams - len(cameras), totalCams), end = '\r')
 					sys.stdout.flush()
 				except Exception as e:
+					logging.exception(e)
 					print("\n\nError! get_start_image Failed")
-					logging.error(e)
-					raise e
 				try:
 					cameras, activeCameras, errorCameras = camera.get_end_image(cameras, activeCameras, errorCameras, fSuccess)
 					print("\rAssessment Runtime: {}sec Max Runtime: {}sec. Processing {}of{}          ".format(round(time.time()-start_timestamp), duration, totalCams - len(cameras), totalCams), end = '\r')
 					sys.stdout.flush()
 				except Exception as e:
+					logging.exception(e)
 					print("\n\nError! get_end_image Failed")
-					logging.error(e)
-					raise e
 				try:
 					cameras, activeCameras, errorCameras = camera.checkThreshold(cameras, activeCameras, errorCameras, threshold, fFailure)
 					print("\rAssessment Runtime: {}sec Max Runtime: {}sec. Processing {}of{}          ".format(round(time.time()-start_timestamp), duration, totalCams - len(cameras), totalCams), end = '\r')
 					sys.stdout.flush()
 				except Exception as e:
+					logging.exception(e)
 					print("Error! checkThreshold Failed")
-					logging.error(e)
-					raise e
 				cycle_times += (time.time() - cycle_start)
 				num_passes += 1
 	except:

@@ -39,16 +39,15 @@ class Camera():
             # Download the image.
             frame, _ = self.parser.get_frame()
             self.refImage = 'Pictures/ref_{}_{}.png'.format(self.id, datetime.datetime.fromtimestamp(frame_timestamp).strftime('%Y-%m-%d_%H-%M-%S-%f'))
-            if self.refImage == None or frame_timestamp == None:
-                raise(Exception('get_ref_image_ERROR: Image could not be retrieved for ID: {}'.format(self.id)))
 
             cv2.imwrite(self.refImage, frame)
 
-        except Exception('get_ref_image_ERROR: Image could not be retrieved for ID: {}'.format(self.id)):
-            cameras, activeCameras, errorCameras = getNewCam(self.ID, cameras, activeCameras, errorCameras)
+        except error.UnreachableCameraError:
+            logging.info('get_ref_image_ERROR: Image could not be retrieved for ID: {}'.format(self.id))
+            # cameras, activeCameras, errorCameras = getNewCam(self.id, cameras, activeCameras, errorCameras)
 
         except Exception, e:
-            print(e)
+            logging.exception(e)
 
         return cameras, activeCameras, errorCameras
 
@@ -74,8 +73,7 @@ class Camera():
             except Exception("get_start_image_ERROR: Image could not be retrieved."), e:
                 cameras, activeCameras, errorCameras = getNewCam(self.ID, cameras, activeCameras, errorCameras)
             except Exception, e:
-                    # logging.debug(e)
-                    print(e)
+                logging.exception(e)
 
         return cameras, activeCameras, errorCameras
 
@@ -103,7 +101,7 @@ class Camera():
                     cameras, activeCameras, errorCameras = getNewCam(activeCameras.index(self), cameras, activeCameras, errorCameras)
 
             except Exception, e:
-                print(self.id)
+                logging.exception(e)
                 raise(e)
 
         return cameras, activeCameras, errorCameras
@@ -118,7 +116,7 @@ class Camera():
                     cameras, activeCameras, errorCameras = getNewCam(camPos, cameras, activeCameras, errorCameras)
                     
         except Exception as e:
-            pass
+            logging.exception(e)
 
         return cameras, activeCameras, errorCameras
 
@@ -185,8 +183,8 @@ def loadCameras(camera_ids, DB_PASSWORD):
         camera = get_camera(camera_id, connection)
         # Check if camera returned
         if camera == None:
-            print Exception('There is no camera with the ID {}.'.format(camera_id.rstrip()))
-            pass
+            logging.error(Exception('There is no camera in the database with the ID {}.'.format(camera_id.rstrip())))
+            
         else:
             cameras.append(camera)
 
