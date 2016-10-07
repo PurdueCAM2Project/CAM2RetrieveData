@@ -1,3 +1,17 @@
+'''
+--------------------------------------------------------------------------------
+Descriptive Name     : camera.py
+Author               : Ryan Dailey                                   
+Contact Info         : dailey1@purdue.edu
+Date Written         : June 20 2016
+Description          : This file contains the Camera class which is used by the frame rate assessment program. 
+Command to run script: This script is only to be run within getFramerate.py
+Usage                : This script is only for use by getFramerate.py
+Input file format    : N/A
+Output               : N/A
+Note                 : 
+Other files required : This file requires several other files they should all be located in the same directory:
+'''
 import os
 import cv2
 import sys
@@ -17,20 +31,26 @@ import getConnection
 class Camera():
 
     def __init__(self, id, url):
-        # super(NonIPCamera, self).__init__(id)
         self.id = id
         self.url = url
 
-        self.timeInitialized = time.time()
-        self.refImage = None
-        self.startImage = None
-        self.startTime = 0
-        self.endImage = None
-        self.endTime = 0
+        self.timeInitialized = time.time()  # Holds the time that the class was initialized
+        self.refImage = None                # Holds the string name of the reference image
+        self.startImage = None              # Holds the string name of the start image
+        self.endImage = None                # Holds the string name of the end image
+        self.startTime = 0                  # Holds the unix start time that the start image was captured
+        self.endTime = 0                    # Holds the unix start time that the end image was captured
+                                            # The frame rate is the difference between these two times. 
 
-        self.parser = None
+        self.parser = None                  # This is the image stream parser object it will always be for static images. 
         self.parser = stream_parser.ImageStreamParser(url)
-
+    '''
+    The get_ref_image function gets the reference image. The reference image is used to compare to the start image and see when
+    a new image is posted to the server. The get_ref_image function is only called once per camera class instance. If the refImage
+    is successfully obtained the program will begin to try and get a startImage. If the image cannot be obtained (either because
+    of a connection issue or because the image is no longer available at that url) then this is recorded and the camera is dumped
+    from the activeCameras list. 
+    '''
     def get_ref_image(self, cameras, activeCameras, errorCameras):
         # Set the timestamp of the snapshot that will be downloaded.
         frame_timestamp = time.time()
@@ -50,7 +70,15 @@ class Camera():
             logging.exception(e)
 
         return cameras, activeCameras, errorCameras
-
+        '''
+        The get_start_image function will get an image from the url and compare it to the referenceImage.
+        If the image is successfully captured the string name of the image is stored in the startImage
+        class variable. If the new image is the same as the refImage no other action is taken. If the
+        new startImage is different then the image stored in the refImage variable then the startTime is
+        stored and the program will no longer attempt to get a startImage for this camera. The startImage
+        is used to compare to the endImage and the difference between the startTime and the endTime is the
+        frame rate. 
+        '''
     def get_start_image(self, cameras, activeCameras, errorCameras):
         if self.startTime == 0 and self.refImage != None:
             # Set the timestamp of the snapshot that will be downloaded.
@@ -76,7 +104,16 @@ class Camera():
                 logging.exception(e)
 
         return cameras, activeCameras, errorCameras
-
+        '''
+        get_end_image only downloads an image if the start image has been captured. If the startImage exists
+        it will attempt to download another image from the url provided in the class. Then, it will compare this
+        new image to the startImage. If the images are the same then it will do nothing. If the images are different
+        then that means that the image on the server has changed since the startImage was downloaded. If the image has 
+        changed then the frame rate for this camera has been determined and the frame rate is recorded by taking the
+        difference between the startTime and the endTime. The successfully assessed frame rate is written to the 
+        SuccessfulOutput.txt file. Then the camera is removed from the active cameras list and replaced by another 
+        camera so the frame rate can be determined.
+        '''
     def get_end_image(self, cameras, activeCameras, errorCameras, fSuccess):
         if self.startTime != 0:
             # Set the timestamp of the snapshot that will be downloaded.
@@ -106,7 +143,12 @@ class Camera():
 
         return cameras, activeCameras, errorCameras
         # raw_input("PICK ME")
-
+        '''
+        checkThreshold checks to see if the camera has been in the activeCameras list longer then the
+        threshold time. If the camera has exceeded the maximum threshold time then the camera is dumped
+        and written to the errorCameras file. A new camera is then added to the activeCameras list to 
+        fill out the list if one is available.
+        '''
     def checkThreshold(self, cameras, activeCameras, errorCameras, threshold, fFailure):
         try:
             if time.time() - self.timeInitialized > threshold:
@@ -119,9 +161,10 @@ class Camera():
             logging.exception(e)
 
         return cameras, activeCameras, errorCameras
-
-# activateCamera is used to take cameras from the input file and swap them out with a new camera. 
-# activateCamera will then check if the first image (reference image) can be downloaded.  
+    '''
+    getNewCam is used to take cameras from the input file and swap them out with a new camera. 
+    getNewCam will then check if the first image (reference image) can be downloaded.  
+    '''
 def getNewCam(camera_pos, cameras, activeCameras, errorCameras):
     amountToProcess = len(activeCameras)
     activeCameras.pop(camera_pos)
@@ -136,7 +179,11 @@ def getNewCam(camera_pos, cameras, activeCameras, errorCameras):
 
     return cameras, activeCameras, errorCameras
 
-
+    '''
+    get_camera is used by the loadCameras function to get camera information from the database. 
+    At the start of the getFramerate function, all of this information is accessed in the 
+    database and recorded in the corresponding camera Class. 
+    '''
 def get_camera(camera_id, connection):
     """ Get a camera from the database. """
 
@@ -162,17 +209,14 @@ def get_camera(camera_id, connection):
 
     return camera
 
-
+    '''
+    loadCameras creates all the camera class objects at the beginning of the execution
+    of the getFramerate program from the input file. 
+    '''
 def loadCameras(camera_ids, DB_PASSWORD):
     # Setup Database Connection:
     connection = None
-
-    while connection == None:
-        connection = getConnection.getConnection(DB_PASSWORD)
-        if connection == None and connection != -1:
-            print("Connection info not correct...\n\tTry again:")
-        elif connection == -1:
-            return
+    connection = getConnection.getConnection(DB_PASSWORD)
 
     logging.info("Database Successfully Opened")
 
