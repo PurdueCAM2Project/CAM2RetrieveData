@@ -85,7 +85,7 @@ def successCompare(folder_to_load, cursor):
         print("1 or less successful input files detected. Skipping.")
         return
     
-    fComp.write("Min, Max, Average, Source, URL")
+    fComp.write(",Min, Max, Average, Source, URL")
 
     fComp.write("\n")
     
@@ -113,14 +113,14 @@ def successCompare(folder_to_load, cursor):
                     fComp.write(',{}'.format(float(entry.group("FR"))/60))
                     written = True
             if written == False:
-                fComp.write(',{}'.format(" "))
+                fComp.write(',{}'.format(""))
 
         if cursor != None:
             cursor.execute('select camera_id, snapshot_url FROM non_ip_camera WHERE camera_id = {};'.format(camera))
             camera_url_row = cursor.fetchone()
             cursor.execute('select source FROM camera WHERE id = {};'.format(camera))
             camera_info_row = cursor.fetchone()
-            fComp.write('{},{}\n'.format(camera_info_row[0], camera_url_row[1]))
+            fComp.write(',,,,{},{}\n'.format(camera_info_row[0], camera_url_row[1]))
         else:
             fComp.write("\n")
 
