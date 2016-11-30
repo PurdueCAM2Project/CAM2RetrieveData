@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <title>CAM2 Cameras</title>
+  <link rel="stylesheet" href="jquery-jvectormap-2.0.3.css" type="text/css" media="screen"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script src="jquery-jvectormap-2.0.3.min.js"></script>
+  <script src="jquery-jvectormap-world-mill.js"></script>
+  <script type="text/javascript" src="data/cameraData.js" ></script>
+  <script type="text/javascript" src="data/stateData.js"></script>
+  <script src="jquery-jvectormap-us-aea.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?KEY=AIzaSyDRb6HaVtHDbpHkJq8a3MEODFZlmkBt7f4"></script>
+  <script src="data/cameras.json"></script>
+  <script type="text/javascript" src="https://cdn.rawgit.com/googlemaps/js-marker-clusterer/gh-pages/src/markerclusterer.js"></script>
+  <script>
+    function initialize() {
+      var center = new google.maps.LatLng(39, -95)
+      var map = new google.maps.Map(document.getElementById('map-cluster'), {
+        zoom: 1,
+        center: center,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        disableDefaultUI: true,
+        styles: [
+          {
+            featureType: "all",
+            elementType: "labels",
+            stylers: [
+              { visibility: "off" }
+            ]
+          },
+          {
+            featureType: "administrative.country",
+            elementType: "geometry.stroke",
+            stylers: [
+              { visibility: "off" }
+            ]
+          }
+        ]
+      });
+      var markers = [];
+      for (var i = 0; i < 118264; i++) {
+        var camera = cameras.cameras[i];
+        var latLng = new google.maps.LatLng(camera.latitude,
+            camera.longitude);
+        var marker = new google.maps.Marker({
+          position: latLng
+        });
+        markers.push(marker);
+    }
+      var markerCluster = new MarkerClusterer(map, markers, {imagePath: google.maps.SymbolPath.CIRCLE, gridSize: 31});
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
+  </script>
+    <style >
+      body {
+        margin: 0;
+        padding: 10px 20px 20px;
+        font-family: Arial;
+        font-size: 16px;
+      }
+      #map-container {
+        padding: 6px;
+        border-width: 1px;
+        border-style: solid;
+        border-color: #ccc #ccc #999 #ccc;
+        -webkit-box-shadow: rgba(64, 64, 64, 0.5) 0 2px 5px;
+        -moz-box-shadow: rgba(64, 64, 64, 0.5) 0 2px 5px;
+        box-shadow: rgba(64, 64, 64, 0.1) 0 2px 5px;
+        width: 600px;
+      }
+      #map-cluster {
+        width: 600px;
+        height: 400px;
+      }
+      #map-heat {
+        width: 600px;
+        height: 400px;        
+      }
+      #floating-panel {
+        position: absolute;
+        top: 10px;
+        left: 25%;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+        text-align: center;
+        font-family: 'Roboto','sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+      }
+      #floating-panel {
+        background-color: #fff;
+        border: 1px solid #999;
+        left: 25%;
+        padding: 5px;
+        position: absolute;
+        top: 10px;
+        z-index: 5;
+      }
+    </style>
+</head>
+
+<body>
+  <div id="world-map-camera" style="width: 600px; height: 400px"></div>
+  <script>
+    $(function(){
+      $('#world-map-camera').vectorMap({
+        map: 'world_mill',
+        series: {
+          regions: [{
+            values: cameraData,
+            scale: ['#C8EEFF', '#0071A4'],
+            normalizeFunction: 'polynomial'
+          }]
+        },
+        onRegionTipShow: function(e, el, code){
+          el.html(el.html()+' (# Cameras - '+cameraData[code]+')');
+        }
+      });
+	  });
+  </script>
+
+  <div id="state-map-camera" style="width: 600px; height: 400px"></div>
+  <script>
+    $(function(){
+      $('#state-map-camera').vectorMap({
+        map: 'us_aea',
+        series: {
+          regions: [{
+            values: stateData,
+            scale: ['#E8E8E8', '#696969'],
+            normalizeFunction: 'linear'
+          }]
+        },
+        onRegionTipShow: function(e, el, code){
+          el.html(el.html()+' (# Cameras - '+stateData[code]+')');
+        }
+      });
+	  });
+  </script>  
+  
+  <div id="map-cluster">
+  </div>
+</body>
+</html>
