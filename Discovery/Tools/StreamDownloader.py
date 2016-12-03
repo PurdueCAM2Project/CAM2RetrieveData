@@ -14,7 +14,9 @@ Usage                : Can be imported into another script or run from the comma
 Input file format    : N/A
 Output               : AVI video
 Note                 : The disadvantage to this is that everytime you want updated
-                       images/videos you will need to run this script.
+                       images/videos you will need to run this script. 
+                       This script will only work for videos that have their own URL, i.e.
+                       it will not work for embedded flash videos.
 Other files required by : N/A
 this script and where 
 located
