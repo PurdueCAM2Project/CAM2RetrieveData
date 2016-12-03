@@ -29,17 +29,17 @@ import time
 from subprocess import call
 
 class StreamDownloader:
-    def __init__(self, link, filename, runtime):
+    def __init__(self, link, filename):
         self.url = urllib2.urlopen(link)
         self.filename = filename
         self.f = open(filename +".avi", 'wb')
-        self.runtime = int(runtime) #In seconds
     
-    def saveStream(self):
+    def saveStream(self, runtime):
+        runtime = int(runtime) #In seconds
         buffer = 4 * 1024 #Can use 8 or 16 instead of 4 to make video run smoother
         start = time.time()
         end = time.time()
-        while (end - start) < self.runtime:
+        while (end - start) < runtime:
             self.f.write(self.url.read(buffer))
             end = time.time()
         self.f.close()
@@ -54,7 +54,7 @@ class StreamDownloader:
 
 if __name__ == '__main__':
     print "Saving Video"
-    download = StreamDownloader(sys.argv[1], sys.argv[2], sys.argv[3])
-    download.saveStream()
+    download = StreamDownloader(sys.argv[1], sys.argv[2])
+    download.saveStream(sys.argv[3])
     print "Video Saved"
     download.saveFrames(sys.argv[4])
