@@ -1,8 +1,7 @@
 # CAM2RetrieveData
 Branch to test new wrapper funtion.
 
-""" 
---------------------------------------------------------------------------------
+
 Descriptive Name     : wrapper.py
 Author               : Ajay Gopakumar and Vikrant Sateesh								      
 Date Written         : March 12, 2016
@@ -14,5 +13,3 @@ Output               : JPG images, AVI video (if video stream)
 Note                 : under development
 Other files required by : ffmpeg.exe (https://ffmpeg.org/download.html)
 
---------------------------------------------------------------------------------
-"""
