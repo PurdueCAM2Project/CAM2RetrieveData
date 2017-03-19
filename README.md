@@ -20,5 +20,5 @@ Output               : JPG images, AVI video (if video stream)
 
 Note                 : under development
 
-Other files required by : ffmpeg.exe (https://ffmpeg.org/download.html)
+Other files required by program : ffmpeg.exe (https://ffmpeg.org/download.html), other archiver programs specified in wiki.
 
