@@ -5,7 +5,7 @@ Branch to test new wrapper funtion.
 
 Descriptive Name     : wrapper.py
 
-Author               : Ajay Gopakumar and Vikrant Sateesh		
+Author               : Ajay Gopakumar and Vikrant Satheesh		
 
 Date Written         : March 12, 2016
 
