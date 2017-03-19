@@ -4,8 +4,11 @@ Branch to test new wrapper funtion.
 
 
 Descriptive Name     : wrapper.py
-Author               : Ajay Gopakumar and Vikrant Sateesh								      
+
+Author               : Ajay Gopakumar and Vikrant Sateesh		
+
 Date Written         : March 12, 2016
+
 Description          : Uses a csv input file to call required function according to user
                        demands. Handles grabbing images from url, camera id and video stream.
                        
