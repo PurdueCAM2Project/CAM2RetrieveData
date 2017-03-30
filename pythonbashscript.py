@@ -2,7 +2,7 @@ from subprocess import Popen,PIPE,STDOUT
 import os
 import csv
 
-if(os.path.isfile("rtmpstreams.csv")):
+if(os.path.isfile("rtmpstreams.csv")): #check if files exists
 
         csv_handle = open('rtmpstreams.csv', 'rb')
         myreader = csv.reader(csv_handle,delimiter=",")
@@ -13,7 +13,7 @@ if(os.path.isfile("rtmpstreams.csv")):
 	durations=[]
 	flvnames=[]
 	k = 0;
-        
+        #get required info
         for row in myreader:
 	    rtmps.append(row[0])
 	    urls.append(row[1])
@@ -27,7 +27,7 @@ if(os.path.isfile("rtmpstreams.csv")):
 	del durations[0]
 	del flvnames[0]
 	del rtmps[0]
-
+	#run commands in bash 1 by 1
 	for i in range(len(urls)):
 		print "start"
 
@@ -39,7 +39,7 @@ if(os.path.isfile("rtmpstreams.csv")):
 		print "end"
 
 
-else:
+else:#if file does not exist
     try:
        option = raw_input("File rtmpstreams.csv does not exist. Would you like to create it?(Yes/No) ")
        if option == 'Yes' or option =="yes":
