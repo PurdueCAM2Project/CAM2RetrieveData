@@ -1,0 +1,2 @@
+RTMP STREAMS,URLS,SWF streams,FLV names,Output filename (no extension),Duration
+rtmp://video3.earthcam.com:1935/fecnetwork/7962.flv,http://www.earthcam.com/usa/indiana/notredame/?cam=notredame,http://www.earthcam.com/swf/streaming/stream_view.er.swf_v3.swf?20170328b,7962,test1,10
