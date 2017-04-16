@@ -6,7 +6,8 @@ Email Id             : agopakum@purdue.edu, vsatees@purdue.edu
 Date Written         : March 12, 2016
 Description          : Uses a csv input file to call required function according to user
                        demands. Handles grabbing images from url, camera id and video stream.
-Command to run script: python wrapper.py
+Command to run script: python wrapper.py filename.csv
+Comments on running script: Please make sure filename has extension.csv (example wrapperfunction.csv)
 Input file format    : .csv
 Output               : JPG images, AVI video (if video stream)
 Note                 : under development
