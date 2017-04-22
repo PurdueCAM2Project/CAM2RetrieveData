@@ -6,8 +6,7 @@ Email Id             : agopakum@purdue.edu, vsatees@purdue.edu
 Date Written         : March 12, 2016
 Description          : Uses a csv input file to call required function according to user
                        demands. Handles grabbing images from url, camera id and video stream.
-Command to run script: python wrapper.py filename.csv
-Comments on running script: Please make sure filename has extension.csv (example wrapperfunction.csv)
+Command to run script: python wrapper.py
 Input file format    : .csv
 Output               : JPG images, AVI video (if video stream)
 Note                 : under development
@@ -23,14 +22,19 @@ try:
     import StreamDownloader
     import urllib2
     import archiver
+    import argparse
 except:
     print("Import failed! Check Requiremnets")
     raise SystemExit
 
-def wrapper(filename):
+class ErrorinCSV(Exception):
+   pass
+
+def wrapper(filename,option):
     filename = str(filename)
+    
     if(os.path.isfile(filename)):
-        option = input("Enter 1 to use wrapper_info file to grab camera images from URL, 2 to grab video data and 3 to search camera database to grab images ")
+        
    
         if option == 1:
 
@@ -50,9 +54,11 @@ def wrapper(filename):
                     cam_ids.append(cam_id)
                     cam_url = row[5]
                     cam_urls.append(cam_url)
-            except:
-               print("Invalid entries in csv. Most likely the wrong fields were filled! Please use readme for instructions to fill csv")
-                raise SystemExit 
+            except:               
+               raise ErrorinCSV("Invalid entries in csv. Most likely the wrong fields were filled! Please use readme for instructions to fill csv")
+              
+               
+               
             print cam_ids,"  ",cam_urls
             csv_handle.close()
             j=1
@@ -88,7 +94,7 @@ def wrapper(filename):
                     filenames.append(filename1)
             except:
                print("Invalid entries in csv. Most likely the wrong fields were filled! Please use readme for instructions to fill csv")
-                raise SystemExit 
+               raise SystemExit 
             j = 0
             del cam_urls[0]
             del filenames[0]
@@ -163,7 +169,8 @@ def wrapper(filename):
             csv_handle.close()
             
 if __name__ == '__main__':
-    if(len(sys.argv)<2):
-       print("Missing arguments")
-       raise SystemExit 
-    wrapper(sys.argv[1])
+    parser = argparse.ArgumentParser()
+    parser.add_argument("Filename",help="CSV file containing camera info",type = str)
+    parser.add_argument("Option",help="Enter 1 to use wrapper_info file to grab camera images from URL, 2 to grab video data and 3 to search camera database to grab images",type = int)
+    args = parser.parse_args()
+    wrapper(args.Filename,args.Option)
