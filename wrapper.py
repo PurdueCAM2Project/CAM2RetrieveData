@@ -170,7 +170,7 @@ def wrapper(filename,option):
             
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("Filename",help="CSV file containing camera info",type = str)
-    parser.add_argument("Option",help="Enter 1 to use wrapper_info file to grab camera images from URL, 2 to grab video data and 3 to search camera database to grab images",type = int)
+    parser.add_argument('-f','--filename',help="Name of CSV file containing camera info with .csv extension",type = str)
+    parser.add_argument('-o','--option',help="Enter 1 to use wrapper_info file to grab camera images from URL, 2 to grab video data and 3 to search camera database to grab images",type = int)
     args = parser.parse_args()
-    wrapper(args.Filename,args.Option)
+    wrapper(args.filename,args.option)
