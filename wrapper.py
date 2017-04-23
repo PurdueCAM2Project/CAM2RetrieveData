@@ -30,7 +30,8 @@ except:
 class ErrorinCSV(Exception):
    pass
 
-def wrapper(filename,option):
+def wrapper(filename,option,optioncreate,newfile):
+    
     filename = str(filename)
     
     if(os.path.isfile(filename)):
@@ -153,17 +154,24 @@ def wrapper(filename,option):
             
     else:
         try:
-          option = raw_input("File does not exist. Would you like to create it?(Yes/No) ")
-          if option == 'Yes':
+         
+          if optioncreate == 'Yes':
+                if(os.path.isfile(newfile)):
+                    print "File Exists! Exiting"
       
-                # open a file
-                csv_handle = open(filename, 'wb')
+                    
+                else:
+                    # open a file
+                    csv_handle = open(newfile, 'wb')
 
-                mywriter = csv.writer(csv_handle)
-                mywriter.writerow(["Camera_ID","is_video","Duration(secs)","Interval","StoreCAM_ID","URL","O/P Filename","Runtime(secs)","FPS"])
+                    mywriter = csv.writer(csv_handle)
+                    mywriter.writerow(["Camera_ID","is_video","Duration(secs)","Interval","StoreCAM_ID","URL","O/P Filename","Runtime(secs)","FPS"])
 
-                #close file
-                csv_handle.close()
+                    #close file
+                    csv_handle.close()
+                    print "File created with name",newfile
+          else:
+                print "File not found! Ending"
         except():
             print "Unable to create file"
             csv_handle.close()
@@ -172,5 +180,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-f','--filename',help="Name of CSV file containing camera info with .csv extension(should be in same directory as program)",type = str)
     parser.add_argument('-o','--option',help="Enter 1 to use wrapper_info file to grab camera images from URL, 2 to grab video data or 3 to search camera database to grab images",type = int)
+    parser.add_argument('-c','--createnew',help="Yes to create new file is file with filename does not exist",type = str,default = "No")
+    parser.add_argument('-n','--newfile',help="takes a string to create new csv file(must have .csv extension)",type = str,default = "Temp.csv")
     args = parser.parse_args()
-    wrapper(args.filename,args.option)
+    wrapper(args.filename,args.option,args.createnew,args.newfile)
