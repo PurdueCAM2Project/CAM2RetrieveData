@@ -1,8 +1,8 @@
 """ 
 --------------------------------------------------------------------------------
 Descriptive Name     : wrapper.py
-Author               : Ajay Gopakumar and Vikrant Sateesh
-Email Id             : agopakum@purdue.edu, vsatees@purdue.edu
+Author               : Ajay Gopakumar and Vikrant Satheesh
+Email Id             : agopakum@purdue.edu, vsathees@purdue.edu
 Date Written         : March 12, 2016
 Description          : Uses a csv input file to call required function according to user
                        demands. Handles grabbing images from url, camera id and video stream.
