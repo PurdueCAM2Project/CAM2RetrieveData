@@ -17,7 +17,6 @@ Other files required by : ffmpeg.exe (https://ffmpeg.org/download.html)
 try:
     import sys
     import os.path
-    import StreamDownloader
     import argparse
 except:
     print("Import failed! Check Requiremnets")
