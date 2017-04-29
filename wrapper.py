@@ -46,10 +46,10 @@ def usearchiverdatabase(filename):
                 duration = int(row[2])
                 Interval = row[3]
                 print Interval
-        cam_id = row[0]
-        cam_ids.append(cam_id)
-        cam_isvideo = row[1]
-        cam_isvideolist.append(cam_isvideo)
+            cam_id = row[0]
+            cam_ids.append(cam_id)
+            cam_isvideo = row[1]
+            cam_isvideolist.append(cam_isvideo)
     except:
         print("Invalid entries in csv. Most likely the wrong fields were filled! Please use readme for instructions to fill csv")
         raise ErrorinCSV("Invalid entries in csv. Most likely the wrong fields were filled! Please use readme for instructions to fill csv") 
@@ -59,11 +59,11 @@ def usearchiverdatabase(filename):
     del cam_isvideolist[0]
        
     csv_handle.close()
-    j=1
+    j=0
     cams = {}
     for i in cam_ids:
         try:
-            archiver.main([i,cam_isvideolist[j],duration,interval])
+            archiver.archiver([i,cam_isvideolist[j],duration,interval])
             j+=1
         except:
             print("Invalid entries, please check the csv file fields")
@@ -198,8 +198,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     if(os.path.isfile(args.filename) != True):
         createnewfile(args.newfile,args.createnew)
-    else:
-        
+    else:        
         if(args.urloption):
             usearchiverurl(args.filename)
         elif(args.videooption):
