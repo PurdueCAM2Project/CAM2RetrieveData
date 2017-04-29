@@ -199,7 +199,7 @@ if __name__ == '__main__':
     if(os.path.isfile(args.filename) != True):
         createnewfile(args.newfile,args.createnew)
     else:
-        print args.urloption
+        
         if(args.urloption):
             usearchiverurl(args.filename)
         elif(args.videooption):
