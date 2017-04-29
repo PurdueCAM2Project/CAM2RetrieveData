@@ -63,7 +63,7 @@ def usearchiverdatabase(filename):
     cams = {}
     for i in cam_ids:
         try:
-            archiver.archiver([i,cam_isvideolist[j],duration,interval])
+            archiver.archiver([i,cam_isvideolist[j],duration,Interval])
             j+=1
         except:
             print("Invalid entries, please check the csv file fields")
