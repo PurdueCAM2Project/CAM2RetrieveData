@@ -77,7 +77,6 @@ except:
 		newFilename = raw_input ("\nEnter the file name: ")
 		
 		print "\nYour file has been successfully created! Please fill in the required info!"      	
-		print "\nYour new file "
         	
 		# open a file
         	csv_handle = open('rtmpstreams.csv', 'wb')
