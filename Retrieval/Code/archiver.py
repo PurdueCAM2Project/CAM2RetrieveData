@@ -139,7 +139,7 @@ def parse_input(args):
     cams = []
     # Read the input arguments.
     parser = argparse.ArgumentParser(description="This program downloads image snapshots from 2 sources\
-        (1) A given URL address (2) A camera ID in the MySQL database * Database must be available on host computer.")
+        (1) A given URL address (2) A camera ID in the MySQL database * MySQL database must be available on host computer.")
     parser.add_argument('-f','--filename',help="Name of CSV file containing camera info with .csv extension(should\
          be in same directory as program)",type = str)
     parser.add_argument('-l','--list',help="List of camera ID's to be archived separated by spaces. \
@@ -188,6 +188,9 @@ def parse_input(args):
                     cams.append(cam)
         else:
             parser.print_help()
+
+    if len(cams) == 0:
+        parser.print_help()
 
     return cams
 
