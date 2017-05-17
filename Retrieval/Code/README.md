@@ -73,12 +73,12 @@ sudo apt-get install python-mysqldb
 * Create an empty MySQL database using the following MySQL command:
 
 ```
-CREATE DATABASE cameras;
+CREATE DATABASE cam2;
 ```
 
 * Build the database using the provided file and the following Linux command:
 ```
-mysql -u root -p cameras < cameras.sql
+mysql -u root -p cam2 < sample_database.sql
 ```
 
 * Modify the database credentials in the ```archiver.py``` module:
