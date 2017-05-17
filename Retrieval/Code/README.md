@@ -119,21 +119,21 @@ Arguments:
   -h, --help            show the help message
 
 -f FILENAME, --filename FILENAME
-
-                        Name of CSV file containing camera info with .csv
+  
+   Name of CSV file containing camera info with .csv
   
   -l LIST [LIST ...], --list LIST [LIST ...]
   
-                        List of camera ID's to be archived separated by
-                        spaces. * This requires a version of the MYSQL
-                        database on your local machine.
+  List of camera ID's to be archived separated by
+  spaces. * This requires a version of the MYSQL
+  database on your local machine.
   
   -d DURATION, --duration DURATION
   
-                        Duration of time to archive snapshots from the
-                        cameras. Required for -l argument.
+  Duration of time to archive snapshots from the
+  cameras. Required for -l argument.
                         
   -i INTERVAL, --interval INTERVAL
   
-                        Interval between snapshots from each camera. Required
-                        for -l argument.
+  Interval between snapshots from each camera. Required
+   for -l argument.
