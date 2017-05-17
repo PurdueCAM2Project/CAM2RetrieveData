@@ -62,6 +62,9 @@ entries in a database (using MySQL).
 * [Install MySQL](https://help.ubuntu.com/lts/serverguide/mysql.html) to maintain the camera database.
 
 * [Install OpenCV](https://github.com/jayrambhia/Install-OpenCV) to decode the downloaded images.
+```
+sudo apt-get install libopencv-dev python-opencv
+```
 
 * Install MySQLdb to access the MySQL database from Python:
 ```
