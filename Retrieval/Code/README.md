@@ -128,3 +128,10 @@ Arguments:
   -d DURATION, --duration DURATION: Duration of time to archive snapshots from the cameras. Required for -l argument.
                         
   -i INTERVAL, --interval INTERVAL: Interval between snapshots from each camera. Required for -l argument.
+Note:
+
+To save MySQL query results into text file, use the following command:
+
+mysql -uroot -p -e "select * from database_name.table_name" > filename.txt
+
+Enter password and file will be saved.
