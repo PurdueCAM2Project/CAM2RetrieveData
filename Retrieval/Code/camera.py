@@ -101,8 +101,10 @@ class Camera(object):
 
     """
 
-    def __init__(self, id):
+    def __init__(self, id, duration, interval):
         self.id = id
+        self.duration = duration
+        self.interval = interval
         self.parser = None
 
     def open_stream(self, stream_format):
@@ -201,8 +203,9 @@ class IPCamera(Camera):
 
     """
 
-    def __init__(self, id, ip, image_path, mjpeg_path=None, port=None):
-        super(IPCamera, self).__init__(id)
+    def __init__(self, id, duration, interval, ip, image_path, mjpeg_path=None, port=None):
+        super(IPCamera, self).__init__(id, duration, interval)
+        self.is_video = 1
         self.ip = ip
         self.image_path = image_path
         self.mjpeg_path = mjpeg_path
@@ -335,8 +338,9 @@ class NonIPCamera(Camera):
 
     """
 
-    def __init__(self, id, url):
-        super(NonIPCamera, self).__init__(id)
+    def __init__(self, id, duration, interval, url):
+        super(NonIPCamera, self).__init__(id, duration, interval)
+        self.is_video = 0
         self.url = url
 
         self.parser = stream_parser.ImageStreamParser(url)
