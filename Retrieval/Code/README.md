@@ -31,7 +31,7 @@ Thousands of network cameras are connected to the Internet and provide
 real-time visual data (image or video).  Many network cameras require
 no password and anyone connected to the Internet can retrieve the
 data,i.e., the data is publicly available.  This program considers
-only public data and does use any password.
+only publicly available camera data.
 
 Even though the data is publicly available to anyone interested
 seeing, there are several problems. First, there is no central
