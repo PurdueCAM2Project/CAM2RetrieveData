@@ -27,9 +27,9 @@ ________________________________________________________________________________
 	
 Flags: (Command line arguments)
   
-  -f = "Name of CSV file containing info with .csv extension (should be in same directory as program)"
-  -n = "Takes a string to create new csv file (must have .csv extension)"
-  -c = "Yes to create new file is file with filename does not exist"
+  -f "Name of CSV file containing info with .csv (should be in same directory as program)"
+  -n "Takes a string to create new csv file (must have .csv extension)"
+  -c "Yes to create new file is file with filename does not exist"
   
   _________________________________________________________________________________________________
   
