@@ -6,7 +6,7 @@ Email Id             : agopakum@purdue.edu, vsathees@purdue.edu
 Date Written         : March 30, 2017
 Description          : Downloads video from EarthCam webiste based on the 
 		       CSV file inputted.
-Command to run script: python pythonbashscriptUpdate.py
+Command to run script: python EarthCamParser.py
 Input file format    : .csv
 Output               : .avi
 
