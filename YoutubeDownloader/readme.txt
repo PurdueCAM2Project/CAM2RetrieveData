@@ -4,6 +4,11 @@ This program takes a CSV file as input with necessary fields filled in and extra
 from the given link to Youtube video and saves it in a new folder. The program has three flags 
 which can be used to pass in command line arguments.
 
+Dependencies: youtube-dl, ffmpeg
+
+1. To install youtube-dl:	sudo pip install youtube-dl
+2. To install ffmpeg (Linux):   sudo apt-get install ffmpeg
+
 __________________________________________________________________________________________________
 
 Input CSV File:
