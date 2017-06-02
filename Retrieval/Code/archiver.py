@@ -25,7 +25,7 @@ def get_camera_db(camera_id, duration, interval):
     # The server database credentials.
     DB_SERVER = 'localhost'
     DB_USER_NAME = 'root'
-    DB_PASSWORD = ''
+    DB_PASSWORD = 'password'
     DB_NAME = 'cam2'
 
     camera = None
@@ -47,6 +47,8 @@ def get_camera_db(camera_id, duration, interval):
     if camera_row:
         camera = IPCamera(camera_row[0], duration, interval, camera_row[1], camera_row[3],
                           camera_row[4], camera_row[2])
+        print ("This is IPCamera:\n")
+        print (camera_row)
     else:
         # Get the non-IP camera with the given ID.
         cursor.execute('select camera.id, non_ip_camera.snapshot_url '
@@ -55,10 +57,12 @@ def get_camera_db(camera_id, duration, interval):
                        'and camera.id = {};'.format(camera_id))
         camera_row = cursor.fetchone()
 
+         
         # Create a NonIPCamera object.
         if camera_row:
             camera = NonIPCamera(camera_row[0], duration, interval, camera_row[1])
-
+            print("This is non-IP camera:\n")
+            print(camera_row)
     cursor.close()
     connection.close()
 

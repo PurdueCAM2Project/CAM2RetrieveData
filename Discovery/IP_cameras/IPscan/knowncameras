@@ -1,0 +1,22 @@
+/cgi-bin/cmd/encoder?SNAPSHOT # ACTi
+/cgi/jpg/image.cgi # TRENDnet-V1
+/cgi/mjpg/mjpeg.cgi # TRENDnet-V1
+/channel2 # Brickcom
+/img/mjpeg.jpg # Linksys
+/img/video.mjpeg # LevelOne FCS
+/ipcam/mjpeg.cgi # Aviosys
+/mjpeg # Arecont Vision
+/MJPEG.CGI # Airlink101
+/mjpeg.cgi # TRENDnet-V3
+/mjpg/video.mjpg # Axis or Airlive or Edimax
+/axis-cgi/jpg/image.cgi # Axis Panoramic models
+/now.jpg?snap=spush # IQEye
+/snapshot.cgi # Foscam
+/SnapshotJPEG?Resolution=640x480 # Panasonic
+/stream.jpg # Y-Cam
+/video2.mjpg # Vivotek
+/video.cgi # Foscam
+/video/mjpg.cgi # D-Link or TRENDnet-V2
+/video.mjpg # LevelOne or Planet or Vivotek 71xx
+/videostream.asf # Foscam
+/cgi-bin/faststream.jpg # unknown
