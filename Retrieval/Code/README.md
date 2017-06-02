@@ -31,7 +31,7 @@ Thousands of network cameras are connected to the Internet and provide
 real-time visual data (image or video).  Many network cameras require
 no password and anyone connected to the Internet can retrieve the
 data,i.e., the data is publicly available.  This program considers
-only public data and does use any password.
+only publicly available camera data.
 
 Even though the data is publicly available to anyone interested
 seeing, there are several problems. First, there is no central
@@ -62,6 +62,9 @@ entries in a database (using MySQL).
 * [Install MySQL](https://help.ubuntu.com/lts/serverguide/mysql.html) to maintain the camera database.
 
 * [Install OpenCV](https://github.com/jayrambhia/Install-OpenCV) to decode the downloaded images.
+```
+sudo apt-get install libopencv-dev python-opencv
+```
 
 * Install MySQLdb to access the MySQL database from Python:
 ```
@@ -125,3 +128,11 @@ Arguments:
   -d DURATION, --duration DURATION: Duration of time to archive snapshots from the cameras. Required for -l argument.
                         
   -i INTERVAL, --interval INTERVAL: Interval between snapshots from each camera. Required for -l argument.
+
+### Note
+
+To save MySQL query results into text file, use the following command:
+```
+  mysql -uroot -p -e "select * from database_name.table_name" > filename.txt
+```
+Enter password and file will be saved.
