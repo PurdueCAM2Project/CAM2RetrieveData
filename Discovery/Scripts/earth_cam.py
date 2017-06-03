@@ -1,10 +1,36 @@
+"""
+--------------------------------------------------------------------------------
+Descriptive Name     : earthcam_parser
+Author               : Kyle Martin				      
+Contact Info         : marti716@purdue.edu
+Date Written         : 06/02/17
+Description          : Parse cameras on the earthcam network website
+Command to run script: python3 earth_cam.py <link> <directory-for-cameras>
+Usage                : No extra requirements
+Input file format    : No input file necessary
+Output               : Several .txt files stored in the directory specified on
+                       the command line
+Note                 : 
+Other files required by : N/A
+this script and where 
+located
+
+----For Parsing Scripts---------------------------------------------------------
+Website Parsed       : Designed for earthcam.com/network/
+In database (Y/N)    : N
+Date added to Database : N/A
+--------------------------------------------------------------------------------
+"""
+
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import sys
 import os
 import re
+import time
 
 def get_earth_cams():
+    
     # check that there is at least one argument
     if (len(sys.argv) != 3):
         raise Exception("Must have two arguments, a link and a directory")
@@ -41,8 +67,19 @@ def get_earth_cams():
                 "regularTitle").get_attribute("innerHTML")
                         
             # go to the camera link in a new tab
-            driver_cam.get(href_cam)
-            
+            # try twice (sometimes a link times out the first time)
+            num_attempts = 0
+            while (num_attempts < 2):
+                try:
+                    num_attempts = 2
+                    driver_cam.get(href_cam)
+                except:
+                    num_attempts += 1
+
+            # if multiple attempts failed, skip this link
+            if (num_attempts > 1):
+                continue
+                
             # get the HTML source
             html_source = driver_cam.page_source
             
@@ -54,6 +91,7 @@ def get_earth_cams():
             # update output file
             f.write(href_cam + "\n" + html_source)
             f.close()
+                
             
     # close the drivers
     driver.close()
