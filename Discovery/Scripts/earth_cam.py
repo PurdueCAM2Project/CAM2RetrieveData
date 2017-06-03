@@ -16,7 +16,7 @@ this script and where
 located
 
 ----For Parsing Scripts---------------------------------------------------------
-Website Parsed       : Designed for earthcam.com/network/
+Website Parsed       : Designed for http://earthcam.com/network/
 In database (Y/N)    : N
 Date added to Database : N/A
 --------------------------------------------------------------------------------
@@ -41,7 +41,13 @@ def get_earth_cams():
     driver_cam = webdriver.Firefox()
     
     # open the link
-    driver.get(sys.argv[1])
+    try:
+        driver.get(sys.argv[1])
+    except Exception as e:
+        driver.close()
+        driver_reg.close()
+        driver_cam.close()
+        raise e
     
     # create an output directory
     if not os.path.exists(sys.argv[2]):
@@ -71,13 +77,13 @@ def get_earth_cams():
             num_attempts = 0
             while (num_attempts < 2):
                 try:
-                    num_attempts = 2
                     driver_cam.get(href_cam)
+                    num_attempts = 3 # the link worked
                 except:
                     num_attempts += 1
 
             # if multiple attempts failed, skip this link
-            if (num_attempts > 1):
+            if (num_attempts == 2):
                 continue
                 
             # get the HTML source
