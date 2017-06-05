@@ -94,8 +94,8 @@ def get_domain(address):
         return None
 
 def print_progress(num_analyzed, num_remaining):
-    print("\r{0:d} links analyzed; {1:d} additional links found" + " "*10
-          .format(num_analyzed, num_remaining), end="\r")
+    print("\r{0:d} links analyzed; {1:d} additional links found"
+          .format(num_analyzed, num_remaining) + " " * 10, end="\r")
 
 if __name__ == '__main__':
     address = sys.argv[1]
