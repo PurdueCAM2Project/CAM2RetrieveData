@@ -16,14 +16,41 @@ located
 """
 
 import sys
+from bs4 import BeautifulSoup as BS
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import urllib.request as urllib2
 import re
 
-def crawl_urllib(address, domain):
-    pass
+def crawl_soup(address, domain):
+    soup = BS(urllib2.urlopen(address).read(), "lxml")
+    a_list = soup.find_all("a")
+    link_dict = {}
+    link_dict[address] = 0
+    cur_list = []
+    fin_list = [address]
+    for a in a_list:
+        link = a.get("href")
+        if (link is not None and domain in link):
+            link_dict[link] = 0
+            cur_list.append(link)
+    while (len(cur_list) > 0):
+        this_link = cur_list.pop()
+        fin_list.append(this_link)
+        try:
+            soup = BS(urllib2.urlopen(this_link).read(), "lxml")
+        except:
+            continue
+        # do something here to check for a stream
+        a_list = soup.find_all("a")
+        for a in a_list:
+            link = a.get("href")
+            if (link is not None and link not in link_dict and domain in link): 
+                link_dict[link] = 0
+                cur_list.append(link)
+        print_progress(len(fin_list), len(cur_list))
 
+                
 def crawl_selenium(address, domain):
     driver = webdriver.Firefox()
     driver.set_page_load_timeout(10)
@@ -67,8 +94,8 @@ def get_domain(address):
         return None
 
 def print_progress(num_analyzed, num_remaining):
-    print("\r{0:d} links analyzed; {1:d} additional links found"
-          .format(num_analyzed, num_remaining, end="\r")
+    print("\r{0:d} links analyzed; {1:d} additional links found" + " "*10
+          .format(num_analyzed, num_remaining), end="\r")
 
 if __name__ == '__main__':
     address = sys.argv[1]
@@ -76,3 +103,4 @@ if __name__ == '__main__':
     if (domain is None):
         raise ValueError("The passed web address has no domain")
     crawl_selenium(address, domain)
+    print() # account for the print_progress command
