@@ -66,7 +66,8 @@ def crawl_selenium(address, domain):
     # do something here to check for a stream
     for a in a_list:
         link = a.get_attribute("href")
-        if (link is not None and domain in link):
+        if (link is not None and link not in link_dict and domain in link
+            and a.is_displayed()):
             link_dict[link] = 0 # the value doesn't matter, just providing 0
             cur_list.append(link)
 
@@ -81,7 +82,8 @@ def crawl_selenium(address, domain):
         a_list = driver.find_elements_by_tag_name("a")
         for a in a_list:
             link = a.get_attribute("href")
-            if (link is not None and link not in link_dict and domain in link):
+            if (link is not None and link not in link_dict and domain in link
+                and a.is_displayed()):
                 link_dict[link] = 0
                 cur_list.append(link)
         print_progress(len(fin_list), len(cur_list))
