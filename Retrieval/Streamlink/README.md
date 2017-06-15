@@ -29,7 +29,7 @@ Tutorial on using Streamlink in Python
 -------------
 > API Guide for Streamlink is at [https://streamlink.github.io/api_guide.html](https://streamlink.github.io/api_guide.html)
 
-Open [fetchstreamsrc.py](https://github.com/PurdueCAM2Project/CAM2RetrieveData/blob/master/Retrieval/Code/fetchstreamsrc.py).
+Open [fetchstreamsrc.py](https://github.com/PurdueCAM2Project/CAM2RetrieveData/blob/master/Retrieval/Streamlink/fetchstreamsrc.py).
 
 Pass a webpage with a live stream to ```streamlink.streams()```
 For example, see line 38 (```page_url``` might store something like "[https://www.youtube.com/watch?v=jlD3vw0LRSI](https://www.youtube.com/watch?v=jlD3vw0LRSI)"):
