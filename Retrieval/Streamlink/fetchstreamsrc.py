@@ -1,19 +1,17 @@
 """
-##############################
-###### THE CAM2 PROJECT ######
-##############################
+This module uses Streamlink to find a livestream src URL on a webpage.
+
+*****************************
+Command Line Usage: python fetchstreamsrc.py [WEBPAGE]
+
+** WARNING ** This is currently a WIP script and IS NOT ROBUST.
+
+******************************
+    ** THE CAM2 PROJECT **
+******************************
 Authors: Caleb Tung,
 Created: 6/13/2017
-Python 3.x
-
-Brief:
-   This module uses Streamlink to find a livestream src URL on a webpage.
-
-Usage:
-   python fetchstreamsrc.py [WEBPAGE]
-
-Notes and Warnings:
-   This is currently a test script and IS NOT ROBUST. Do not use for production.
+Preferred: Python3.x
 """
 
 from __future__ import print_function # Force the use of Python3.x print()
@@ -21,15 +19,16 @@ from __future__ import print_function # Force the use of Python3.x print()
 import re
 import sys
 import streamlink
+import test_fetchstreamsrc
 
 
 def get_stream_src_from_url(page_url):
     """
     Fetches the source URL of a livestream on a given webpage
 
-    @param page_url the URL of the webpage with a livestream on it
+    param: page_url the URL of the webpage with a livestream on it
 
-    @return the URL of the livestream source
+    return: the URL of the livestream source
     """
 
     src_url = None # The source URL to return
