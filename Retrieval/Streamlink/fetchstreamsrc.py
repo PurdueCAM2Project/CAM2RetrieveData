@@ -27,7 +27,6 @@ def __select_stream(page_streams):
     HELPER selects the desired stream src given a Stream dictionary
 
     param: page_streams the Stream dictionary
-
     return: the selected URL, or None on fail
     """
 
@@ -50,7 +49,6 @@ def get_stream_src_from_url(page_url):
     Fetches the source URL of a livestream on a given webpage
 
     param: page_url the URL of the webpage with a livestream on it
-
     return: the URL of the livestream source, or None on fail
     """
 
