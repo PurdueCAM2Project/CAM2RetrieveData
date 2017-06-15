@@ -19,7 +19,30 @@ from __future__ import print_function # Force the use of Python3.x print()
 import re
 import sys
 import streamlink
-import test_fetchstreamsrc
+
+
+
+def __select_stream(page_streams):
+    """
+    HELPER selects the desired stream src given a Stream dictionary
+
+    param: page_streams the Stream dictionary
+
+    return: the selected URL, or None on fail
+    """
+
+    # TODO: Figure out how to handle multiple different streams (not just one stream
+    #       with multiple resolutions
+    src_url = None
+
+    if len(page_streams) >= 1:
+        if 'best' in page_streams: # Default choose the stream with best resolution
+            src_url = page_streams['best'].url
+        else: # No 'best' resolution was determined
+            unused_key, stream_val = page_streams.popitem() # Just get the first one
+            src_url = stream_val.url
+
+    return src_url
 
 
 def get_stream_src_from_url(page_url):
@@ -28,7 +51,7 @@ def get_stream_src_from_url(page_url):
 
     param: page_url the URL of the webpage with a livestream on it
 
-    return: the URL of the livestream source
+    return: the URL of the livestream source, or None on fail
     """
 
     src_url = None # The source URL to return
@@ -36,18 +59,10 @@ def get_stream_src_from_url(page_url):
     try:
         page_streams = streamlink.streams(page_url) # Get a dictionary of all streams
 
-        # TODO: Figure out how to handle multiple different streams (not just one stream
-        #       with multiple resolutions
-
         # TODO: Find a way to collect the frame width and height, along with FPS, if
         #       possible.  Might need to use FFmpeg?
 
-        if len(page_streams) >= 1:
-            if 'best' in page_streams: # Default choose the stream with best resolution
-                src_url = page_streams['best'].url
-            else: # No 'best' resolution was determined
-                unused_key, stream_val = page_streams.popitem() # Just get the first one
-                src_url = stream_val.url
+        src_url = __select_stream(page_streams)
 
     except streamlink.exceptions.PluginError as perr:
         # If no suitable URL can be confirmed, Streamlink may suggest a potential one
