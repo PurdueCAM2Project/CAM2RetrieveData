@@ -1,1 +1,47 @@
-This is a program to determine the framerate of cameras within the database.
+The getFramerate script is given a list of IDs for cameras in the CAM2 database.
+Using this list, it finds the framerate of each camera, and returns the
+information in text files.
+
+To use the script, make sure that you have a .txt file in the same directory as
+getFramerate.py. This file should contain only the IDs of each camera to be
+analyzed, one per line. Next, execute the command "python getFramerate.py",
+making sure that you are using Python 2 ("python -V" will check the version).
+Once the program is running, you will be asked a series of questions.
+
+First, the program will identify all the .txt files in the directory and ask
+which one to use for the program. It will output a numbered list of the files,
+and you can either enter the number associated with the file or the file name.
+
+Next, you will be asked for the assessment duration in seconds. This is the
+total amount of time that the script will be allowed to run before prematurely
+exiting. It is advised to make this number larger than you expect the script to
+run.
+
+At this point, you'll be asked how many feeds the program should process at
+once. This is simply the number of cameras the program will check at the same
+time.
+
+Next, you'll be asked how long to wait for an individual camera before it is
+dumped. If a camera is being processed for longer than this, the program will
+dump this camera and move on with the execution. Note that this value should
+be double the maximum framerate you want to capture, as the program needs to get
+three frames: a reference frame, a start frame and an end frame.
+
+You'll then be asked for a path to save the reports. Just put the name of a
+directory where you want the text files to be saved. The directory will be
+created for you.
+
+The last stage is entering the information for the SQL camera database, which
+the program will access. Note that the SQL database must be installed on your
+computer in order for the program to work. If there a database.config file in
+the directory, the program will automaticall find the server, username and
+database name. If not, these will most likely be "localhost", "root" and "cam2",
+respectively. No matter what, you'll be asked to enter a password, which will
+be whatever root password you entered while installing MySQL.
+
+Once the program has finished executing, three files will be created in this
+directory: a log file, an error file and a successful output file. The log file
+will include any information that was output during the execution of the
+program; the error file will output all cameras that failed to generate a
+framerate, along with the reasons each one failed; and the successful output
+file will output the framerate of each camera.
