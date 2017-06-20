@@ -73,6 +73,7 @@ import datetime
 import MySQLdb
 import getpass
 import error
+import argparse
 
 # Cameras that exceeded threshold (Handled by checkThreshold())
 # Cameras that could not be loaded.
@@ -293,7 +294,29 @@ def progress(start, dur, left, tot):
                          .format(time.time() - start, dur, left, tot))
         sys.stdout.flush()
         return
-        
+
+'''
+parse_cmd_args gets a list of the command line arguments and returns a
+namespace with the necessary values for the script to run.
+'''
+def parse_cmd_args(args):
+        desc = 'Get the framerate of cameras in the databse based on a '\
+               '.txt file of camera IDs, one per line.'
+        parser = argparse.ArgumentParser(prog='getFrameratey.py',
+                                         description=desc)
+        parser.add_argument('-t', '--threshold', help='the maximum threshold '
+                            '(in seconds) to check a camera.')
+        parser.add_argument('-r', '--runtime', help='the maximum runtime (in '
+                            'seconds) for the program.')
+        parser.add_argument('-d', '--directory', help='the name of the '
+                            'directory in which the output files will be '
+                            'saved.')
+        parser.add_argument('-p', '--password', help='the password for mysql.')
+        parser.add_argument('-f', '--filename', help='the .txt file from which '
+                            'the ids will be taken.')
+        parser.add_argument('-n', '--number', help='the number of cameras to '
+                            'process at once.')
+        return parser.parse_args(args)
 '''
 	main contains the functions to get the initial assessment parameters if getFramerate.py is run without the manageGetFramerate program.
 	If manageGetFramerate.py is called this function is skipped.
@@ -301,81 +324,91 @@ def progress(start, dur, left, tot):
 def main(args):
 	relatedFiles = ["archiver.py", "Pictures", "archiver.pyc", "camera.pyc", "error.py", "stream_parser.pyc", "results", "getFramerate.py", "error.pyc", "camera.py", "stream_parser.py"]
 
-	try:
-		while 1:
-			try:
-				print("\nFiles in current directory:")
-				files = os.listdir(os.curdir)
-				diffFiles = []
-				file_detected = False; 
-				for onefile in files:
-					if onefile not in relatedFiles and onefile.find(".txt") != -1:
-						diffFiles.append(onefile)
+        password = None
+        if (len(args) > 1):
+                ns = parse_cmd_args(args[1:])
+                inputFile = ns.filename
+                duration = ns.runtime
+                amountToProcess = ns.number
+                threshold = ns.threshold
+                resultsPath = ns.directory
+                password = ns.password
+        else:
+	        try:
+		        while 1:
+			        try:
+				        print("\nFiles in current directory:")
+				        files = os.listdir(os.curdir)
+				        diffFiles = []
+				        file_detected = False; 
+				        for onefile in files:
+					        if onefile not in relatedFiles and onefile.find(".txt") != -1:
+						        diffFiles.append(onefile)
 
-				for onefile in range(0,(len(diffFiles))):
-					print("\t[{}] {}".format(onefile, diffFiles[onefile]))
-					file_detected = True;
+				        for onefile in range(0,(len(diffFiles))):
+					        print("\t[{}] {}".format(onefile, diffFiles[onefile]))
+                                                file_detected = True;
 
-				if file_detected == False:
-					print("\n\tNo input files detected!!\n\tMake sure that the desired input file is in the same directory and is a .txt file!\n")
-					return
+				        if file_detected == False:
+					        print("\n\tNo input files detected!!\n\tMake sure that the desired input file is in the same directory and is a .txt file!\n")
+					        return
 					
-				print("\n")
-				inputFile = str(raw_input('Enter input file or number: '))
-				try:
-					inputFile = int(inputFile)
-					inputFile = diffFiles[inputFile]
-					print(inputFile)
-				except:
-					pass
-				fInput = open(inputFile, "r")
-				fInput.close()
+				        print("\n")
+				        inputFile = str(raw_input('Enter input file or number: '))
+				        try:
+					        inputFile = int(inputFile)
+					        inputFile = diffFiles[inputFile]
+					        print(inputFile)
+				        except:
+					        pass
+				        fInput = open(inputFile, "r")
+				        fInput.close()
 
-				break
-			except Exception as e:
-				print("Input file couldn't be opened... Try again.")
-				pass
-	except KeyboardInterrupt:
-		print("\n")
-		raise(KeyboardInterrupt)
+				        break
+			        except Exception as e:
+				        print("Input file couldn't be opened... Try again.")
+				        pass
+	        except KeyboardInterrupt:
+		        print("\n")
+		        raise(KeyboardInterrupt)
 
-	try:
-		duration = raw_input('Assessment Duration (seconds): ')
-		if duration != '':
-			duration = int(duration)
-		else:
-			duration = -1
-			print("\tNo duration entered using default: {}sec".format(duration))
+	        try:
+		        duration = raw_input('Assessment Duration (seconds): ')
+		        if duration != '':
+			        duration = int(duration)
+		        else:
+			        duration = -1
+			        print("\tNo duration entered using default: {}sec".format(duration))
 
-		amountToProcess = raw_input('Number of feeds to process at once: ')
-		if amountToProcess != '':
-			amountToProcess = int(amountToProcess)
-		else:
-			amountToProcess = 30
-			print("\tNo number entered using default: {}".format(amountToProcess))
+		        amountToProcess = raw_input('Number of feeds to process at once: ')
+		        if amountToProcess != '':
+			        amountToProcess = int(amountToProcess)
+		        else:
+			        amountToProcess = 30
+			        print("\tNo number entered using default: {}".format(amountToProcess))
 
-		threshold = raw_input('Longest possible time to assess camera before dumped (seconds): ')
-		if threshold != '':
-			threshold = int(threshold)
-		else:
-			threshold = 600
-			print("\tNo number entered using default: {}sec".format(threshold))
+		        threshold = raw_input('Longest possible time to assess camera before dumped (seconds): ')
+		        if threshold != '':
+			        threshold = int(threshold)
+		        else:
+			        threshold = 600
+			        print("\tNo number entered using default: {}sec".format(threshold))
 
-		results_path = raw_input('Path to save reports: ')
-		if results_path != '':
-			results_path = results_path
-		else:
-			results_path = "results"
-			print("\tNo path entered using default: {}/".format(results_path))
+		        results_path = raw_input('Path to save reports: ')
+		        if results_path != '':
+			        results_path = results_path
+		        else:
+			        results_path = "results"
+			        print("\tNo path entered using default: {}/".format(results_path))
 
-	except KeyboardInterrupt:
-		print("\n")
-		return
+	        except KeyboardInterrupt:
+		        print("\n")
+		        return
 
 
 	is_video = 0
 
-	setup(inputFile, duration, amountToProcess, threshold, results_path, is_video, None)
+	setup(inputFile, duration, amountToProcess, threshold, results_path, is_video, password)
 
 if __name__ == '__main__':
 	main(sys.argv)
