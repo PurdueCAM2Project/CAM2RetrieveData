@@ -119,8 +119,7 @@ def cleanUp(cameras, activeCameras, errorCameras, end_compare_cameras, fFailure)
 '''
 def assessFramerate(cameras, activeCameras, errorCameras, threshold, duration, totalCams, fSuccess, fFailure):
 	start_timestamp = time.time()
-	print("\rAssessment Runtime: {}sec Max Runtime: {}sec. Processing {}of{}          ".format(round(time.time()-start_timestamp), duration, totalCams - len(cameras), totalCams), end = '\r')
-	sys.stdout.flush()
+        progress(start_timestamp, duration, totalCams-len(cameras), totalCams)
 	try:
 		while ((duration > 0 and (time.time() - start_timestamp) < duration) or duration <= 0) and len(activeCameras) > 0 :
 			for camera in activeCameras:				
@@ -129,22 +128,25 @@ def assessFramerate(cameras, activeCameras, errorCameras, threshold, duration, t
 				cycle_times = 0
 				try:
 					cameras, activeCameras, errorCameras = camera.get_start_image(cameras, activeCameras, errorCameras)
-					print("\rAssessment Runtime: {}sec Max Runtime: {}sec. Processing {}of{}          ".format(round(time.time()-start_timestamp), duration, totalCams - len(cameras), totalCams), end = '\r')
-					sys.stdout.flush()
+                                        progress(start_timestamp, duration,
+                                                 totalCams-len(cameras),
+                                                 totalCams)
 				except Exception as e:
 					logging.exception(e)
 					print("\n\nError! get_start_image Failed")
 				try:
 					cameras, activeCameras, errorCameras = camera.get_end_image(cameras, activeCameras, errorCameras, fSuccess)
-					print("\rAssessment Runtime: {}sec Max Runtime: {}sec. Processing {}of{}          ".format(round(time.time()-start_timestamp), duration, totalCams - len(cameras), totalCams), end = '\r')
-					sys.stdout.flush()
+                                        progress(start_timestamp, duration,
+                                                 totalCams-len(cameras),
+                                                 totalCams)
 				except Exception as e:
 					logging.exception(e)
 					print("\n\nError! get_end_image Failed")
 				try:
 					cameras, activeCameras, errorCameras = camera.checkThreshold(cameras, activeCameras, errorCameras, threshold, fFailure)
-					print("\rAssessment Runtime: {}sec Max Runtime: {}sec. Processing {}of{}          ".format(round(time.time()-start_timestamp), duration, totalCams - len(cameras), totalCams), end = '\r')
-					sys.stdout.flush()
+                                        progress(start_timestamp, duration,
+                                                 totalCams-len(cameras),
+                                                 totalCams)
 				except Exception as e:
 					logging.exception(e)
 					print("Error! checkThreshold Failed")
@@ -282,6 +284,16 @@ def setup(inputFile, duration, amountToProcess, threshold, results_path, is_vide
 	# return cameras, activeCameras, errorCameras, startTimes, dumpedCams, end_compare_cameras, DB_PASSWORD
 
 
+'''
+progress() prints to stdout the progress of getFramerate.py
+'''
+def progress(start, dur, left, tot):
+        sys.stdout.write("\rAssessment Runtime: {0:0.1f}sec Max Runtime: {1:d}"
+                         "sec. Processing {2:d}of{3:d}"
+                         .format(time.time() - start, dur, left, tot))
+        sys.stdout.flush()
+        return
+        
 '''
 	main contains the functions to get the initial assessment parameters if getFramerate.py is run without the manageGetFramerate program.
 	If manageGetFramerate.py is called this function is skipped.
