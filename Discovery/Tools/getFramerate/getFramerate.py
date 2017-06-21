@@ -324,6 +324,11 @@ def parse_cmd_args(args):
 def main(args):
 	relatedFiles = ["archiver.py", "Pictures", "archiver.pyc", "camera.pyc", "error.py", "stream_parser.pyc", "results", "getFramerate.py", "error.pyc", "camera.py", "stream_parser.py"]
 
+        inputFile = None
+        duration = None
+        amountToProcess = None
+        threshold = None
+        resultsPath = None
         password = None
         if (len(args) > 1):
                 ns = parse_cmd_args(args[1:])
@@ -333,8 +338,8 @@ def main(args):
                 threshold = ns.threshold
                 resultsPath = ns.directory
                 password = ns.password
-        else:
-	        try:
+	try:
+                if (inputFile is None):
 		        while 1:
 			        try:
 				        print("\nFiles in current directory:")
@@ -368,32 +373,33 @@ def main(args):
 			        except Exception as e:
 				        print("Input file couldn't be opened... Try again.")
 				        pass
-	        except KeyboardInterrupt:
-		        print("\n")
-		        raise(KeyboardInterrupt)
+	except KeyboardInterrupt:
+		print("\n")
+		raise(KeyboardInterrupt)
 
-	        try:
+	try:
+                if (duration is None):
 		        duration = raw_input('Assessment Duration (seconds): ')
 		        if duration != '':
 			        duration = int(duration)
 		        else:
 			        duration = -1
 			        print("\tNo duration entered using default: {}sec".format(duration))
-
+                if (amountToProcess is None):
 		        amountToProcess = raw_input('Number of feeds to process at once: ')
 		        if amountToProcess != '':
 			        amountToProcess = int(amountToProcess)
 		        else:
 			        amountToProcess = 30
 			        print("\tNo number entered using default: {}".format(amountToProcess))
-
+                if (threshold is None):
 		        threshold = raw_input('Longest possible time to assess camera before dumped (seconds): ')
 		        if threshold != '':
 			        threshold = int(threshold)
 		        else:
 			        threshold = 600
 			        print("\tNo number entered using default: {}sec".format(threshold))
-
+                if (resultsPath is None):
 		        results_path = raw_input('Path to save reports: ')
 		        if results_path != '':
 			        results_path = results_path
@@ -401,14 +407,14 @@ def main(args):
 			        results_path = "results"
 			        print("\tNo path entered using default: {}/".format(results_path))
 
-	        except KeyboardInterrupt:
-		        print("\n")
-		        return
+	except KeyboardInterrupt:
+		print("\n")
+		return
 
 
 	is_video = 0
 
-	setup(inputFile, duration, amountToProcess, threshold, results_path, is_video, password)
+	setup(inputFile, int(duration), int(amountToProcess), int(threshold), results_path, is_video, password)
 
 if __name__ == '__main__':
 	main(sys.argv)
