@@ -328,7 +328,7 @@ def main(args):
         duration = None
         amountToProcess = None
         threshold = None
-        resultsPath = None
+        results_path = None
         password = None
         if (len(args) > 1):
                 ns = parse_cmd_args(args[1:])
@@ -336,7 +336,7 @@ def main(args):
                 duration = ns.runtime
                 amountToProcess = ns.number
                 threshold = ns.threshold
-                resultsPath = ns.directory
+                results_path = ns.directory
                 password = ns.password
 	try:
                 if (inputFile is None):
@@ -399,7 +399,7 @@ def main(args):
 		        else:
 			        threshold = 600
 			        print("\tNo number entered using default: {}sec".format(threshold))
-                if (resultsPath is None):
+                if (results_path is None):
 		        results_path = raw_input('Path to save reports: ')
 		        if results_path != '':
 			        results_path = results_path
