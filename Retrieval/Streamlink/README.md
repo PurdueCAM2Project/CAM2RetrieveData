@@ -60,16 +60,6 @@ Perhaps you meant http:////video3.earthcam.com/fecnetwork/hdtimes10.flv/playlist
 
 Using simple regular expression parsing (lines 57-59), fetchstreamsrc.py can still retrieve a functional source URL.
 
-----------
-
-Further work needed
--------------------
-fetchstreamsrc.py is still not robust enough for the CAM² team's needs and requires further development.  Some problems that still need solving:
-* How does Streamlink behave on a webpage with more than one stream?  How can the script differentiate and find the ones we need?
-* Examine the ```Stream``` object; how (if possible) can the script collect the width, height, and framerate?
-* Develop more robust handling of Streamlink exceptions (there are other types besides ```PluginError```).
-
-----------
 
 More details
 -------------------
