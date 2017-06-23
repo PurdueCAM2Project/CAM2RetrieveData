@@ -155,9 +155,11 @@ def assessFramerate(cameras, activeCameras, errorCameras, threshold, duration, t
 				cycle_times += (time.time() - cycle_start)
 				num_passes += 1
 	except:
+                sys.stdout.write('\n')
 		logging.info("Stopped, Cleaning Up...")
 
 	if time.time() - start_timestamp > duration:
+                sys.stdout.write('\n')
 		logging.info("Assessment Limit Time Reached, Cleaning Up....")
 	
 	# logging.debug("Average Cycle Time: {}".format(float(cycle_times/num_passes)))
@@ -278,6 +280,7 @@ def setup(inputFile, duration, amountToProcess, threshold, results_path, is_vide
 	
 
 	cleanUp(cameras, activeCameras, errorCameras, end_compare_cameras, fFailure)
+        sys.stdout.write('\n')
 	logging.info("Done. Exit...")
 
 	fFailure.close()
