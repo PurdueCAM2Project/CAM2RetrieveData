@@ -3,9 +3,9 @@ import urllib2
 from bs4 import BeautifulSoup as BS
 from Geocoding import Geocoding
 
-f=open("bs_opentopia_out2.txt", 'w')
+f=open("bs_opentopia_out2_0to5k.txt", 'w')
 
-for x in range(1000,2000):
+for x in range(0,5000):
   print(str(x))
   still_url = "http://www.opentopia.com/webcam/" + str(x) + "?viewmode=savedstill"
   vid_url   = "http://www.opentopia.com/webcam/" + str(x) + "?viewmode=livevideo"
