@@ -5,7 +5,7 @@ from Geocoding import Geocoding
 
 f=open("bs_opentopia_out2.txt", 'w')
 
-for x in range(1000,2000):
+for x in range(0,5000):
   print(str(x))
   still_url = "http://www.opentopia.com/webcam/" + str(x) + "?viewmode=savedstill"
   vid_url   = "http://www.opentopia.com/webcam/" + str(x) + "?viewmode=livevideo"
@@ -54,20 +54,23 @@ for x in range(1000,2000):
                 # it's good
                 info[y]=d[0]
           # print (info)
-
           for n in range(2, len(info)):
             if (info[n - 1] == "Country:"):
               country = info[n]
             if (info[n - 1] == "State/Region:"):
               state = info[n]
             if (info[n - 1] == "City:"):
-              city2 = info[n]
-              city2 = city2.split(',')
-              city = city2[0]+city2[1]
+	      if "," in info[n-1]:
+	        city2 = info[n]
+              	city2 = city2.split(',')
+                city = city2[0]+city2[1]
+	      else:
+		city = info[n]
             if (info[n-1]=="Facility:"):
               location = info[n]
             if (info[n - 1] == "Brand:"):
               brand = info[n]
+	  
 
           if (lat=="none" or lon=="none"):
             newGeo = Geocoding("Google", "AIzaSyBZYcy365bFEbW1Qar5ij4EmUkaCdmbbBc")
