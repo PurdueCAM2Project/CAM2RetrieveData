@@ -150,7 +150,7 @@ def assessFramerate(cameras, activeCameras, errorCameras, threshold, duration, t
                                                  totalCams)
 				except Exception as e:
 					logging.exception(e)
-					print("Error! checkThreshold Failed")
+					print("\n\nError! checkThreshold Failed")
 
 				cycle_times += (time.time() - cycle_start)
 				num_passes += 1
@@ -270,7 +270,7 @@ def setup(inputFile, duration, amountToProcess, threshold, results_path, is_vide
 	try:
 			cameras, activeCameras, errorCameras = assessFramerate(cameras, activeCameras, errorCameras, threshold, duration, totalCams, fSuccess, fFailure)
 	except KeyboardInterrupt:
-		print("\n")
+		sys.stdout.write('\n')
 		cleanUp(cameras, activeCameras, errorCameras, end_compare_cameras, fFailure)
 		logging.info("Done. Exit...")
 
