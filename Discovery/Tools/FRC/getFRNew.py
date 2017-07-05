@@ -9,7 +9,6 @@ import cv2
 import time
 import MySQLdb
 import datetime
-#import threading
 import filecmp
 from camera import IPCamera
 from camera import NonIPCamera
@@ -118,12 +117,12 @@ def worker(cam, is_video, res_width, res_height, maxTime):
                 '''
         # We need to fix the exceptions
         except Exception as e: # Probably http error exceptions
-            print(str(camera.id) + '\t' + "NO REF FRAME")
+            #print(str(camera.id) + '\t' + "NO REF FRAME")
             return camera.id,frame_rate_nonip
 
-        if (frame_rate_nonip == 0): 
-            print(str(camera.id) + '\t' + "NOT UPDATE LESS THAN 30 SEC")
-        #delete directory ?
+        #if (frame_rate_nonip == 0): 
+            #print(str(camera.id) + '\t' + "NOT UPDATE LESS THAN 30 SEC")
+
         return camera.id,frame_rate_nonip
 
 def get_next_frame(camera, file1, file2, maxTime):
@@ -205,7 +204,7 @@ def main(args):
 
     DB_SERVER = 'localhost'
     DB_USER_NAME = 'root'
-    DB_PASSWORD = ''
+    DB_PASSWORD = 'password'
     DB_NAME = database
 
     connection = MySQLdb.connect(DB_SERVER,DB_USER_NAME,DB_PASSWORD,DB_NAME)
@@ -223,8 +222,8 @@ def main(args):
         cursor.execute('select camera.id, non_ip_camera.snapshot_url '
                        'FROM camera, non_ip_camera '
                        'WHERE camera.id = non_ip_camera.camera_id '
-                       'and is_active=1 and camera.id between 100000 and '\
-                       '101000 order by rand();')
+                       'and is_active=1 and camera.id between 105000 and '
+                       '106000 order by rand();')
     # 157868 157532
     # else : UNION two queries above to combine both IPCams and NON-IP Cams.
 
@@ -247,17 +246,12 @@ def main(args):
     f.close()
     
     print("Starting camera analysis")
-    i = 0
-    cam_len = len(cameras)
     with ProcessPool(max_workers=processes_num) as pool:
        for camera in cameras:
             print_progress(i, cam_len)
             future = pool.schedule(worker, args=(camera, is_video, res_width,\
                     res_height, timeout), timeout=timeout*2 + 5)
             future.add_done_callback(task_done)
-            i += 1
-    print_progress(1, 1)
-    print('')
 
 def get_active_cams(f, cameras, maxTime):
     cameras = list(cameras)
