@@ -66,6 +66,7 @@ for x in range(0, 500):
                 city2 = city2.split(',')
                 city=city2[0]
                 for i in range(1,len(city2)):
+                  city += " -"
                   city += city2[i]
               else:
                 city = info[n]
