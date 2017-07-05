@@ -5,7 +5,7 @@ from Geocoding import Geocoding
 
 f=open("bs_opentopia_out2_whole2.txt", 'w')
 
-for x in range(16000,20000):
+for x in range(0, 500):
   print(str(x))
   still_url = "http://www.opentopia.com/webcam/" + str(x) + "?viewmode=savedstill"
   vid_url   = "http://www.opentopia.com/webcam/" + str(x) + "?viewmode=livevideo"
@@ -24,7 +24,7 @@ for x in range(16000,20000):
         ipAddress = "http://"+ipAddress
 
         try:
-          soup3 = BS(urllib2.urlopen(ipAddress, timeout=4), 'html.parser')
+          soup3 = BS(urllib2.urlopen(ipAddress, timeout=15), 'html.parser')
           #Find Geo Data assuming findign url went well
           b = soup.find_all("label")
           country = "none"
@@ -59,15 +59,28 @@ for x in range(16000,20000):
               country = info[n]
             if (info[n - 1] == "State/Region:"):
               state = info[n]
+
             if (info[n - 1] == "City:"):
-	      if "," in info[n-1]:
-	        city2 = info[n]
-              	city2 = city2.split(',')
-                city = city2[0]+city2[1]
-	      else:
-		city = info[n]
-            if (info[n-1]=="Facility:"):
-              location = info[n]
+              if "," in info[n]:
+                city2 = info[n]
+                city2 = city2.split(',')
+                city=city2[0]
+                for i in range(1,len(city2)):
+                  city += city2[i]
+              else:
+                city = info[n]
+
+            if (info[n - 1] == "Facility:"):
+              if "," in info[n]:
+                location2 = info[n]
+                location2 = location2.split(',')
+                location=location2[0]
+                for i in range(1,len(location2)):
+                  location += " -"
+                  location += location2[i]
+              else:
+                location = info[n]
+
             if (info[n - 1] == "Brand:"):
               brand = info[n]
 	  
@@ -79,8 +92,9 @@ for x in range(16000,20000):
             lon=newGeo.longitude
 
 
+          printOutput = ("Cam ID:\t\t" + str(x) + "\nLat:\t\t" + lat + "\nLon:\t\t" + lon + "\nCountry:\t" + country + "\nState:\t\t" + state + "\nCity:\t\t" + city + "\nLocation:\t" + location + "\nBrand:\t\t" + brand + "\nURL:\t\t" + ipAddress + "\n")
           output = (str(x) + "," + lat + "," + lon + "," + country + "," + state + "," + city + "," + location + "," + brand + "," + ipAddress + "\n")
-          print (output)
+          print (printOutput)
           f.write(output)
         except Exception as e:
           print e
@@ -88,6 +102,8 @@ for x in range(16000,20000):
           pass
       except:
         pass
+  except (KeyboardInterrupt, SystemExit):
+    raise
   except:
     pass
 
