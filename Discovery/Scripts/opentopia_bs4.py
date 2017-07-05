@@ -5,28 +5,32 @@ from Geocoding import Geocoding
 
 f=open("bs_opentopia_out2_whole2.txt", 'w')
 
-for x in range(0, 500):
+for x in range(0, 17000):
   print(str(x))
   still_url = "http://www.opentopia.com/webcam/" + str(x) + "?viewmode=savedstill"
   vid_url   = "http://www.opentopia.com/webcam/" + str(x) + "?viewmode=livevideo"
 
-  try:#will exit if a 404 error or something
+  try:
+    # Try to open the opentopia site with the saved still
     soup = BS(urllib2.urlopen(still_url), 'html.parser')
     a = soup.find_all("img")[1].get("src")
-    if(a!="/images/nosnapshot-715x536.jpg"):
 
+    # Only continue if the still image is not the stock "no image found" placeholder
+    if(a!="/images/nosnapshot-715x536.jpg"):
       try:
+        # Try to open the opentopia site with the live feed
         soup2 = BS(urllib2.urlopen(vid_url), 'html.parser')
         wholeURL = soup2.find_all("img")[1].get("src")
         cutUrl=wholeURL.split("/")
         ipAddress=cutUrl[2]
-        # print (ipAddress)
+        # Store the ip address as something that can be opened by a web-browser with appropriate url tails
         ipAddress = "http://"+ipAddress
 
         try:
+          # Try to open the url link of the feed located on the livefeed opentopia website
           soup3 = BS(urllib2.urlopen(ipAddress, timeout=15), 'html.parser')
-          #Find Geo Data assuming findign url went well
-          b = soup.find_all("label")
+
+          # Initialize geo info as none in case it's not found
           country = "none"
           state = "none"
           city = "none"
@@ -34,7 +38,14 @@ for x in range(0, 500):
           lat = "none"
           lon = "none"
           brand = "none"
+
+          # Find all HTML elements with label types (all opentopia geo info data is stored as lables)
+          b = soup.find_all("label")
           info=[0]*len(b)
+
+          # Parse Geo Data assuming findign url went well. Split all label elements along their > and < characters.
+          # Geo info is stored as <blahblahblah>RELEVENT_INFO<blahblahblah>. This pulls out the relevant info.
+          # Special care is needed for lat and lon
           for y in range(0,len(b)):
             c = b[y]
             c = str(c)
@@ -47,19 +58,25 @@ for x in range(0, 500):
               d=str(c[1])
               d=d.split("<")
               if ((len(d[0])==0)or(d[0][len(d[0])-1]==" ")):
-                # cut off last char
+                # cut off last char if it's a space
                 temp=d[0][:-1]
                 info[y]=temp
               else:
-                # it's good
+                # not needed
                 info[y]=d[0]
-          # print (info)
+
+          # Pull out text for geo info from the extracted html strings if the category is present
           for n in range(2, len(info)):
             if (info[n - 1] == "Country:"):
               country = info[n]
             if (info[n - 1] == "State/Region:"):
               state = info[n]
 
+            if (info[n - 1] == "Brand:"):
+              brand = info[n]
+
+            # Extra code is needed for city and location, as these sometimes contain commas within the text strings
+            # which needs to be replaced
             if (info[n - 1] == "City:"):
               if "," in info[n]:
                 city2 = info[n]
@@ -82,10 +99,7 @@ for x in range(0, 500):
               else:
                 location = info[n]
 
-            if (info[n - 1] == "Brand:"):
-              brand = info[n]
-	  
-
+          # Only use geocoding.py is the GPS coords were not provided on the website
           if (lat=="none" or lon=="none"):
             newGeo = Geocoding("Google", "AIzaSyBZYcy365bFEbW1Qar5ij4EmUkaCdmbbBc")
             newGeo.locateCoords(location, city, state, country)
@@ -93,9 +107,9 @@ for x in range(0, 500):
             lon=newGeo.longitude
 
 
-          printOutput = ("Cam ID:\t\t" + str(x) + "\nLat:\t\t" + lat + "\nLon:\t\t" + lon + "\nCountry:\t" + country + "\nState:\t\t" + state + "\nCity:\t\t" + city + "\nLocation:\t" + location + "\nBrand:\t\t" + brand + "\nURL:\t\t" + ipAddress + "\n")
+          # printOutput = ("Cam ID:\t\t" + str(x) + "\nLat:\t\t" + lat + "\nLon:\t\t" + lon + "\nCountry:\t" + country + "\nState:\t\t" + state + "\nCity:\t\t" + city + "\nLocation:\t" + location + "\nBrand:\t\t" + brand + "\nURL:\t\t" + ipAddress + "\n")
           output = (str(x) + "," + lat + "," + lon + "," + country + "," + state + "," + city + "," + location + "," + brand + "," + ipAddress + "\n")
-          print (printOutput)
+          # print (printOutput)
           f.write(output)
         except Exception as e:
           print e
