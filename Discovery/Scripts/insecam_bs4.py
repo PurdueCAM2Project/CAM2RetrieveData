@@ -40,8 +40,7 @@ import time
 
 def main():
   f=open("insecam_output.txt", 'w')
-  driver = webdriver.Firefox()
-  driver.set_page_load_timeout(30)
+  hdr = {'User-Agent': 'Mozilla/5.0'}
 
   pages=2
   camsPerPage=6
@@ -50,24 +49,19 @@ def main():
   for x in range(1, pages):
 
     url = ("http://www.insecam.org/en/byrating/?page="+str(x))
-    driver.get(url)
+    req = urllib2.Request(url, headers=hdr)
+    page = urllib2.urlopen(req)
+    soup = BS(page, 'html.parser')
 
-    data = driver.find_elements_by_xpath("//div[@class = 'col-xs-12 col-sm-6 col-md-4 col-lg-4']/div/a/div/img")
-    insecamlink=driver.find_elements_by_xpath("//div[@class = 'col-xs-12 col-sm-6 col-md-4 col-lg-4']/div/a")
-    for y in range(0, len(data)):
-      urls[count]=str(insecamlink[y].get_attribute("href"))
-      count+=1
-      # data2=data[x].get_attribute("src")
-      # insecamlinks=insecamlink[x].get_attribute("href")
-      # print (data2)
-      # print (insecamlinks)
-  driver.close()
+    for a in soup.find_all('a', href=True):
+      if ("view" in a['href']):
+        urls[count] = str("http://www.insecam.org/" + a['href'])
+        count+=1
 
+  # print urls
 
-
-  hdr = {'User-Agent': 'Mozilla/5.0'}
   # Find the stream and geo info from each of the links found earlier
-  for x in range(0, 2):#len(urls)):
+  for x in range(0, len(urls)):
     try:
       print (urls[x])
       req = urllib2.Request(urls[x], headers=hdr)
@@ -77,55 +71,33 @@ def main():
 
 
       a = soup.find_all("div")
-      country = a[18].text.strip()
-      region = a[24].text.strip()
-      city = a[27].text.strip()
-      lat = a[30].text.strip()
-      lon = a[33].text.strip()
-      brand = a[42].text.strip()
+      if (a[18].text.strip()=="Country:"):
+        country = a[19].text.strip()
+        region = a[25].text.strip()
+        city = a[28].text.strip()
+        lat = a[31].text.strip()
+        lon = a[34].text.strip()
+        brand = a[43].text.strip()
+      else:
+        country = a[18].text.strip()
+        region = a[24].text.strip()
+        city = a[27].text.strip()
+        lat = a[30].text.strip()
+        lon = a[33].text.strip()
+        brand = a[42].text.strip()
 
       b = soup.find_all("img")
       tempStream = b[0].get("src")
       tempStream=tempStream.split("/")
       stream = "http://" + tempStream[2]
 
-      printOutput = ("Lat:\t\t" + str(lat) + "\nLon:\t\t" + str(lon) + "\nCountry:\t" + str(country) + "\nState:\t\t" + str(region) + "\nCity:\t\t" + str(city) + "\nBrand:\t\t" + str(brand) + "\nURL:\t\t" + str(stream))
-      output = (str(lat) + "," + str(lon) + "," + str(country) + "," + str(region) + "," + str(city) + "," + str(brand) + "," + str(stream))
+      printOutput = ("Lat:\t\t" + str(lat) + "\nLon:\t\t" + str(lon) + "\nCountry:\t" + str(country) + "\nState:\t\t" + str(region) + "\nCity:\t\t" + str(city) + "\nBrand:\t\t" + str(brand) + "\nURL:\t\t" + str(stream) + "\n")
+      output = (str(lat) + "," + str(lon) + "," + str(country) + "," + str(region) + "," + str(city) + "," + str(brand) + "," + str(stream) + "\n")
       print printOutput
       f.write(output)
     except Exception as e:
       print (e)
       pass
-
-
-
-
-
-
-  # Works with Selenium
-  # for x in range(0,len(urls)):
-  #   print(x)
-  #   driver.get(urls[x])
-  #   try:
-  #     streamHTML = driver.find_element_by_xpath("//div[@class = 'grid-container']/a/img")
-  #     tempStream=streamHTML.get_attribute("src")
-  #     tempStream=tempStream.split("/")
-  #     stream = "http://" + tempStream[2]
-  #     # print ("Stream: " + str(stream))
-  #   except Exception as e:
-  #     print e
-  #     pass
-  #
-  #   for y in range(0,9):
-  #     temp = driver.find_elements_by_xpath("//div[@class = 'camera-details__cell']")
-  #     country = temp[0].text
-  #     state = temp[2].text
-  #     city = temp[3].text
-  #     lat = temp[4].text
-  #     lon = temp[5].text
-  #     brand = temp[8].text
-  #     f.write(str(lat)+","+str(lon)+","+str(country)+","+str(state)+","+str(city)+","+str(brand)+","+str(stream)+"\n")
-  #   # print (len(details))
   f.close()
 
 if __name__ == "__main__":
