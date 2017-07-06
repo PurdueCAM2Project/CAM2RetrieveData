@@ -1,28 +1,29 @@
-"""
---------------------------------------------------------------------------------
-Descriptive Name     : <Opentopia whole database parser>
-Author               : Ryan Schlueter
-Contact Info         : rschluet@gmail.com
-Date Written         : July 5, 2017
-Description          : Parse the entirety of opentopia's database. Find relevant geographical data and include that
-                      in a csv output file. This is slower, but gets more links than just going through the
-                      “most viewed” or “highest rated” links on opentopia’s website, as some of the links not on those
-                      lists still give valid cameras, but are broken on opentopia’s website
-Command to run script: python opentopia_bs4.py
-Usage                : (extra requirements to run the script: eg. have to be run within dev server)
-Input file format    : (eg. url#description (on each line))
-Output               : <whole_opentopia_output.txt>
-Note                 :
-Other files required by : N/A
-this script and where
-located
+# """
+# --------------------------------------------------------------------------------
+# Descriptive Name     : <Opentopia whole database parser>
+# Author               : Ryan Schlueter
+# Contact Info         : rschluet@gmail.com
+# Date Written         : July 5, 2017
+# Description          : Parse the entirety of opentopia's database. Find relevant geographical data and include that
+#                       in a csv output file. This is slower, but gets more links than just going through the
+#                       "most viewed" or "highest rated" links on opentopia's website, as some of the links not on those
+#                       lists still give valid cameras, but are broken on opentopia's website
+# Command to run script: python opentopia_bs4.py
+# Usage                : (extra requirements to run the script: eg. have to be run within dev server)
+# Input file format    : (eg. url#description (on each line))
+# Output               : <whole_opentopia_output.txt>
+# Note                 :
+# Other files required by : N/A
+# this script and where
+# located
+#
+# ----For Parsing Scripts---------------------------------------------------------
+# Website Parsed       : <opentopia.com>
+# In database (Y/N)    :
+# Date added to Database :
+# --------------------------------------------------------------------------------
+# """
 
-----For Parsing Scripts---------------------------------------------------------
-Website Parsed       : <opentopia.com>
-In database (Y/N)    :
-Date added to Database :
---------------------------------------------------------------------------------
-"""
 
 import urllib2
 from bs4 import BeautifulSoup as BS
@@ -131,7 +132,6 @@ def parseOpentopia():
               newGeo.locateCoords(location, city, state, country)
               lat=newGeo.latitude
               lon=newGeo.longitude
-
 
             # printOutput = ("Cam ID:\t\t" + str(x) + "\nLat:\t\t" + lat + "\nLon:\t\t" + lon + "\nCountry:\t" + country + "\nState:\t\t" + state + "\nCity:\t\t" + city + "\nLocation:\t" + location + "\nBrand:\t\t" + brand + "\nURL:\t\t" + ipAddress + "\n")
             output = (str(x) + "," + lat + "," + lon + "," + country + "," + state + "," + city + "," + location + "," + brand + "," + ipAddress + "\n")
