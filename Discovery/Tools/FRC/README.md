@@ -16,11 +16,11 @@ optional arguments:
 *  -r RESOLUTION, --resolution RESOLUTION
                         the minimum resolution to evaluate. Pass as a string,
                         for example, '400 x 400'
-  -t TIMEOUT, --timeout TIMEOUT
+*  -t TIMEOUT, --timeout TIMEOUT
                         the maximum time to evaluate a camera.
-  -p PROCESSES, --processes PROCESSES
+*  -p PROCESSES, --processes PROCESSES
                         the number of processes that will run concurrently.
-  -d DATABASE, --database DATABASE
+*  -d DATABASE, --database DATABASE
                         the name of the SQL database.
 
 Ex. Python getFRNew.py -r “400 x 400” -p 8 -d cam2 0
