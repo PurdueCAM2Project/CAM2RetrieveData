@@ -12,8 +12,8 @@ positional arguments:
   is_video              whether the cameras are videos or not.
 
 optional arguments:
-  -h, --help            show this help message and exit
-  -r RESOLUTION, --resolution RESOLUTION
+*  -h, --help            show this help message and exit
+*  -r RESOLUTION, --resolution RESOLUTION
                         the minimum resolution to evaluate. Pass as a string,
                         for example, '400 x 400'
   -t TIMEOUT, --timeout TIMEOUT
