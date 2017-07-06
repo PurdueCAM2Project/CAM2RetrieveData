@@ -30,7 +30,7 @@ def worker(cam, is_video, res_width, res_height, maxTime):
     #IP Cameras
     if is_video:
         #camera[0] is ID, camera[1] is ip, camera[2]port, camera[3]video path
-        camera = IPCamera(cam[0], cam[1], None, cam[3], cam[2]) #ID,IP,imageStreamPath,optionalParams
+        camera = IPCamera(cam[0], cam[1], None, cam[3], cam[2])
         try:
             camera.open_stream(StreamFormat.MJPEG)
         except Exception:
@@ -60,7 +60,8 @@ def worker(cam, is_video, res_width, res_height, maxTime):
         #Create non-ip camera object
         try:
             frame_rate_nonip = -1
-            camera = NonIPCamera(cam[0], cam[1]) #ID,URL of the camera image stream
+            # ID, URL of the camera image stream
+            camera = NonIPCamera(cam[0], cam[1]) 
 
         except Exception as e:
             return
@@ -82,43 +83,15 @@ def worker(cam, is_video, res_width, res_height, maxTime):
                 StartFile_name = '{}/START.png'.format(cam_directory)
                 # Keep downloading more images for maxTime
                 # to obtain the true frame rate of non-ip cameras
-                if (get_next_frame(camera, None, RefFile_name, StartFile_name, maxTime) > -1):
+                if (get_next_frame(camera, None, RefFile_name, StartFile_name,\
+                                   maxTime) > -1):
                     EndFile_name = '{}/END.png'.format(cam_directory)
-                    frame_rate_nonip = get_next_frame(camera, RefFile_name, StartFile_name, EndFile_name, maxTime)
-                '''
-                start_time = time.time()
-                while (time.time() - start_time) < 30: # 30 secs minute currently
-                    try:
-                        frame_timestamp = time.time()
-                        frame, _ = camera.get_frame()
+                    frame_rate_nonip = get_next_frame(camera, RefFile_name,\
+                                                      StartFile_name,\
+                                                      EndFile_name, maxTime)
 
-                        if frame is not None:
-                            #save frame
-                            file_name = '{}/{}_{}.png'.format(
-                                cam_directory, str(camera.id),
-                                datetime.datetime.fromtimestamp(
-                                    frame_timestamp).strftime('%Y-%m-%d_%H-%M-%S-%f'))
-                            cv2.imwrite(file_name, frame)
-                            # Compare each frame with ref frame
-                            # Once different, obtain frame rate and exit.
-                            if not filecmp.cmp(file_name, RefFile_name,shallow=True):
-                                frame_rate_nonip = frame_timestamp - RefFrame_timestamp
-                                #f.write(str(camera.id) + '\t' + str(frame_rate_nonip) + '\t' + '\n')
-                                print(str(camera.id) + '\t' + str(frame_rate_nonip))
-                                break;
-
-                    except Exception: # Probably http error exceptions
-                        #errorFile.write(str(camera.id))
-                        print(str(camera.id) + '\t' + "NO FRAME")
-                        return
-                '''
-        # We need to fix the exceptions
         except Exception as e: # Probably http error exceptions
-            #print(str(camera.id) + '\t' + "NO REF FRAME")
             return camera.id,frame_rate_nonip
-
-        #if (frame_rate_nonip == 0): 
-            #print(str(camera.id) + '\t' + "NOT UPDATE LESS THAN 30 SEC")
 
         return camera.id,frame_rate_nonip
 
@@ -148,8 +121,8 @@ def parse_args(args):
                         ' a camera.', type=int)
     parser.add_argument('-p', '--processes', help='the number of processes'\
                         ' that will run concurrently.', type=int)
-    parser.add_argument('-d', '--database', help='the name of the SQL database.'\
-                        , type=str)
+    parser.add_argument('-d', '--database', help='the name of the SQL'\
+                        'database.', type=str)
     return parser.parse_args(args)
 
 def task_done(future):
@@ -306,7 +279,8 @@ def get_active_cams(f, cameras, maxTime):
     return cameras
 
 def print_progress(num_done, num_tot):
-    sys.stdout.write('\r{0:0.2f}% completed'.format(float(num_done * 100)/num_tot))
+    sys.stdout.write('\r{0:0.2f}% completed'\
+                     .format(float(num_done * 100)/num_tot))
     sys.stdout.flush()
 
 # Call the main function
