@@ -43,7 +43,7 @@ def main():
   f=open("insecam_output.txt", 'w')
   hdr = {'User-Agent': 'Mozilla/5.0'}
 
-  pages=100
+  pages=10
   camsPerPage=6
   urls = [0]*((pages-1)*(camsPerPage))
   count=0
@@ -69,6 +69,7 @@ def main():
   # Find the stream and geo info from each of the links found earlier
   print ("Finding ip camera information\n")
   for x in range(0, len(urls)):
+    print (str(x+1) + " out of " + str((pages-1)*(camsPerPage)))
     try:
       print (urls[x])
       req = urllib2.Request(urls[x], headers=hdr)
