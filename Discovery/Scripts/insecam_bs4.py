@@ -61,11 +61,12 @@ def main():
       # insecamlinks=insecamlink[x].get_attribute("href")
       # print (data2)
       # print (insecamlinks)
+  driver.close()
 
 
 
   hdr = {'User-Agent': 'Mozilla/5.0'}
-  driver.close()
+  # Find the stream and geo info from each of the links found earlier
   for x in range(0, 2):#len(urls)):
     try:
       print (urls[x])
@@ -73,6 +74,8 @@ def main():
       page=urllib2.urlopen(req)
       soup=BS(page, 'html.parser')
       time.sleep(1)
+
+
       a = soup.find_all("div")
       country = a[18].text.strip()
       region = a[24].text.strip()
@@ -80,9 +83,15 @@ def main():
       lat = a[30].text.strip()
       lon = a[33].text.strip()
       brand = a[42].text.strip()
-      stream = "temp"
+
+      b = soup.find_all("img")
+      tempStream = b[0].get("src")
+      tempStream=tempStream.split("/")
+      stream = "http://" + tempStream[2]
+
+      printOutput = ("Lat:\t\t" + str(lat) + "\nLon:\t\t" + str(lon) + "\nCountry:\t" + str(country) + "\nState:\t\t" + str(region) + "\nCity:\t\t" + str(city) + "\nBrand:\t\t" + str(brand) + "\nURL:\t\t" + str(stream))
       output = (str(lat) + "," + str(lon) + "," + str(country) + "," + str(region) + "," + str(city) + "," + str(brand) + "," + str(stream))
-      print output
+      print printOutput
       f.write(output)
     except Exception as e:
       print (e)
