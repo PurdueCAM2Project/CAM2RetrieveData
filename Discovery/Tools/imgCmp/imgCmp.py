@@ -27,12 +27,18 @@ import copy
 class Image:
     """An image object."""
     
-    def __init__(self, filename, grayscale=False):
+    def __init__(self, filename):
         """Initialize an image object from a filename."""
         self.img = cv2.imread(filename)
         self.height = self.img.shape[0]
         self.width = self.img.shape[1]
-        self.gray = grayscale
+        if (self.img.shape[2] == 1):
+            self.gray = True
+        elif (self.img.shape[2] == 3):
+            False
+        else:
+            raise Exception("The filepath \"{0:s}\" did not return a valid "\
+                            "grayscale or RGB image.".format(filename))
 
 def main(args):
     img1 = Image(args[0])
@@ -41,8 +47,8 @@ def main(args):
     mean = sum(diff_list) / len(diff_list)
     median = getMedian(diff_list)
     std_dev = getStdDev(diff_list, mean=mean)
-    print("Mean = {0:0.2f}\nMedian = {0:0.2f}\nStandard Deviation = {0:0.2f}"\
-          .format(mean, median, std_dev))
+    print("Mean = {0:0.2f}%\nMedian = {1:0.2f}%\nStandard Deviation = "\
+          "{2:0.2f}%".format(mean, median, std_dev))
     return
 
 def compare(img1, img2):
@@ -54,19 +60,19 @@ def compare(img1, img2):
 
     diff_list = []
     i = 0
-    j = 0
-    k = 0
     while i < img1.height:
+        j = 0
         while j < img1.width:
             diff = 0
             if img1.gray:
-                diff = float(img1.img[i][j] - img2.img[i][j]) * 100 / 255
+                diff = int(img1.img[i][j]) - int(img2.img[i][j])
             else:
+                k = 0
                 while k < 3:
-                    diff += float(img1.img[i][j][k] - img2.img[i][j][k])\
-                            * 100 / 255
+                    diff += int(img1.img[i][j][k]) - int(img2.img[i][j][k])
                     k += 1
                 diff /= 3
+            diff = float(diff) * 100 / 255
             diff_list.append(diff)
             j += 1
         i += 1
