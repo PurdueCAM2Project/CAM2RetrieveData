@@ -122,7 +122,7 @@ def parse_args(args):
     parser.add_argument('-p', '--processes', help='the number of processes'\
                         ' that will run concurrently.', type=int)
     parser.add_argument('-d', '--database', help='the name of the SQL'\
-                        'database.', type=str)
+                        ' database.', type=str)
     return parser.parse_args(args)
 
 def task_done(future):
