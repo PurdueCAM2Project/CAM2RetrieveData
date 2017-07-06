@@ -34,6 +34,7 @@ import urllib
 from bs4 import BeautifulSoup as BS
 from Geocoding import Geocoding
 import time
+import sys
 
 
 
@@ -42,33 +43,37 @@ def main():
   f=open("insecam_output.txt", 'w')
   hdr = {'User-Agent': 'Mozilla/5.0'}
 
-  pages=2
+  pages=100
   camsPerPage=6
   urls = [0]*((pages-1)*(camsPerPage))
   count=0
+  print ("Loading pages")
   for x in range(1, pages):
-
+    sys.stdout.write('.')
+    sys.stdout.flush()
     url = ("http://www.insecam.org/en/byrating/?page="+str(x))
     req = urllib2.Request(url, headers=hdr)
-    page = urllib2.urlopen(req)
-    soup = BS(page, 'html.parser')
+    page = urllib2.urlopen(req, timeout=15)
+    try:
+      soup = BS(page, 'html.parser')
+    except Exception as e:
+      print e
+      pass
 
     for a in soup.find_all('a', href=True):
       if ("view" in a['href']):
         urls[count] = str("http://www.insecam.org/" + a['href'])
         count+=1
 
-  # print urls
-
+  print ("\nPages loaded\n")
   # Find the stream and geo info from each of the links found earlier
+  print ("Finding ip camera information\n")
   for x in range(0, len(urls)):
     try:
       print (urls[x])
       req = urllib2.Request(urls[x], headers=hdr)
-      page=urllib2.urlopen(req)
+      page=urllib2.urlopen(req, timeout=15)
       soup=BS(page, 'html.parser')
-      time.sleep(1)
-
 
       a = soup.find_all("div")
       if (a[18].text.strip()=="Country:"):
