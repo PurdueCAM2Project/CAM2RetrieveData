@@ -82,12 +82,9 @@ def worker(cam, is_video, res_width, res_height, maxTime):
                 StartFile_name = '{}/START.png'.format(cam_directory)
                 # Keep downloading more images for maxTime
                 # to obtain the true frame rate of non-ip cameras
-                if (get_next_frame(camera, RefFile_name, StartFile_name, maxTime) > -1):
+                if (get_next_frame(camera, None, RefFile_name, StartFile_name, maxTime) > -1):
                     EndFile_name = '{}/END.png'.format(cam_directory)
-                    time.sleep(1)
-                    frame_rate_nonip = get_next_frame(camera, StartFile_name, EndFile_name, maxTime)
-                    if (frame_rate_nonip > -1):
-                        frame_rate_nonip += 1
+                    frame_rate_nonip = get_next_frame(camera, RefFile_name, StartFile_name, EndFile_name, maxTime)
                 '''
                 start_time = time.time()
                 while (time.time() - start_time) < 30: # 30 secs minute currently
@@ -125,16 +122,18 @@ def worker(cam, is_video, res_width, res_height, maxTime):
 
         return camera.id,frame_rate_nonip
 
-def get_next_frame(camera, file1, file2, maxTime):
+def get_next_frame(camera, file1, file2, file3, maxTime):
     start_time = time.time()
-    elapsed = -1
-    while ((time.time() - start_time) < maxTime and elapsed == -1):
+    while ((time.time() - start_time) < maxTime):
         frame, _ = camera.get_frame()
-        cv2.imwrite(file2, frame)
-        if (not filecmp.cmp(file1, file2, shallow=True)):
-            elapsed = time.time() - start_time
-
-    return elapsed
+        cv2.imwrite(file3, frame)
+        if (not filecmp.cmp(file2, file3, shallow=True)):
+            if (file1 is not None):
+                if (not filecmp.cmp(file1, file2, shallow=True)):
+                    return (time.time() - start_time)
+            else:
+                return (time.time() - start_time)
+    return -1
 
 def parse_args(args):
     desc = 'Get the framerate of cameras in the database.'
@@ -203,8 +202,8 @@ def main(args):
         timeout = 30
 
     DB_SERVER = 'localhost'
-    DB_USER_NAME = 'root'
-    DB_PASSWORD = 'password'
+    DB_USER_NAME = 'cam2'
+    DB_PASSWORD = ''
     DB_NAME = database
 
     connection = MySQLdb.connect(DB_SERVER,DB_USER_NAME,DB_PASSWORD,DB_NAME)
@@ -248,7 +247,6 @@ def main(args):
     print("Starting camera analysis")
     with ProcessPool(max_workers=processes_num) as pool:
        for camera in cameras:
-            print_progress(i, cam_len)
             future = pool.schedule(worker, args=(camera, is_video, res_width,\
                     res_height, timeout), timeout=timeout*2 + 5)
             future.add_done_callback(task_done)
