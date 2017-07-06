@@ -25,15 +25,21 @@ class Image:
     
     def __init__(self, filename, grayscale=False):
         """Initialize an image object from a filename."""
-        self.arr = cv2.imread(filename)
-        self.height = self.arr.shape[0]
-        self.width = self.arr.shape[1]
+        self.img = cv2.imread(filename)
+        self.height = self.img.shape[0]
+        self.width = self.img.shape[1]
         self.gray = grayscale
 
 
 def compare(img1, img2):
-    pass
+    """Compare two images of the same size."""
+    if (img1.height != img2.height or img1.width != img2.width):
+        raise ValueError("img1 and img2 are not the same size.")
+    if (img1.gray != img2.gray):
+        raise ValueError("img1 and img2 must have the same grayscale value.")
 
+    diff_list = []
+    
 def main(args):
     pass
 
