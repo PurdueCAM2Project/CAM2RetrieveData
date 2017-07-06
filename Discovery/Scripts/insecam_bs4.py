@@ -74,13 +74,16 @@ def main():
       soup=BS(page, 'html.parser')
       time.sleep(1)
       a = soup.find_all("div")
-      country = a[18].text
-      region = a[24].text
-      city = a[27].text
-      lat = a[30].text
-      lon = a[33].text
-      brand = a[42].text
-      print country
+      country = a[18].text.strip()
+      region = a[24].text.strip()
+      city = a[27].text.strip()
+      lat = a[30].text.strip()
+      lon = a[33].text.strip()
+      brand = a[42].text.strip()
+      stream = "temp"
+      output = (str(lat) + "," + str(lon) + "," + str(country) + "," + str(region) + "," + str(city) + "," + str(brand) + "," + str(stream))
+      print output
+      f.write(output)
     except Exception as e:
       print (e)
       pass
