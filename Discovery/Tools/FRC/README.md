@@ -37,7 +37,7 @@ Image. Get the time that this image was retrieved.
 * Continue to pull images from the camera until an image is returned that is
 different from both the Start Image and the Reference Image. This will be
 referred to as the End Image. Get the time that this image was retrieved.
-# Find the difference between the time that the Start and End images were
+* Find the difference between the time that the Start and End images were
 retrieved. This is the elapsed time (in seconds) it takes for the frame to
 update. Note that this is seconds per frame, while framerate is normally
 expressed in frames per second, or FPS.
