@@ -129,7 +129,7 @@ def get_next_frame(camera, file1, file2, file3, maxTime):
         cv2.imwrite(file3, frame)
         if (not filecmp.cmp(file2, file3, shallow=True)):
             if (file1 is not None):
-                if (not filecmp.cmp(file1, file2, shallow=True)):
+                if (not filecmp.cmp(file1, file3, shallow=True)):
                     return (time.time() - start_time)
             else:
                 return (time.time() - start_time)
