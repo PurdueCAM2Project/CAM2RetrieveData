@@ -43,7 +43,7 @@ def main():
   f=open("insecam_output.txt", 'w')
   hdr = {'User-Agent': 'Mozilla/5.0'}
 
-  pages=10
+  pages=500
   camsPerPage=6
   urls = [0]*((pages-1)*(camsPerPage))
   count=0
