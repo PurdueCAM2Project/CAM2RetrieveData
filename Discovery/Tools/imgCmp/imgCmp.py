@@ -60,10 +60,11 @@ def compare(img1, img2):
         while j < img1.width:
             diff = 0
             if img1.gray:
-                diff = float(img1.img[i][j] - img2.img[i][j]) / 255
+                diff = float(img1.img[i][j] - img2.img[i][j]) * 100 / 255
             else:
                 while k < 3:
-                    diff += float(img1.img[i][j][k] - img2.img[i][j][k]) / 255
+                    diff += float(img1.img[i][j][k] - img2.img[i][j][k])\
+                            * 100 / 255
                     k += 1
                 diff /= 3
             diff_list.append(diff)
