@@ -24,55 +24,54 @@ import cv2
 import numpy as np
 import copy
 
-class Image:
-    """An image object."""
-    
-    def __init__(self, filename):
-        """Initialize an image object from a filename."""
-        self.img = cv2.imread(filename)
-        self.height = self.img.shape[0]
-        self.width = self.img.shape[1]
-        if (self.img.shape[2] == 1):
-            self.gray = True
-        elif (self.img.shape[2] == 3):
-            False
-        else:
-            raise Exception("The filepath \"{0:s}\" did not return a valid "\
-                            "grayscale or RGB image.".format(filename))
 
 def main(args):
-    img1 = Image(args[0])
-    img2 = Image(args[1])
-    diff_list = compare(img1, img2)
+    """The main function for imgCmp.py
+
+    The main implementation expects two command-line arguments, both filenames
+    of images. The script then creates two Image objects, one for each
+    filename, and compares them to get a list of percent differences. This list
+    is then used to find the mean, median and standard deviation of the pixel-
+    wise percent differences. These values are returned via a print statement.
+    """
+    img1 = cv2.imread(args[0])
+    img2 = cv2.imread(args[1])
+    diff_list = cmpMSE(img1, img2)
     mean = sum(diff_list) / len(diff_list)
     median = getMedian(diff_list)
     std_dev = getStdDev(diff_list, mean=mean)
-    print("Mean = {0:0.2f}%\nMedian = {1:0.2f}%\nStandard Deviation = "\
-          "{2:0.2f}%".format(mean, median, std_dev))
+    s = cmpSSIM(img1, img2)
+    print("Mean = {0:0.2f}\nMedian = {1:0.2f}\nStandard Deviation = "\
+          "{2:0.2f}".format(mean, median, std_dev))
+    print("SSIM = {0:0.2f}".format(s))
     return
 
-def compare(img1, img2):
-    """Compare two images of the same size."""
-    if (img1.height != img2.height or img1.width != img2.width):
+def cmpSSIM(img1, img2):
+    """Compare two images using the Structural Similarity Index method."""
+    from skimage.measure import structural_similarity as ssim
+
+    img1_gray = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
+    img2_gray = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
+    return ssim(img1_gray, img2_gray)
+
+def cmpMSE(img1, img2):
+    """Compare two images using the Means Squared Error method."""
+    if (img1.shape[0] != img2.shape[0] or img1.shape[1] != img2.shape[1]):
         raise ValueError("img1 and img2 are not the same size.")
-    if (img1.gray != img2.gray):
+    if (img1.shape[2] != img2.shape[2]):
         raise ValueError("img1 and img2 must have the same grayscale value.")
 
     diff_list = []
     i = 0
-    while i < img1.height:
+    while i < img1.shape[0]:
         j = 0
-        while j < img1.width:
+        while j < img1.shape[1]:
             diff = 0
-            if img1.gray:
-                diff = int(img1.img[i][j]) - int(img2.img[i][j])
-            else:
-                k = 0
-                while k < 3:
-                    diff += int(img1.img[i][j][k]) - int(img2.img[i][j][k])
-                    k += 1
-                diff /= 3
-            diff = float(diff) * 100 / 255
+            k = 0
+            while k < img1.shape[2]:
+                diff += (int(img1[i][j][k]) - int(img2[i][j][k])) ** 2
+                k += 1
+            diff /= img1.shape[2]
             diff_list.append(diff)
             j += 1
         i += 1
