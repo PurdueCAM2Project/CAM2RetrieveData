@@ -32,7 +32,7 @@ from Geocoding import Geocoding
 f=open("whole_opentopia_output.txt", 'w')
 
 def parseOpentopia():
-  for x in range(0, 17000):
+  for x in range(0, 15):
     print(str(x))
     still_url = "http://www.opentopia.com/webcam/" + str(x) + "?viewmode=savedstill"
     vid_url   = "http://www.opentopia.com/webcam/" + str(x) + "?viewmode=livevideo"
