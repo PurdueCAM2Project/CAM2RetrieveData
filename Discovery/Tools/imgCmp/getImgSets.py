@@ -94,8 +94,8 @@ def retrieve_images(f_ns):
             img_ns = get_img_info(filename)
             f_dict = f_ns.__dict__
             img_dict = img_ns.__dict__
+            add_image = True
             for attr in img_dict:
-                add_image = True
                 if (f_dict[attr].lb is not None and \
                     f_dict[attr].lb > img_dict[attr]):
                     add_image = False
@@ -108,10 +108,10 @@ def retrieve_images(f_ns):
                 elif (f_dict[attr].intv is not None and \
                       img_dict[attr] % f_dict[attr].intv != 0):
                     add_image = False
-                if (add_image):
-                    src = os.path.join(f_ns.readdir, filename)
-                    dest = os.path.join(f_ns.writedir, filename)
-                    shutil.copyfile(src, dest)
+            if (add_image):
+                src = os.path.join(f_ns.readdir, filename)
+                dest = os.path.join(f_ns.writedir, filename)
+                shutil.copyfile(src, dest)
     print_progress(1, 1)
     sys.stdout.write('\n')
     return
