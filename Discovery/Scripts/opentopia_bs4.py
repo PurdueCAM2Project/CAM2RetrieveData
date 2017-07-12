@@ -32,7 +32,7 @@ from Geocoding import Geocoding
 f=open("whole_opentopia_output.txt", 'w')
 
 def parseOpentopia():
-  for x in range(0, 15):
+  for x in range(0, 17000):
     print(str(x))
     still_url = "http://www.opentopia.com/webcam/" + str(x) + "?viewmode=savedstill"
     vid_url   = "http://www.opentopia.com/webcam/" + str(x) + "?viewmode=livevideo"
@@ -55,7 +55,8 @@ def parseOpentopia():
 
           try:
             # Try to open the url link of the feed located on the livefeed opentopia website
-            soup3 = BS(urllib2.urlopen(ipAddress, timeout=15), 'html.parser')
+            soup3 = BS(urllib2.urlopen(ipAddress, timeout=15), 'html.parser') # Full website
+            soup3 = BS(urllib2.urlopen(ipAddress, timeout=2), 'html.parser') # Quick parse
 
             # Initialize geo info as none in case it's not found
             country = "none"
