@@ -23,7 +23,6 @@ Date added to Database :
 --------------------------------------------------------------------------------
 """
 
-# Necessary Import Statements, selenium allows for web-crawling. Maybe switch to Beautiful Soup for faster performance
 import selenium
 from selenium import webdriver
 from selenium.webdriver.support.select import Select
@@ -43,9 +42,9 @@ def main():
   f=open("insecam_output.txt", 'w')
   hdr = {'User-Agent': 'Mozilla/5.0'}
 
-  pages=20
-  camsPerPage=6
-  urls = [0]*((pages-1)*(camsPerPage))
+  pages=20 # Change according to how many cameras you want to look through
+  camsPerPage=6 # Do not change, cams per page will always be 6
+  urls = [0]*((pages-1)*(camsPerPage)) # Have to initialize this, otherwise python will have an error
   count=0
   print ("Loading pages")
   for x in range(1, pages):
@@ -76,6 +75,10 @@ def main():
       page=urllib2.urlopen(req, timeout=15)
       soup=BS(page, 'html.parser')
 
+
+      # Sometimes insecam has an add, sometimes not. This takes that into account. Not as robust as it could be, but
+      # might be able to save on computation time as opposed to searching through the for loop to find where the
+      # "Country:" element is and indexing off that
       a = soup.find_all("div")
       if (a[18].text.strip()=="Country:"):
         country = a[19].text.strip()

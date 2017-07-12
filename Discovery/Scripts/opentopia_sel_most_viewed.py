@@ -23,121 +23,99 @@ Date added to Database :
 --------------------------------------------------------------------------------
 """
 
-# Necessary Import Statements, selenium allows for web-crawling. Maybe switch to Beautiful Soup for faster performance
 import selenium
 from selenium import webdriver
 from selenium.webdriver.support.select import Select
 import urllib
 import time
+import urllib2
+import urllib
+from bs4 import BeautifulSoup as BS
+from Geocoding import Geocoding
+import time
+import sys
 
 
 
 
 def main():
-    driver = webdriver.Firefox()
-    driver.set_page_load_timeout(30)
-    f=open('opentopia_most_viewed_output.txt', 'w')
-    f.write("feedNumber#lat#lon#country#state/region#city#specific_location#URL_feed"+'\n')
-    noSnap="http://www.opentopia.com/images/nosnapshot-715x536.jpg"
+  f=open("insecam_master_output.txt", 'w')
+  hdr = {'User-Agent': 'Mozilla/5.0'}
+  currentCam = 0
+  endCam = 500000
+  while (currentCam <= endCam):
+    url = ("http://www.insecam.org/en/view/" + str(currentCam) + "/")
+    req = urllib2.Request(url, headers=hdr)
+    page = urllib2.urlopen(req, timeout=15)
 
-    pages=87
-    camsPerPage=15# DO NOT CHANGE
-    urlList=[0]*((pages)*camsPerPage)
-    print (str(len(urlList)) + " cameras")
-
-    i=0
-    for page in range(1,pages+1):
-        print ("Pulling links from page: " + str(page) + " out of " + str(pages))
-        url = "http://www.opentopia.com/hiddencam.php?showmode=standard&country=*&seewhat=oftenviewed&p="
-        url += str(page)
-        driver.get(url)
-        time.sleep(0.5)
-
-        data = driver.find_elements_by_xpath("//ul[@class = 'camgrid camgrid3']/li/a")
-
-        openUrls=[]
-        for x in range(0,camsPerPage):
-            openUrls=data[x].get_attribute("href")
-            splitUrls=openUrls.split('/')
-            num=(int(splitUrls[-1]))
-            urlList[i]=num
-            i += 1
-
-    time.sleep(2)
-    print ("Finding Data")
-    for n in range(0, len(urlList)):
-        findUrl = "http://www.opentopia.com/webcam/" + str(urlList[n]) + "?viewmode=livevideo"
-        try:
-            print (str(n) + ": " + str(urlList[n]))
-            driver.get(findUrl)
-        except selenium.common.exceptions.TimeoutException:
-            print ("Timeout" + '\n')
-            continue
-        time.sleep(0.05)
-
-        try:
-            f.write(GetInfo(driver, urlList[n]))
-        except:
-            pass
-
-def GetInfo(driver, currentCam):
+    print (str(currentCam+1) + " out of " + str(endCam))
     try:
-        feedUrl = urllib.quote(driver.find_element_by_xpath("//div[@class = 'big']/div/img").get_attribute("src"),safe = ':?,=/&')
-    except:
-        feedUrl="none"
-        pass
-    feedUrl=str(feedUrl)
-
-    try:
-        country = driver.find_element_by_xpath("//label[@class = 'right country-name']").text
-        country = str(country)
-    except:
-        country="none"
-        pass
-
-    try:
-        state_region = driver.find_element_by_xpath("//label[@class = 'right region']").text
-        state_region=str(state_region)
-    except:
-        state_region="none"
-        pass
-
-    try:
-        city = driver.find_element_by_xpath("//label[@class = 'right locality']").text
-        city = str(city)
-    except:
-        city="none"
-        pass
-
-    try:
-        location = driver.find_element_by_xpath("//label[@class = 'right']").text
-        location = str(location)
-    except:
-        location="none"
-        pass
-
-    try:
-        gpsCoord = driver.find_element_by_xpath("//div[@id = 'map_canvas']/img").get_attribute("src")
-        gpsCoord=gpsCoord[gpsCoord.index('%') + 3:len(gpsCoord)]
-        lat,lon = gpsCoord.split(',')
-    except:
-        lat=0
-        lon=0
-        pass
-    lat=str(lat)
-    lon=str(lon)
+      print (url)
+      req = urllib2.Request(url, headers=hdr)
+      page=urllib2.urlopen(req, timeout=15)
+      soup=BS(page, 'html.parser')
 
 
-    try:
-        brand = []
-        brand = driver.find_elements_by_xpath("//label[@class = 'right']")[2]
-    except:
-        brand = "none"
-        pass
+      # Sometimes insecam has an add, sometimes not. This takes that into account. Not as robust as it could be, but
+      # might be able to save on computation time as opposed to searching through the for loop to find where the
+      # "Country:" element is and indexing off that
+      a = soup.find_all("div")
+      if (a[18].text.strip()=="Country:"):
+        country = a[19].text.strip()
+        region = a[25].text.strip()
+        city = a[28].text.strip()
+        lat = a[31].text.strip()
+        lon = a[34].text.strip()
+        brand = a[43].text.strip()
+      else:
+        country = a[18].text.strip()
+        region = a[24].text.strip()
+        city = a[27].text.strip()
+        lat = a[30].text.strip()
+        lon = a[33].text.strip()
+        brand = a[42].text.strip()
 
-    geoInfo=str(currentCam) +'#' + str(lat) + '#' +  str(lon) + '#' +  str(country) + '#' +  str(state_region) + '#' +   str(city) + '#' +  str(location) + '#' + brand + '#' + str(feedUrl) + '\n'
-    return(geoInfo)
+      country = check(country)
+      region = check(region)
+      city = check(city)
 
+      b = soup.find_all("img")
+      tempStream = b[0].get("src")
+      tempStream=tempStream.split("/")
+      # stream = "http://" + tempStream[2]
+      stream = tempStream[2]
+
+      # Tries to open the url of the stream obtained from the website, will exit through the try:except block if it
+      # cannot be opened
+      try:
+        # hdr, req, page needed to get around insecam servers needing an actual browser name to allow http request
+        req = urllib2.Request(("http://" + stream), headers=hdr)
+        page = urllib2.urlopen(req, timeout=15)
+        soup2 = BS(page, 'html.parser')
+
+        printOutput = ("Lat:\t\t" + str(lat) + "\nLon:\t\t" + str(lon) + "\nCountry:\t" + str(country) + "\nState:\t\t" + str(region) + "\nCity:\t\t" + str(city) + "\nBrand:\t\t" + str(brand) + "\nURL:\t\t" + str(stream) + "\n")
+        output = (str(lat) + "," + str(lon) + "," + str(country) + "," + str(region) + "," + str(city) + "," + str(brand) + "," + str(stream) + "\n")
+        print printOutput
+        f.write(output)
+      except Exception as e:
+        print e
+        print ("Can not open stream url")
+    except Exception as e:
+      print e
+      pass
+  f.close()
+
+def check(dataInput):
+  if "," in dataInput:
+    dataInput2 = dataInput
+    dataInput2 = dataInput2.split(',')
+    dataOutput = dataInput2[0]
+    for i in range(1, len(dataInput2)):
+      dataOutput += " -"
+      dataOutput += dataInput2[i]
+  else:
+    dataOutput = input
+  return dataOutput
 
 if __name__ == "__main__":
     main()
