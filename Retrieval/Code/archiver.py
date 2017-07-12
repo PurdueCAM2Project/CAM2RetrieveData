@@ -9,6 +9,7 @@ import csv
 from camera import IPCamera
 from camera import NonIPCamera
 from camera import StreamFormat
+from camera import StreamCamera
 
 
 # The path of the results directory.
@@ -25,8 +26,8 @@ def get_camera_db(camera_id, duration, interval):
     # The server database credentials.
     DB_SERVER = 'localhost'
     DB_USER_NAME = 'root'
-    DB_PASSWORD = 'password'
-    DB_NAME = 'cam2'
+    DB_PASSWORD = ''
+    DB_NAME = ''
 
     camera = None
 
@@ -46,9 +47,7 @@ def get_camera_db(camera_id, duration, interval):
     # Create an IPCamera object.
     if camera_row:
         camera = IPCamera(camera_row[0], duration, interval, camera_row[1], camera_row[3],
-                          camera_row[4], camera_row[2])
-        print ("This is IPCamera:\n")
-        print (camera_row)
+                          camera_row[4], camera_row[2]) #1 is ip and 3 is image path
     else:
         # Get the non-IP camera with the given ID.
         cursor.execute('select camera.id, non_ip_camera.snapshot_url '
@@ -61,8 +60,17 @@ def get_camera_db(camera_id, duration, interval):
         # Create a NonIPCamera object.
         if camera_row:
             camera = NonIPCamera(camera_row[0], duration, interval, camera_row[1])
-            print("This is non-IP camera:\n")
-            print(camera_row)
+        else:
+            # Get the stream camera with the given ID.
+            cursor.execute('select camera.id, camera.m3u8_key '
+                           'FROM camera, stream_camera '
+                           'WHERE camera.id = stream_camera.camera_id '
+                           'and camera.id = {};'.format(camera_id))
+            camera_row = cursor.fetchone()
+            # Create a stream camera object.
+            if camera_row:
+                camera = StreamCamera(camera_row[0],duration, interval, camera_row[1])
+
     cursor.close()
     connection.close()
 
@@ -106,13 +114,13 @@ class CameraHandler(threading.Thread):
         """Download snapshots from the camera, and save locally."""
         # Create the camera results directory.
         print("Starting Download from camera with id: {}".format(self.id))
+        # Set the starting timestamp, and process until the end of the duration.
         cam_directory = os.path.join(RESULTS_PATH, str(self.id))
         try:
             os.makedirs(cam_directory)
-        except OSError:
+        except OSError as e:
             pass
 
-        # Set the starting timestamp, and process until the end of the duration.
         start_timestamp = time.time()
         while (time.time() - start_timestamp) < self.duration:
 
@@ -123,6 +131,7 @@ class CameraHandler(threading.Thread):
                 # Download the image.
                 frame, _ = self.camera.get_frame()
             except Exception as e:
+                print e
                 pass
             else:
                 # Save the image.
@@ -131,6 +140,7 @@ class CameraHandler(threading.Thread):
                     datetime.datetime.fromtimestamp(
                         frame_timestamp).strftime('%Y-%m-%d_%H-%M-%S-%f'))
                 cv2.imwrite(file_name, frame)
+
 
             # Sleep until the interval between frames ends.
             time_to_sleep = self.interval - (time.time() - frame_timestamp)
