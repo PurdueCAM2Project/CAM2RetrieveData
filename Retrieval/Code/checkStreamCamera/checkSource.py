@@ -51,8 +51,6 @@ def checkCamera(address, port, cameras):
 
            if vc.isOpened():
                return source
-               #loop and retrieve for 1 second
-               #rval, frame = vc.read()
            #else:
                #rval = False
 
@@ -102,24 +100,7 @@ def main(args):
         for oneline in fptr:
            future = pool.schedule(checkCapture, args=(oneline, cameras), timeout=timeout)
            future.add_done_callback(task_done)
-    '''
-           try:
-               result = future.result()  # blocks until results are ready
-           except TimeoutError as e:
-               lock.acquire()
-               f.write(str(oneline))
-               lock.release()
-               print("Function took longer than %d seconds" % e.args[1])
-           except Exception as e:
-               print("Function raised %s" % e)
-               print(e.traceback)  # traceback of the function
-           else:
-               lock.acquire()
-               f.write(str(result) + "\n")
-               lock.release()
 
-    f.close()
-    '''
     fptr.close()
 
 
