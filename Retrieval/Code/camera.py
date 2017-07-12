@@ -372,9 +372,3 @@ class StreamCamera(Camera):
         self.is_video = 0
         self.url = url
         self.parser = stream_parser.mjpgStreamParser(url)
-
-    # self.parser = stream_parser.ImageStreamParser(url)
-    # -t for time(s) -r fps /No r means download as many within t
-    # subprocess.call("ffmpeg -i " + url + " -t" + duration + "%d.png", shell=True)
-    # 1. ffmpeg output file passed to streamCamera.get_frame or getMetadata
-
