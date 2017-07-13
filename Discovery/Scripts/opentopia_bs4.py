@@ -55,7 +55,7 @@ def parseOpentopia():
 
           try:
             # Try to open the url link of the feed located on the livefeed opentopia website
-            soup3 = BS(urllib2.urlopen(ipAddress, timeout=15), 'html.parser') # Full website
+            # soup3 = BS(urllib2.urlopen(ipAddress, timeout=15), 'html.parser') # Full website
             soup3 = BS(urllib2.urlopen(ipAddress, timeout=2), 'html.parser') # Quick parse
 
             # Initialize geo info as none in case it's not found
