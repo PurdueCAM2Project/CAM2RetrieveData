@@ -40,19 +40,9 @@ def main(args):
     mean = sum(diff_list) / len(diff_list)
     median = getMedian(diff_list)
     std_dev = getStdDev(diff_list, mean=mean)
-    s = cmpSSIM(img1, img2)
     print("Mean = {0:0.2f}\nMedian = {1:0.2f}\nStandard Deviation = "\
           "{2:0.2f}".format(mean, median, std_dev))
-    print("SSIM = {0:0.2f}".format(s))
     return
-
-def cmpSSIM(img1, img2):
-    """Compare two images using the Structural Similarity Index method."""
-    from skimage.measure import structural_similarity as ssim
-
-    img1_gray = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
-    img2_gray = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
-    return ssim(img1_gray, img2_gray)
 
 def cmpMSE(img1, img2):
     """Compare two images using the Means Squared Error method."""
