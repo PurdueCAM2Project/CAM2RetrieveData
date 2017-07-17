@@ -5,7 +5,9 @@ Author               : Vikrant Satheesh Kumar
 Email Id             : vsathees@purdue.edu
 Date Written         : 5 / 28 / 17
 Description          : This program downloads images from YouTube videos and
-		       saves it in a format given by the user.
+		       saves it in a format given by the user. (Ask permission
+		       from YouTube before downloading any video so that their 
+		       terms of service is not violated.)
 Command to run script: python youtubeDownloader.py
 Input file format    : .csv
 Output               : Output depends on what the user wants. (eg: jpeg, bmp, etc)
