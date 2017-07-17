@@ -99,7 +99,7 @@ def main(args):
     if (duration is None):
         duration = 1
     if (interval is None):
-        interval = 1
+        interval = 0
     input = ns.filename
     # read the list of addresses - urls
     fptr = open(input, 'r')
