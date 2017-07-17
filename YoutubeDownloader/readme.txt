@@ -1,4 +1,5 @@
-About the program: 
+About the program:
+(This program offers the feature of download YouTube videos given the link using exisitng youtube downloader libraries. However, we must ask the permission of YouTube before using this program so that we do not violate their terms of sevice.)
   
 This program takes a CSV file as input with necessary fields filled in and extracts images 
 from the given link to Youtube video and saves it in a new folder. The program has three flags 
