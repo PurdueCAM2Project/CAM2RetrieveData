@@ -7,7 +7,7 @@ Date Written         : 07/06/2017
 Description          : Compare images to determine how different they are.
 Command to run script: python imgCmp.py <filename1> <filename2>
 Usage                : Get the mean, median and standard deviation of the
-                       pixel-wise percent difference between two images.
+                       pixel-wise squared difference between two images.
 Input file format    : N/A
 Output               : A print statement with mean, median and standard
                        deviation.
@@ -50,7 +50,7 @@ def cmpMSE(img1, img2):
     arg: img1 - the first image to be compared
     arg: img2 - the second image to be compared
     
-    return: A list of all the squared differences, one for each pixel
+    returns: A list of all the squared differences, one for each pixel
     """
     if (img1.shape[0] != img2.shape[0] or img1.shape[1] != img2.shape[1]):
         raise ValueError("img1 and img2 are not the same size.")
