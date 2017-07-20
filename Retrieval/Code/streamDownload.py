@@ -16,10 +16,10 @@ def loadStreams():
             streamNo += 1
     print (str(streamNo) + " streams opened")
     print ("Ellapsed time: " + str(time.time() - tick))
-    downloadImages(streamQueue, streamNo)
+    downloadImages(streamQueue)
 
 
-def downloadImages(streamQueue, streamNo):
+def downloadImages(streamQueue):
     raw_input("Press enter to download images")
     sys.stdout.flush()
     tick = time.time()
@@ -36,25 +36,22 @@ def downloadImages(streamQueue, streamNo):
                 image = stream.read()[1]
                 imageData.append(image)
         except Exception as e:
-            if (e != "pop from empty list"):
-                print ("Breaking Exception: " + str(e))
-            else:
-                print ("Downloaded All Images")
+            print ("Breaking Exception: " + str(e))
             breaker=True
             break
         if breaker:
             break
     print ("Ellapsed time: " + str(time.time()-tick))
-    saveImages(imageData, streamNo)
+    saveImages(imageData)
 
 
-def saveImages(imageData, streamNo):
+def saveImages(imageData):
     raw_input("Press enter to save images")
     sys.stdout.flush()
     tick = time.time()
     fileNumber = 0
     for frame in imageData:
-        fileName = ("z_Camera" + str(streamNo) + "img no" + str(fileNumber) + ".jpg")
+        fileName = ("z_img no" + str(fileNumber) + ".jpg")
         cv2.imwrite(fileName, frame)
         fileNumber += 1
     print ("Ellapsed time: " + str(time.time() - tick))
