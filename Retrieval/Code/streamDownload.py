@@ -1,23 +1,37 @@
 import cv2
 import sys
 import time
+import threading
+threadList=[]
+numCores = 7
 
-
+streamQueue = []
 def loadStreams():
     print ("Loading Streams")
     tick = time.time()
-    streamQueue = []
     inputFile = open("m3u8s.txt", 'r')
-    streamNo=0
     for line in inputFile:
-        cap = cv2.VideoCapture(line)
-        if(cap.isOpened()):
-            streamQueue.append(cap)
-            streamNo += 1
-    print (str(streamNo) + " streams opened")
+        opened=False
+        while (not opened):
+            if (len(threadList)<numCores):
+                t = threading.Thread(target=addFeed, args=(line,))
+                t.start()
+                print ("Thread Started")
+                threadList.append(t)
+                opened=True
+            else:
+                time.sleep(0.1)
+    while (len(threadList) != 0):
+        time.sleep(0.1)
     print ("Ellapsed time: " + str(time.time() - tick))
     downloadImages(streamQueue)
 
+def addFeed(url):
+    cap = cv2.VideoCapture(url)
+    if (cap.isOpened()):
+        streamQueue.append(cap)
+    threadList.pop()
+    print ("Thread Released")
 
 def downloadImages(streamQueue):
     raw_input("Press enter to download images")
@@ -32,9 +46,10 @@ def downloadImages(streamQueue):
     while (True):
         try:
             stream = streamQueue.pop()
-            for x in range(totalNumImages/totalNumStreams):
-                image = stream.read()[1]
-                imageData.append(image)
+            for x in range(totalNumStreams):
+
+                # image = stream.read()[1]
+                # imageData.append(image)
         except Exception as e:
             print ("Breaking Exception: " + str(e))
             breaker=True
@@ -43,6 +58,13 @@ def downloadImages(streamQueue):
             break
     print ("Ellapsed time: " + str(time.time()-tick))
     saveImages(imageData)
+
+
+def saveFrame (stream, imageData):
+    for x in range(20):
+        image = stream.read()[1]
+        imageData.append(image)
+    threadList.pop()
 
 
 def saveImages(imageData):
