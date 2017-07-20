@@ -23,6 +23,7 @@ import sys
 import cv2
 import numpy as np
 import copy
+import math
 
 
 def main(args):
@@ -36,13 +37,70 @@ def main(args):
     """
     img1 = cv2.imread(args[0])
     img2 = cv2.imread(args[1])
-    diff_list = cmpMSE(img1, img2)
-    mean = sum(diff_list) / len(diff_list)
-    median = getMedian(diff_list)
-    std_dev = getStdDev(diff_list, mean=mean)
-    print("Mean = {0:0.2f}\nMedian = {1:0.2f}\nStandard Deviation = "\
-          "{2:0.2f}".format(mean, median, std_dev))
+    #diff_list = cmpMSE(img1, img2)
+    #mean = sum(diff_list) / len(diff_list)
+    #median = getMedian(diff_list)
+    #std_dev = getStdDev(diff_list, mean=mean)
+    #print("Mean = {0:0.2f}\nMedian = {1:0.2f}\nStandard Deviation = "\
+    #      "{2:0.2f}".format(mean, median, std_dev))
+    arr1 = copy.copy(img1).flatten()
+    arr2 = copy.copy(img2).flatten()
+    best_fit = getBestFit(arr1, arr2)
+    r_squared = getRSquared(arr1, arr2, best_fit)
+    print("r squared = {0:0.2f}".format(r_squared))
     return
+
+def getPMF(img):
+    """Get the Probability Mass Function of an image."""
+    img_flat = copy.copy(img).flatten()
+    pmf = [0 for ind in range(256)]
+    for pix in img_flat:
+        try:
+            pmf[int(pix)] += float(1) / len(img_flat)
+        except Exception as e:
+            print(int(pix))
+            raise e
+    return pmf
+
+def getJointPMF(img1, img2):
+    """Get the Joint Probability Mass Function of two images."""
+    img1_flat = copy.copy(img1).flatten()
+    img2_flat = copy.copy(img2).flatten()
+    pmf = [[0 for col in range(256)] for row in range(256)]
+    for pix1 in img1_flat:
+        for pix2 in img2_flat:
+            pmf[int(pix1)][int(pix2)] += float(1) \
+                                         / (len(img1_flat) * len(img2_flat))
+    return pmf
+
+def getMutInf(pmf1, pmf2, j_pmf):
+    """Get the Mutual Information of two random variables."""
+    mi = 0
+    for a in range(len(pmf1)):
+        for b in range(len(pmf2)):
+            mi += j_pmf(a, b) * math.log(j_pmf(a, b) / (pmf(a) * pmf(b)))
+    return mi
+
+def getRSquared(arr1, arr2, best_fit):
+    """Find the correlation between two arrays."""
+    m = best_fit[0]
+    b = best_fit[1]
+    arr2_bar = float(sum(arr2)) / len(arr2)
+    ss_tot = sum([(arr2[i] - arr2_bar) ** 2 for i in range(len(arr2))])
+    f = [arr1[i] * m + b for i in range(len(arr1))]
+    ss_res = sum([(arr2[i] - f[i]) ** 2 for i in range(len(f))])
+    return 1 - float(ss_res) / ss_tot
+
+def getBestFit(arr1, arr2):
+    """Get the line of best fit between arr2 (on y axis) vs arr1 (x axis)."""
+    arr1_bar = float(sum(arr1)) / len(arr1)
+    arr2_bar = float(sum(arr2)) / len(arr2)
+    num = sum([(arr1[i] - arr1_bar) * (arr2[i] - arr2_bar)\
+               for i in range(len(arr1))])
+    den = sum([(arr1[i] - arr1_bar) ** 2 for i in range(len(arr1))])
+    m = float(num) / den
+    b = arr2_bar - m * arr1_bar
+    return (m, b)
 
 def cmpMSE(img1, img2):
     """Compare two images using the Means Squared Error method.
