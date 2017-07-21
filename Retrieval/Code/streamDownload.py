@@ -40,7 +40,7 @@ def downloadImages(streamQueue):
     imageData = []
     # framesSaved = 0
     breaker = False
-    totalNumImages = 500
+    totalNumImages = 1000
     print len(streamQueue)
     for x in range(len(streamQueue)):
         #
@@ -56,15 +56,6 @@ def downloadImages(streamQueue):
                 time.sleep(0.1)
     while (len(threadList) != 0):
         time.sleep(0.1)
-        # while (True):
-        #     try:
-        #         saveFrame(streamQueue[x], imageData, totalNumImages, len(streamQueue))
-        #     except Exception as e:
-        #         print ("Breaking Exception: " + str(e))
-                # breaker=True
-                # break
-            # if breaker:
-            #     break
     print ("Ellapsed time: " + str(time.time()-tick))
     saveImages(imageData)
 
@@ -73,7 +64,6 @@ def saveFrame (stream, imageData, images, streams):
     for x in range(images/streams):
         image = stream.read()[1]
         imageData.append(image)
-    # print ("Thread freed")
     threadList.pop()
 
 
@@ -81,13 +71,6 @@ def saveImages(imageData):
     raw_input("Press enter to save images")
     sys.stdout.flush()
     tick = time.time()
-    fileNumber = 0
-    # for frame in imageData:
-    #
-    #     fileName = ("z_img no" + str(fileNumber) + ".jpg")
-    #     cv2.imwrite(fileName, frame)
-    #     fileNumber += 1
-    #
 
     for threadNo in range (numCores):
         opened = False
@@ -95,7 +78,6 @@ def saveImages(imageData):
             if (len(threadList)<numCores):
                 t = threading.Thread(target=saveImage, args=(imageData, threadNo,))
                 t.start()
-                # print ("Thread Started")
                 threadList.append(t)
                 opened = True
             else:
@@ -115,6 +97,7 @@ def saveImage(imageData, threadNo):
             fileName = ("z_" + "threadNumber" + str(threadNo) + "iamgeNumber" + str(fileNumber) + ".jpg")
             cv2.imwrite(fileName, frame)
         except:
+            print ("out of images")
             break
     threadList.pop()
 
