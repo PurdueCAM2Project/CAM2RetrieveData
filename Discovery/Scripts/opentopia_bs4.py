@@ -28,11 +28,12 @@
 import urllib2
 from bs4 import BeautifulSoup as BS
 from Geocoding import Geocoding
+import time
 
 f=open("whole_opentopia_output.txt", 'w')
 
 def parseOpentopia():
-  for x in range(16093, 17000):
+  for x in range(0, 17000):
     print(str(x))
     still_url = "http://www.opentopia.com/webcam/" + str(x) + "?viewmode=savedstill"
     vid_url   = "http://www.opentopia.com/webcam/" + str(x) + "?viewmode=livevideo"
@@ -153,4 +154,6 @@ def parseOpentopia():
   f.close()
 
 if __name__ == "__main__":
+    ti = time.time()
     parseOpentopia()
+    print (str(time.time()-ti))
