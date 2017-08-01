@@ -344,3 +344,31 @@ class NonIPCamera(Camera):
         self.url = url
 
         self.parser = stream_parser.ImageStreamParser(url)
+
+class StreamCamera(Camera):
+    """Represent a Stream camera similar to a non-ip camera, but faster frame rates.
+
+    This class represents a camera whose IP is not known. A web server hides
+    the information about the camera, and provides only a URL to get the most
+    recent frame from the camera. The This class subclasses the Camera class and
+    inherits its attributes and extends its constructor.
+
+    Parameters
+    ----------
+    id : int
+        The unique camera ID.
+    url : str
+        The URL that is used to get the most recent frame from the camera.
+
+    Attributes
+    ----------
+    url : str
+        The URL that is used to get the most recent frame from the camera.
+
+    """
+
+    def __init__(self, id, duration, interval, url):
+        super(StreamCamera, self).__init__(id, duration, interval)
+        self.is_video = 0
+        self.url = url
+        self.parser = stream_parser.mjpgStreamParser(url)

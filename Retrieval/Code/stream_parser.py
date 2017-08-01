@@ -309,3 +309,60 @@ class MJPEGStreamParser(StreamParser):
 
         """
         self.close_stream()
+
+
+
+class mjpgStreamParser(StreamParser):
+    """Represent a parser for a camera MJPEG stream.
+    *Does not have to be MJPEG, .m3u8 media file works as well.
+
+    This class subclasses the StreamParser class and inherits its attributes
+    and extends its constructor.
+
+    Parameters
+    ----------
+    url : str
+        The URL of the MJPEG stream.
+
+    Attributes
+    ----------
+    mjpeg_stream : file-like object
+        The handle to the camera MJPEG stream.
+
+    """
+
+    def __init__(self, url):
+        super(mjpgStreamParser, self).__init__(url)
+        self.mjpeg_stream = None
+
+    def get_frame(self):
+        """Get the most recent frame from the camera MJPEG stream.
+
+        Returns
+        -------
+        frame : numpy.ndarray
+            The downloaded frame.
+        frame_size : int
+            The size of the downloaded frame in bytes.
+
+        Raises
+        ------
+        error.CorruptedFrameError
+            If the frame is corrupted.
+        error.ClosedStreamError
+            If the MJPEG stream needs to be opened first.
+
+        """
+
+        vc = cv2.VideoCapture(self.url)
+
+        if vc.isOpened():
+            rval , frame = vc.read()
+            return frame,1
+        else:
+            rval = False
+            print("No frame returned")
+            return None,1
+
+        vc.release()
+
