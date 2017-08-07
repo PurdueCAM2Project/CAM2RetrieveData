@@ -82,7 +82,7 @@ def main():
         lat = a[31].text.strip()
         lon = a[34].text.strip()
         brand = a[43].text.strip()
-        print ("kjsahfiouhsadfkb")
+
       else:
         country = a[18].text.strip()
         region = a[24].text.strip()
@@ -90,7 +90,6 @@ def main():
         lat = a[30].text.strip()
         lon = a[33].text.strip()
         brand = a[42].text.strip()
-        print ("qwqerqwerwerqwerqwerqwer")
 
       country = check(country)
       region = check(region)
