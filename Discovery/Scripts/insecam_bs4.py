@@ -23,16 +23,8 @@ Date added to Database :
 --------------------------------------------------------------------------------
 """
 
-import selenium
-from selenium import webdriver
-from selenium.webdriver.support.select import Select
-import urllib
-import time
 import urllib2
-import urllib
 from bs4 import BeautifulSoup as BS
-from Geocoding import Geocoding
-import time
 import sys
 
 
