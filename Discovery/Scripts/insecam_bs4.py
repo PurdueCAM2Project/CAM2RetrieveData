@@ -133,7 +133,7 @@ def check(dataInput):
   return dataOutput
 
 def checkCity(dataInput):
-  if dataInput[-1] == "."
+  if dataInput[-1] == ".":
     dataOutput = dataInput[:-1]
   else:
     dataOutput = dataInput
