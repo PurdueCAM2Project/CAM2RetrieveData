@@ -93,7 +93,7 @@ def main():
       country = check(country)
       region = check(region)
       city = check(city)
-
+      city  checkCity(city)
       b = soup.find_all("img")
       tempStream = b[0].get("src")
       tempStream=tempStream.split("/")
@@ -128,6 +128,13 @@ def check(dataInput):
     for i in range(1, len(dataInput2)):
       dataOutput += " -"
       dataOutput += dataInput2[i]
+  else:
+    dataOutput = dataInput
+  return dataOutput
+
+def checkCity(dataInput):
+  if dataInput[-1] == '.'
+    dataOutput = dataInput[:-1]
   else:
     dataOutput = dataInput
   return dataOutput
