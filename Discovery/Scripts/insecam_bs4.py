@@ -93,7 +93,7 @@ def main():
       country = check(country)
       region = check(region)
       city = check(city)
-      city  checkCity(city)
+      city = checkCity(city)
       b = soup.find_all("img")
       tempStream = b[0].get("src")
       tempStream=tempStream.split("/")
