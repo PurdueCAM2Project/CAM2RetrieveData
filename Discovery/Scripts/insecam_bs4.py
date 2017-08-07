@@ -34,7 +34,7 @@ def main():
   f=open("insecam_output.txt", 'w')
   hdr = {'User-Agent': 'Mozilla/5.0'}
 
-  pages=500 # Change according to how many cameras you want to look through
+  pages = 10 # Change according to how many cameras you want to look through
   camsPerPage=6 # Do not change, cams per page will always be 6
   urls = [0]*((pages-1)*(camsPerPage)) # Have to initialize this, otherwise python will have an error
   count=0
