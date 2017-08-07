@@ -34,7 +34,7 @@ def main():
   f=open("insecam_output.txt", 'w')
   hdr = {'User-Agent': 'Mozilla/5.0'}
 
-  pages=20 # Change according to how many cameras you want to look through
+  pages=500 # Change according to how many cameras you want to look through
   camsPerPage=6 # Do not change, cams per page will always be 6
   urls = [0]*((pages-1)*(camsPerPage)) # Have to initialize this, otherwise python will have an error
   count=0
@@ -72,6 +72,7 @@ def main():
       # might be able to save on computation time as opposed to searching through the for loop to find where the
       # "Country:" element is and indexing off that
       a = soup.find_all("div")
+      pr
       if (a[18].text.strip()=="Country:"):
         country = a[19].text.strip()
         region = a[25].text.strip()
@@ -79,6 +80,7 @@ def main():
         lat = a[31].text.strip()
         lon = a[34].text.strip()
         brand = a[43].text.strip()
+        print ("kjsahfiouhsadfkb")
       else:
         country = a[18].text.strip()
         region = a[24].text.strip()
@@ -86,6 +88,7 @@ def main():
         lat = a[30].text.strip()
         lon = a[33].text.strip()
         brand = a[42].text.strip()
+        print ("qwqerqwerwerqwerqwerqwer")
 
       country = check(country)
       region = check(region)
