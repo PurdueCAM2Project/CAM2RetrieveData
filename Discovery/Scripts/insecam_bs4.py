@@ -72,7 +72,7 @@ def main():
       # might be able to save on computation time as opposed to searching through the for loop to find where the
       # "Country:" element is and indexing off that
       a = soup.find_all("div")
-      
+
       if (a[18].text.strip()=="Country:"):
         country = a[19].text.strip()
         region = a[25].text.strip()
@@ -129,7 +129,7 @@ def check(dataInput):
       dataOutput += " -"
       dataOutput += dataInput2[i]
   else:
-    dataOutput = input
+    dataOutput = dataInput
   return dataOutput
 
 if __name__ == "__main__":
