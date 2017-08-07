@@ -26,11 +26,13 @@ Date added to Database :
 import urllib2
 from bs4 import BeautifulSoup as BS
 import sys
+import time
 
 
 
 
 def main():
+  startTime = time.time()
   f=open("insecam_output.txt", 'w')
   hdr = {'User-Agent': 'Mozilla/5.0'}
 
@@ -119,6 +121,7 @@ def main():
       print e
       pass
   f.close()
+  print ("Ellapsed Time = " + str(time.time() - startTime))
 
 def check(dataInput):
   if "," in dataInput:
