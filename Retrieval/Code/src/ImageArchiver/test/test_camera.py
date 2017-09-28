@@ -11,20 +11,29 @@ class TestCamera(unittest.TestCase):
 
         #Instantiate camera test fixtures
         self.cam = Camera(1, 1, 1)
-        self.ip_cam = IPCamera(1, 1, 1, "127.1.1.1", "Image_Path")
+        self.ip_cam = IPCamera(1, 1, 1, "127.1.1.1", "/test_image_path", "/test_mjpeg_path", "3000")
 
     def test_get_frame_no_parser(self):
         #Assert camera raises error when no parser is present
         self.assertRaises(ClosedStreamError, self.cam.get_frame)
 
     def test_open_stream_invalid_enum(self):
+        #Assert exception raised with invalid enum
         self.assertRaises(ValueError, self.ip_cam.open_stream, "INVALID_ENUM_VAL")
 
-    def test_open_stream_valid_enum(self):
-        with patch.object(self.ip_cam.parser, 'open_stream') as mock:
-            self.ip_cam.open_stream(StreamFormat.MJPEG)
+    def test_get_url_invalid_enum(self):
+        #Assert exception raised with invalid enum
+        self.assertRaises(ValueError, self.ip_cam.get_url, "INVALID_ENUM_VAL")
 
-        mock.assert_called_once()
+    def test_get_url_mjpeg(self):
+        result = self.ip_cam.get_url(StreamFormat.MJPEG)
+        self.assertEquals(result, "http://127.1.1.1:3000/test_mjpeg_path")
+
+    def test_get_url_image(self):
+        result = self.ip_cam.get_url(StreamFormat.IMAGE)
+        self.assertEquals(result, "http://127.1.1.1:3000/test_image_path")
+
+
 
 if __name__ == '__main__':
     unittest.main()
