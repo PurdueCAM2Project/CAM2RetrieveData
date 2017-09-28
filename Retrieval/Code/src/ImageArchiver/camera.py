@@ -57,7 +57,7 @@ camera.close_stream()
 
 """
 import error
-import stream_parser
+import StreamParser
 
 
 class StreamFormat(object):
@@ -220,7 +220,7 @@ class IPCamera(Camera):
 
         # Initializes an ImageStreamParser so that frames can be retrieved from
         # the image stream without the need to call the open_stream method.
-        self.parser = stream_parser.ImageStreamParser(self.get_url())
+        self.parser = StreamParser.ImageStreamParser(self.get_url())
 
     def open_stream(self, stream_format):
         """
@@ -244,7 +244,7 @@ class IPCamera(Camera):
         url = self.get_url(stream_format)
         # Initialize and open the parser according to the stream format.
         if stream_format == StreamFormat.MJPEG:
-            self.parser = stream_parser.MJPEGStreamParser(url)
+            self.parser = StreamParser.MJPEGStreamParser(url)
             self.parser.open_stream()
         elif stream_format == StreamFormat.IMAGE:
             # The image stream parser is always initialized, and the stream
@@ -266,7 +266,7 @@ class IPCamera(Camera):
         """
         if self.parser is not None:
             self.parser.close_stream()
-            self.parser = stream_parser.ImageStreamParser(self.get_url())
+            self.parser = StreamParser.ImageStreamParser(self.get_url())
 
     def get_url(self, stream_format=StreamFormat.IMAGE):
         """
@@ -354,7 +354,7 @@ class NonIPCamera(Camera):
         self.is_video = 0
         self.url = url
 
-        self.parser = stream_parser.ImageStreamParser(url)
+        self.parser = StreamParser.ImageStreamParser(url)
 
 class StreamCamera(Camera):
     """
@@ -383,4 +383,4 @@ class StreamCamera(Camera):
         super(StreamCamera, self).__init__(id, duration, interval)
         self.is_video = 0
         self.url = url
-        self.parser = stream_parser.mjpgStreamParser(url)
+        self.parser = StreamParser.mjpgStreamParser(url)

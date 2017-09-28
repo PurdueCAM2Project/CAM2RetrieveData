@@ -4,7 +4,7 @@ Example usage of archiver class to retrieve one frame per second for 100 seconds
 
 from ImageArchiver import ImageArchiver
 
-archiver = ImageArchiver("localhost", "root", None, "cam2")
+archiver = ImageArchiver("localhost", "root", "Tiger007", "cam2")
 
-archiver.retrieve_csv("cameraSources/test_camera_url", "NON_IP", 10, 1, "results")
-#archiver.retrieve_db("cameraSources/db_test.csv",100 ,1, "/results")
+#archiver.retrieve_csv("cameraSources/test_camera_url", 10, 1, "results")
+archiver.retrieve_db("cameraSources/puerto_rico.csv",10 ,1, "/results")

@@ -21,7 +21,7 @@ class ImageArchiver:
         self.db_name=db_name
 
 
-    def retrieve_csv(self, camera_url_file, camera_type, duration, interval, result_path):
+    def retrieve_csv(self, camera_url_file, duration, interval, result_path):
         '''
         Reads camera urls from csv file and archives the images at the requested directory.
         '''
