@@ -1,4 +1,5 @@
-"""Provide classes to deal with different types of cameras.
+"""
+Provide classes to deal with different types of cameras.
 
 This module is used to deal with different types of cameras. The module
 provides the Camera base class which provides a uniform way of dealing with
@@ -56,11 +57,12 @@ camera.close_stream()
 
 """
 import error
-import stream_parser
+import StreamParser
 
 
 class StreamFormat(object):
-    """Represent an Enum for the different camera stream formats.
+    """
+    Represent an Enum for the different camera stream formats.
 
     Attributes
     ----------
@@ -76,7 +78,8 @@ class StreamFormat(object):
 
 
 class Camera(object):
-    """Represent the base class for all types of cameras.
+    """
+    Represent the base class for all types of cameras.
 
     Parameters
     ----------
@@ -108,7 +111,8 @@ class Camera(object):
         self.parser = None
 
     def open_stream(self, stream_format):
-        """Open the camera stream of the given format.
+        """
+        Open the camera stream of the given format.
 
         Parameters
         ----------
@@ -131,7 +135,8 @@ class Camera(object):
         pass
 
     def restart_stream(self):
-        """Restart the currently open camera stream.
+        """
+        Restart the currently open camera stream.
 
         This method restarts the stream by closing then opening it. This is
         useful because some cameras closes a stream if it is open for a long
@@ -141,7 +146,8 @@ class Camera(object):
         self.parser.restart_stream()
 
     def get_frame(self):
-        """Get the most recent frame from the currently open camera stream.
+        """
+        Get the most recent frame from the currently open camera stream.
 
         Returns
         -------
@@ -166,7 +172,8 @@ class Camera(object):
 
 
 class IPCamera(Camera):
-    """Represent an IP camera.
+    """
+    Represent an IP camera.
 
     This class subclasses the Camera class and inherits its attributes and
     extends its constructor.
@@ -213,10 +220,11 @@ class IPCamera(Camera):
 
         # Initializes an ImageStreamParser so that frames can be retrieved from
         # the image stream without the need to call the open_stream method.
-        self.parser = stream_parser.ImageStreamParser(self.get_url())
+        self.parser = StreamParser.ImageStreamParser(self.get_url())
 
     def open_stream(self, stream_format):
-        """Open the camera stream of the given format.
+        """
+        Open the camera stream of the given format.
 
         Parameters
         ----------
@@ -234,10 +242,9 @@ class IPCamera(Camera):
         """
         # Get the URL of the stream of the given format.
         url = self.get_url(stream_format)
-
         # Initialize and open the parser according to the stream format.
         if stream_format == StreamFormat.MJPEG:
-            self.parser = stream_parser.MJPEGStreamParser(url)
+            self.parser = StreamParser.MJPEGStreamParser(url)
             self.parser.open_stream()
         elif stream_format == StreamFormat.IMAGE:
             # The image stream parser is always initialized, and the stream
@@ -247,7 +254,8 @@ class IPCamera(Camera):
             raise ValueError('Invalid Argument: stream_format')
 
     def close_stream(self):
-        """Close the currently open camera stream.
+        """
+        Close the currently open camera stream.
 
         Notes
         -----
@@ -258,10 +266,11 @@ class IPCamera(Camera):
         """
         if self.parser is not None:
             self.parser.close_stream()
-            self.parser = stream_parser.ImageStreamParser(self.get_url())
+            self.parser = StreamParser.ImageStreamParser(self.get_url())
 
     def get_url(self, stream_format=StreamFormat.IMAGE):
-        """Get the URL to the camera stream of the given format.
+        """
+        Get the URL to the camera stream of the given format.
 
         Parameters
         ----------
@@ -298,7 +307,8 @@ class IPCamera(Camera):
         return url
 
     def __del__(self):
-        """Close the currently open camera stream before destroying the object.
+        """
+        Close the currently open camera stream before destroying the object.
 
         This destructor is a backup plan in case the user of this class did not
         call the close_stream method. The close_stream method has to be called,
@@ -311,7 +321,8 @@ class IPCamera(Camera):
 
 
 class NonIPCamera(Camera):
-    """Represent a non-IP camera.
+    """
+    Represent a non-IP camera.
 
     This class represents a camera whose IP is not known. A web server hides
     the information about the camera, and provides only a URL to get the most
@@ -343,10 +354,11 @@ class NonIPCamera(Camera):
         self.is_video = 0
         self.url = url
 
-        self.parser = stream_parser.ImageStreamParser(url)
+        self.parser = StreamParser.ImageStreamParser(url)
 
 class StreamCamera(Camera):
-    """Represent a Stream camera similar to a non-ip camera, but faster frame rates.
+    """
+    Represent a Stream camera similar to a non-ip camera, but faster frame rates.
 
     This class represents a camera whose IP is not known. A web server hides
     the information about the camera, and provides only a URL to get the most
@@ -371,4 +383,4 @@ class StreamCamera(Camera):
         super(StreamCamera, self).__init__(id, duration, interval)
         self.is_video = 0
         self.url = url
-        self.parser = stream_parser.mjpgStreamParser(url)
+        self.parser = StreamParser.mjpgStreamParser(url)

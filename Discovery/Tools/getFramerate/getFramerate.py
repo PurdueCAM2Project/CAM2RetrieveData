@@ -325,7 +325,7 @@ def parse_cmd_args(args):
 	If manageGetFramerate.py is called this function is skipped.
 '''
 def main(args):
-	relatedFiles = ["archiver.py", "Pictures", "archiver.pyc", "camera.pyc", "error.py", "stream_parser.pyc", "results", "getFramerate.py", "error.pyc", "camera.py", "stream_parser.py"]
+	relatedFiles = ["archiver.py", "Pictures", "archiver.pyc", "camera.pyc", "error.py", "stream_parser.pyc", "results", "getFramerate.py", "error.pyc", "camera.py", "StreamParser.py"]
 
         inputFile = None
         duration = None

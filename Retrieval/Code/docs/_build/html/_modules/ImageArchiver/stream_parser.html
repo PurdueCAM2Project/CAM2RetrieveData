@@ -1,0 +1,464 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>ImageArchiver.stream_parser &#8212; CAM2ImageArchiver 1.0.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for ImageArchiver.stream_parser</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Parse different types of camera streams.</span>
+
+<span class="sd">This module is used to parse different types of camera streams. The module</span>
+<span class="sd">provides the StreamParser base class which provides a uniform way of parsing</span>
+<span class="sd">all camera streams. The module provides different subclasses, each for a</span>
+<span class="sd">different type of camera streams (e.g. image streams, and MJPEG streams).</span>
+
+<span class="sd">Examples</span>
+<span class="sd">--------</span>
+<span class="sd">Example 1: To parse a camera image stream:</span>
+<span class="sd">1. Initialize an object of ImageStreamParser using the URL of the camera</span>
+<span class="sd">image stream.</span>
+<span class="sd">2. Use the get_frame method to get the most recent frame at any point of</span>
+<span class="sd">time, as well as the frame size. There is no need to call open_stream or</span>
+<span class="sd">close_stream.</span>
+
+<span class="sd">parser = ImageStreamParser(&#39;http://128.10.29.33/axis-cgi/jpg/image.cgi&#39;)</span>
+<span class="sd">frame, frame_size = parser.get_frame()</span>
+<span class="sd">cv2.imshow(&#39;frame&#39;, frame)</span>
+<span class="sd">print frame_size</span>
+<span class="sd">cv2.waitKey()</span>
+
+<span class="sd">Example 2: To parse a camera MJPEG stream:</span>
+<span class="sd">1. Initialize an object of MJPEGStreamParser using the URL of the camera</span>
+<span class="sd">MJPEG stream.</span>
+<span class="sd">2. Open the stream by calling the open_stream method.</span>
+<span class="sd">3. Use the get_frame method to get the most recent frame at any point of time,</span>
+<span class="sd">as well as the frame size.</span>
+<span class="sd">4. At the end when no more frames are needed, close the stream by calling the</span>
+<span class="sd">close_stream method.</span>
+
+<span class="sd">parser = MJPEGStreamParser(&#39;http://128.10.29.33/axis-cgi/mjpg/video.cgi&#39;)</span>
+<span class="sd">parser.open_stream()</span>
+<span class="sd">t = time.time()</span>
+<span class="sd">while time.time() - t &lt; 5:</span>
+<span class="sd">    frame, frame_size = parser.get_frame()</span>
+<span class="sd">    cv2.imshow(&#39;frame&#39;, frame)</span>
+<span class="sd">    print frame_size</span>
+<span class="sd">    cv2.waitKey(30)</span>
+<span class="sd">parser.close_stream()</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">urllib2</span>
+
+<span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">error</span>
+
+
+<div class="viewcode-block" id="StreamParser"><a class="viewcode-back" href="../../ImageArchiver.html#ImageArchiver.stream_parser.StreamParser">[docs]</a><span class="k">class</span> <span class="nc">StreamParser</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represent the base class for camera stream parsers.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    url : str</span>
+<span class="sd">        The URL of the stream.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    url : str</span>
+<span class="sd">        The URL of the stream.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span>
+
+<div class="viewcode-block" id="StreamParser.open_stream"><a class="viewcode-back" href="../../ImageArchiver.html#ImageArchiver.stream_parser.StreamParser.open_stream">[docs]</a>    <span class="k">def</span> <span class="nf">open_stream</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open the stream.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        error.UnreachableCameraError</span>
+<span class="sd">            If the camera is unreachable.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="StreamParser.close_stream"><a class="viewcode-back" href="../../ImageArchiver.html#ImageArchiver.stream_parser.StreamParser.close_stream">[docs]</a>    <span class="k">def</span> <span class="nf">close_stream</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Close the MJPEG stream.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="StreamParser.restart_stream"><a class="viewcode-back" href="../../ImageArchiver.html#ImageArchiver.stream_parser.StreamParser.restart_stream">[docs]</a>    <span class="k">def</span> <span class="nf">restart_stream</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Restart the stream.</span>
+
+<span class="sd">        This method restarts the stream by closing then opening it. This is</span>
+<span class="sd">        useful because some cameras closes a stream if it is open for a long</span>
+<span class="sd">        period of time.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close_stream</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">open_stream</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="StreamParser.get_frame"><a class="viewcode-back" href="../../ImageArchiver.html#ImageArchiver.stream_parser.StreamParser.get_frame">[docs]</a>    <span class="k">def</span> <span class="nf">get_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the most recent frame from the camera stream.</span>
+
+<span class="sd">        This method is an abstract method that must be overridden by subclasses.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">            The downloaded frame.</span>
+<span class="sd">        int</span>
+<span class="sd">            The size of the downloaded frame in bytes.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        error.CorruptedFrameError</span>
+<span class="sd">            If the frame is corrupted.</span>
+<span class="sd">        error.UnreachableCameraError</span>
+<span class="sd">            If the camera is unreachable.</span>
+<span class="sd">        error.ClosedStreamError</span>
+<span class="sd">            If the stream needs to be opened first.</span>
+<span class="sd">        NotImplementedError</span>
+<span class="sd">            If the method is not overridden in the subclass.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;The get_frame method has to be overridden.&#39;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="ImageStreamParser"><a class="viewcode-back" href="../../ImageArchiver.html#ImageArchiver.stream_parser.ImageStreamParser">[docs]</a><span class="k">class</span> <span class="nc">ImageStreamParser</span><span class="p">(</span><span class="n">StreamParser</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represent a parser for a camera image stream.</span>
+
+<span class="sd">    This class subclasses the StreamParser class and inherits its attributes</span>
+<span class="sd">    and constructor.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    A camera that provides an image stream is a camera that provides a URL to</span>
+<span class="sd">    get the most recent frame (regardless of how recent it is). Hence, Parsing</span>
+<span class="sd">    an image stream is as simple as downloading the most recent frame from the</span>
+<span class="sd">    given URL whenever requested. There is no need to call open_stream or</span>
+<span class="sd">    close_stream since they do nothing.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ImageStreamParser.get_frame"><a class="viewcode-back" href="../../ImageArchiver.html#ImageArchiver.stream_parser.ImageStreamParser.get_frame">[docs]</a>    <span class="k">def</span> <span class="nf">get_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the most recent frame from the camera image stream.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        frame : numpy.ndarray</span>
+<span class="sd">            The downloaded frame.</span>
+<span class="sd">        frame_size : int</span>
+<span class="sd">            The size of the downloaded frame in bytes.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        error.CorruptedFrameError</span>
+<span class="sd">            If the frame is corrupted.</span>
+<span class="sd">        error.UnreachableCameraError</span>
+<span class="sd">            If the camera is unreachable.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Download the frame data.</span>
+            <span class="n">frame</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">except</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">URLError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">error</span><span class="o">.</span><span class="n">UnreachableCameraError</span>
+
+        <span class="c1"># Handle the cameras that return empty content.</span>
+        <span class="k">if</span> <span class="n">frame</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">error</span><span class="o">.</span><span class="n">CorruptedFrameError</span>
+        <span class="c1"># Get the size of the downloaded frame in bytes.</span>
+        <span class="n">frame_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+
+        <span class="c1"># Decode the frame data to a numpy.ndarray image.</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imdecode</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Handle the cameras whose URLs return 1x1 images. The method</span>
+        <span class="c1"># cv2.imdecode returns None if the input buffer is too short</span>
+        <span class="c1"># or contains invalid data.</span>
+        <span class="k">if</span> <span class="n">frame</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">error</span><span class="o">.</span><span class="n">CorruptedFrameError</span>
+
+
+        <span class="k">return</span> <span class="n">frame</span><span class="p">,</span> <span class="n">frame_size</span></div></div>
+
+
+<div class="viewcode-block" id="MJPEGStreamParser"><a class="viewcode-back" href="../../ImageArchiver.html#ImageArchiver.stream_parser.MJPEGStreamParser">[docs]</a><span class="k">class</span> <span class="nc">MJPEGStreamParser</span><span class="p">(</span><span class="n">StreamParser</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represent a parser for a camera MJPEG stream.</span>
+
+<span class="sd">    This class subclasses the StreamParser class and inherits its attributes</span>
+<span class="sd">    and extends its constructor.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    url : str</span>
+<span class="sd">        The URL of the MJPEG stream.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mjpeg_stream : file-like object</span>
+<span class="sd">        The handle to the camera MJPEG stream.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MJPEGStreamParser</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mjpeg_stream</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="MJPEGStreamParser.open_stream"><a class="viewcode-back" href="../../ImageArchiver.html#ImageArchiver.stream_parser.MJPEGStreamParser.open_stream">[docs]</a>    <span class="k">def</span> <span class="nf">open_stream</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Open the MJPEG stream.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        error.UnreachableCameraError</span>
+<span class="sd">            If the camera is unreachable.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mjpeg_stream</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">URLError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">error</span><span class="o">.</span><span class="n">UnreachableCameraError</span></div>
+
+<div class="viewcode-block" id="MJPEGStreamParser.close_stream"><a class="viewcode-back" href="../../ImageArchiver.html#ImageArchiver.stream_parser.MJPEGStreamParser.close_stream">[docs]</a>    <span class="k">def</span> <span class="nf">close_stream</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Close the MJPEG stream.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjpeg_stream</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mjpeg_stream</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mjpeg_stream</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="MJPEGStreamParser.get_frame"><a class="viewcode-back" href="../../ImageArchiver.html#ImageArchiver.stream_parser.MJPEGStreamParser.get_frame">[docs]</a>    <span class="k">def</span> <span class="nf">get_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the most recent frame from the camera MJPEG stream.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        frame : numpy.ndarray</span>
+<span class="sd">            The downloaded frame.</span>
+<span class="sd">        frame_size : int</span>
+<span class="sd">            The size of the downloaded frame in bytes.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        error.CorruptedFrameError</span>
+<span class="sd">            If the frame is corrupted.</span>
+<span class="sd">        error.ClosedStreamError</span>
+<span class="sd">            If the MJPEG stream needs to be opened first.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        MJPEG Stream Format:</span>
+<span class="sd">        --myboundary</span>
+<span class="sd">        Content-Type: image/jpeg</span>
+<span class="sd">        Content-Length: [size of image in bytes]</span>
+<span class="sd">        [empty line]</span>
+<span class="sd">        ..... binary data .....</span>
+<span class="sd">        [empty line]</span>
+<span class="sd">        --myboundary</span>
+<span class="sd">        Content-Type: image/jpeg</span>
+<span class="sd">        Content-Length: [size of image in bytes]</span>
+<span class="sd">        [empty line]</span>
+<span class="sd">        ..... binary data .....</span>
+<span class="sd">        [empty line]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjpeg_stream</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">error</span><span class="o">.</span><span class="n">ClosedStreamError</span>
+
+        <span class="c1"># Skip the boundary line.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjpeg_stream</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;--myboundary&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">error</span><span class="o">.</span><span class="n">CorruptedFrameError</span>
+
+        <span class="c1"># Skip the second line that has &quot;Content-Type: image/jpeg&quot;.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjpeg_stream</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;Content-Type: image/jpeg&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">error</span><span class="o">.</span><span class="n">CorruptedFrameError</span>
+
+        <span class="c1"># Verify the format of the third line, and get the frame size.</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjpeg_stream</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Content-Length&#39;</span> <span class="ow">and</span> <span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+            <span class="n">frame_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">error</span><span class="o">.</span><span class="n">CorruptedFrameError</span>
+
+        <span class="c1"># Skip the empty line before the binary frame data.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjpeg_stream</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">error</span><span class="o">.</span><span class="n">CorruptedFrameError</span>
+
+        <span class="c1"># Read the binary frame data.</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjpeg_stream</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">frame_size</span><span class="p">)</span>
+
+        <span class="c1"># Skip the empty line after the binary frame data.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjpeg_stream</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">error</span><span class="o">.</span><span class="n">CorruptedFrameError</span>
+
+        <span class="c1"># Decode the frame data to a numpy.ndarray image.</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imdecode</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Handle the cameras whose URLs return 1x1 images. The method</span>
+        <span class="c1"># cv2.imdecode returns None if the input buffer is too short or</span>
+        <span class="c1"># contains invalid data.</span>
+        <span class="k">if</span> <span class="n">frame</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">error</span><span class="o">.</span><span class="n">CorruptedFrameError</span>
+
+        <span class="k">return</span> <span class="n">frame</span><span class="p">,</span> <span class="n">frame_size</span></div>
+
+    <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Close the MJPEG stream when the object is about to be destroyed.</span>
+
+<span class="sd">        This destructor is a backup plan in case the user of this class did not</span>
+<span class="sd">        call the close_stream method. The close_stream method has to be called,</span>
+<span class="sd">        without relying on this destructor, because __del__ is not guaranteed</span>
+<span class="sd">        to be called in some cases and it is also better to close the stream as</span>
+<span class="sd">        soon as possible to avoid unnecessary network workload.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close_stream</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="mjpgStreamParser"><a class="viewcode-back" href="../../ImageArchiver.html#ImageArchiver.stream_parser.mjpgStreamParser">[docs]</a><span class="k">class</span> <span class="nc">mjpgStreamParser</span><span class="p">(</span><span class="n">StreamParser</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represent a parser for a camera MJPEG stream.</span>
+<span class="sd">    *Does not have to be MJPEG, .m3u8 media file works as well.</span>
+
+<span class="sd">    This class subclasses the StreamParser class and inherits its attributes</span>
+<span class="sd">    and extends its constructor.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    url : str</span>
+<span class="sd">        The URL of the MJPEG stream.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mjpeg_stream : file-like object</span>
+<span class="sd">        The handle to the camera MJPEG stream.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">mjpgStreamParser</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mjpeg_stream</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="mjpgStreamParser.get_frame"><a class="viewcode-back" href="../../ImageArchiver.html#ImageArchiver.stream_parser.mjpgStreamParser.get_frame">[docs]</a>    <span class="k">def</span> <span class="nf">get_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the most recent frame from the camera MJPEG stream.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        frame : numpy.ndarray</span>
+<span class="sd">            The downloaded frame.</span>
+<span class="sd">        frame_size : int</span>
+<span class="sd">            The size of the downloaded frame in bytes.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        error.CorruptedFrameError</span>
+<span class="sd">            If the frame is corrupted.</span>
+<span class="sd">        error.ClosedStreamError</span>
+<span class="sd">            If the MJPEG stream needs to be opened first.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">vc</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">vc</span><span class="o">.</span><span class="n">isOpened</span><span class="p">():</span>
+            <span class="n">rval</span> <span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">frame</span><span class="p">,</span><span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">rval</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No frame returned&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span><span class="mi">1</span>
+
+        <span class="n">vc</span><span class="o">.</span><span class="n">release</span><span class="p">()</span></div></div>
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">CAM2ImageArchiver</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Sam Yellin.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

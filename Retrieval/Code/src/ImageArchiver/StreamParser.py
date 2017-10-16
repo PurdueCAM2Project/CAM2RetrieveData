@@ -1,4 +1,5 @@
-"""Parse different types of camera streams.
+"""
+Parse different types of camera streams.
 
 This module is used to parse different types of camera streams. The module
 provides the StreamParser base class which provides a uniform way of parsing
@@ -49,7 +50,8 @@ import error
 
 
 class StreamParser(object):
-    """Represent the base class for camera stream parsers.
+    """
+    Represent the base class for camera stream parsers.
 
     Parameters
     ----------
@@ -60,7 +62,6 @@ class StreamParser(object):
     ----------
     url : str
         The URL of the stream.
-
     """
 
     def __init__(self, url):
@@ -73,29 +74,29 @@ class StreamParser(object):
         ------
         error.UnreachableCameraError
             If the camera is unreachable.
-
         """
         pass
 
     def close_stream(self):
-        """Close the MJPEG stream.
-
+        """
+        Close the MJPEG stream.
         """
         pass
 
     def restart_stream(self):
-        """Restart the stream.
+        """
+        Restart the stream.
 
         This method restarts the stream by closing then opening it. This is
         useful because some cameras closes a stream if it is open for a long
         period of time.
-
         """
         self.close_stream()
         self.open_stream()
 
     def get_frame(self):
-        """Get the most recent frame from the camera stream.
+        """
+        Get the most recent frame from the camera stream.
 
         This method is an abstract method that must be overridden by subclasses.
 
@@ -116,13 +117,13 @@ class StreamParser(object):
             If the stream needs to be opened first.
         NotImplementedError
             If the method is not overridden in the subclass.
-
         """
         raise NotImplementedError('The get_frame method has to be overridden.')
 
 
 class ImageStreamParser(StreamParser):
-    """Represent a parser for a camera image stream.
+    """
+    Represent a parser for a camera image stream.
 
     This class subclasses the StreamParser class and inherits its attributes
     and constructor.
@@ -134,11 +135,11 @@ class ImageStreamParser(StreamParser):
     an image stream is as simple as downloading the most recent frame from the
     given URL whenever requested. There is no need to call open_stream or
     close_stream since they do nothing.
-
     """
 
     def get_frame(self):
-        """Get the most recent frame from the camera image stream.
+        """
+        Get the most recent frame from the camera image stream.
 
         Returns
         -------
@@ -153,7 +154,6 @@ class ImageStreamParser(StreamParser):
             If the frame is corrupted.
         error.UnreachableCameraError
             If the camera is unreachable.
-
         """
         try:
             # Download the frame data.
@@ -164,7 +164,6 @@ class ImageStreamParser(StreamParser):
         # Handle the cameras that return empty content.
         if frame == '':
             raise error.CorruptedFrameError
-
         # Get the size of the downloaded frame in bytes.
         frame_size = len(frame)
 
@@ -177,11 +176,13 @@ class ImageStreamParser(StreamParser):
         if frame is None:
             raise error.CorruptedFrameError
 
+
         return frame, frame_size
 
 
 class MJPEGStreamParser(StreamParser):
-    """Represent a parser for a camera MJPEG stream.
+    """
+    Represent a parser for a camera MJPEG stream.
 
     This class subclasses the StreamParser class and inherits its attributes
     and extends its constructor.
@@ -195,7 +196,6 @@ class MJPEGStreamParser(StreamParser):
     ----------
     mjpeg_stream : file-like object
         The handle to the camera MJPEG stream.
-
     """
 
     def __init__(self, url):
@@ -203,13 +203,13 @@ class MJPEGStreamParser(StreamParser):
         self.mjpeg_stream = None
 
     def open_stream(self):
-        """Open the MJPEG stream.
+        """
+        Open the MJPEG stream.
 
         Raises
         ------
         error.UnreachableCameraError
             If the camera is unreachable.
-
         """
         try:
             self.mjpeg_stream = urllib2.urlopen(self.url, timeout=5)
@@ -217,15 +217,16 @@ class MJPEGStreamParser(StreamParser):
             raise error.UnreachableCameraError
 
     def close_stream(self):
-        """Close the MJPEG stream.
-
+        """
+        Close the MJPEG stream.
         """
         if self.mjpeg_stream is not None:
             self.mjpeg_stream.close()
             self.mjpeg_stream = None
 
     def get_frame(self):
-        """Get the most recent frame from the camera MJPEG stream.
+        """
+        Get the most recent frame from the camera MJPEG stream.
 
         Returns
         -------
@@ -256,7 +257,6 @@ class MJPEGStreamParser(StreamParser):
         [empty line]
         ..... binary data .....
         [empty line]
-
         """
         if self.mjpeg_stream is None:
             raise error.ClosedStreamError
@@ -299,21 +299,22 @@ class MJPEGStreamParser(StreamParser):
         return frame, frame_size
 
     def __del__(self):
-        """Close the MJPEG stream when the object is about to be destroyed.
+        """
+        Close the MJPEG stream when the object is about to be destroyed.
 
         This destructor is a backup plan in case the user of this class did not
         call the close_stream method. The close_stream method has to be called,
         without relying on this destructor, because __del__ is not guaranteed
         to be called in some cases and it is also better to close the stream as
         soon as possible to avoid unnecessary network workload.
-
         """
         self.close_stream()
 
 
 
 class mjpgStreamParser(StreamParser):
-    """Represent a parser for a camera MJPEG stream.
+    """
+    Represent a parser for a camera MJPEG stream.
     *Does not have to be MJPEG, .m3u8 media file works as well.
 
     This class subclasses the StreamParser class and inherits its attributes
@@ -328,7 +329,6 @@ class mjpgStreamParser(StreamParser):
     ----------
     mjpeg_stream : file-like object
         The handle to the camera MJPEG stream.
-
     """
 
     def __init__(self, url):
@@ -336,7 +336,8 @@ class mjpgStreamParser(StreamParser):
         self.mjpeg_stream = None
 
     def get_frame(self):
-        """Get the most recent frame from the camera MJPEG stream.
+        """
+        Get the most recent frame from the camera MJPEG stream.
 
         Returns
         -------
@@ -351,7 +352,6 @@ class mjpgStreamParser(StreamParser):
             If the frame is corrupted.
         error.ClosedStreamError
             If the MJPEG stream needs to be opened first.
-
         """
 
         vc = cv2.VideoCapture(self.url)
