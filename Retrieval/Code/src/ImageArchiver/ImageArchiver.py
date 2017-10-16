@@ -36,8 +36,12 @@ class ImageArchiver:
             cams=[]
             for camera_url in camera_reader:
                 #These cameras do not come from the database and so have no ID.  Assign one to them so they can be placed in a result folder.
-                camera = NonIPCamera(id, duration, interval,camera_url[0])
-                id+=id
+                camera_type = camera_url[0].split(".")[-1]
+                if (camera_type == "m3u8"):
+                    camera = StreamCamera(id, duration, interval, camera_url[0])
+                else:
+                    camera = NonIPCamera(id, duration, interval,camera_url[0])
+                id+=1
                 cams.append(camera)
         if len(cams):
             self.__archive_cameras(cams, result_path)
