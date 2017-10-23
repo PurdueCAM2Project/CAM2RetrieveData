@@ -1,3 +1,10 @@
+"""
+This program retrieves images from cameras through the URLs or the ID numbers of 
+each camera in the database and archives the images at the requested directory. 
+It then places a directory of all results at a given path. This function also 
+queries database for the cameras IDs specified in the csv files. 
+"""
+
 import time
 import csv
 import MySQLdb
@@ -11,9 +18,39 @@ Created on 5 September 2017
 """
 
 class ImageArchiver:
-    '''
+    
+    """
     Retrieves images from cameras specified through a csv file.  The csv file either contains the urls of the cameras, or the ID numbers of each camera in the database.
-    '''
+
+	***Parameters** 
+	
+	db_server : str 
+		The server the database is running on. 
+		
+	db_username : str
+		The username for the database.
+		
+	db_password : str 
+		Password to access the database, if in existence. 
+		
+	db_name : str 
+		The name of the database.  
+
+	**Attributes**
+    
+	db_server : str 
+		The server the database is running on. 
+		
+	db_username : str
+		The username for the database.
+		
+	db_password : str 
+		Password to access the database, if in existence. 
+		
+	db_name : str 
+		The name of the database.  
+
+    """
     def __init__(self, db_server="localhost", db_username="root", db_password=None, db_name="cam2"):
         self.db_server=db_server
         self.db_username=db_username
@@ -22,9 +59,9 @@ class ImageArchiver:
 
 
     def retrieve_csv(self, camera_url_file, duration, interval, result_path):
-        '''
+        """
         Reads camera urls from csv file and archives the images at the requested directory.
-        '''
+        """
 
         #verify file exists and can be read
         if not check_file_exists(camera_url_file):
@@ -47,9 +84,9 @@ class ImageArchiver:
             self.__archive_cameras(cams, result_path)
 
     def retrieve_db(self, camera_id_file, duration, interval, result_path):
-        '''
+        """
         Reads camera IDs from csv file, retrieves the associated camera objects from the database, and archives the images at the requested directory.
-        '''
+        """
         if not check_file_exists(camera_id_file):
             return -1
 
@@ -71,9 +108,9 @@ class ImageArchiver:
         return 0
 
     def __archive_cameras(self, cams, result_path):
-        '''
+        """
         Archives images from array of cameras.  Places directory of all results at the given path.
-        '''
+        """
         camera_handlers = []
         for camera in cams:
             # Create a new thread to handle the camera.
@@ -92,9 +129,9 @@ class ImageArchiver:
             camera_handler.join()
 
     def __get_camera_from_db(self, camera_id, duration, interval):
-        '''
+        """
         Reads camera IDs from file, and queries database for those cameras.  Archives the images from those cameras in the indicated result path.
-        '''
+        """
         connection = MySQLdb.connect(self.db_server, self.db_username, self.db_password, self.db_name)
         cursor = connection.cursor()
 
