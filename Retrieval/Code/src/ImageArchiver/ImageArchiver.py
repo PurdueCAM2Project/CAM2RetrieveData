@@ -22,7 +22,7 @@ class ImageArchiver:
     """
     Retrieves images from cameras specified through a csv file.  The csv file either contains the urls of the cameras, or the ID numbers of each camera in the database.
 
-	***Parameters** 
+	**Parameters** 
 	
 	db_server : str 
 		The server the database is running on. 
