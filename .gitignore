@@ -55,6 +55,14 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
+# Ignore DocTree dir 
+doctrees/
+
+# Ignore binary files with the following extensions 
+*.doctree
+*.pickle  
+*.DS_Store 
+
 # PyBuilder
 target/
 
