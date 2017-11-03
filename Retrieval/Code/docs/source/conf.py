@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-# CAM2ImageArchiver documentation build configuration file, created by
-# sphinx-quickstart on Tue Sep  5 11:12:22 2017.
+# Cam2ImageArchiver documentation build configuration file, created by
+# sphinx-quickstart on Mon Oct 23 04:29:51 2017.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
@@ -30,8 +30,7 @@ sys.path.insert(0, os.path.abspath('../src'))
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autodoc',
-    'sphinx.ext.viewcode']
+extensions = ['sphinx.ext.autodoc']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -46,9 +45,9 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'CAM2ImageArchiver'
-copyright = u'2017, Sam Yellin'
-author = u'Sam Yellin'
+project = u'Cam2ImageArchiver'
+copyright = u'2017, Tiffany Chen'
+author = u'Tiffany Chen'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -69,7 +68,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = []
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
@@ -115,7 +114,7 @@ html_sidebars = {
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'CAM2ImageArchiverdoc'
+htmlhelp_basename = 'Cam2ImageArchiverdoc'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -142,8 +141,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'CAM2ImageArchiver.tex', u'CAM2ImageArchiver Documentation',
-     u'Sam Yellin', 'manual'),
+    (master_doc, 'Cam2ImageArchiver.tex', u'Cam2ImageArchiver Documentation',
+     u'Tiffany Chen', 'manual'),
 ]
 
 
@@ -152,7 +151,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'cam2imagearchiver', u'CAM2ImageArchiver Documentation',
+    (master_doc, 'cam2imagearchiver', u'Cam2ImageArchiver Documentation',
      [author], 1)
 ]
 
@@ -163,7 +162,10 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'CAM2ImageArchiver', u'CAM2ImageArchiver Documentation',
-     author, 'CAM2ImageArchiver', 'One line description of project.',
+    (master_doc, 'Cam2ImageArchiver', u'Cam2ImageArchiver Documentation',
+     author, 'Cam2ImageArchiver', 'One line description of project.',
      'Miscellaneous'),
 ]
+
+
+

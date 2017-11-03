@@ -1,3 +1,7 @@
+""" 
+This program downloads snapshots from a single camera and saves them locally.
+"""
+
 import threading
 import time
 import cv2
@@ -8,13 +12,13 @@ class CameraHandler(threading.Thread):
     """
     The thread to download snapshots from a single camera.
 
-    Parameters
-    ----------
+    **Parameters**
+    
     camera : camera object
         The camera from which snapshots will be taken.
 
-    Attributes
-    ----------
+    **Attributes**
+    
     camera : camera object
         The camera from which snapshots will be taken.
     id : int
