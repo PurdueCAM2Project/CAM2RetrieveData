@@ -1,3 +1,5 @@
+This repository is obsolete. DO NOT USE IT.
+
 # NetworkCameras
 
 This repository contains the code and data for retrieving data (image and video) from network cameras. It has three parts:
