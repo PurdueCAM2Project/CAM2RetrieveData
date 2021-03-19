@@ -6,7 +6,7 @@ docutils==0.14
 funcsigs==1.0.2
 idna==2.6
 imagesize==0.7.1
-Jinja2==2.9.6
+Jinja2==2.11.3
 MarkupSafe==1.0
 mock==2.0.0
 MySQL-python==1.2.5
